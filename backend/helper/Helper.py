@@ -69,10 +69,13 @@ class HelperContract:
 
     def select_query_gdb(self, purpose=None, dataRequester=None, additionalData=None, contractId=None,
                          contractRequester=None, contractProvider=None):
+
         sparql_inits = self.init_sparql(
             self.HOST_URI, self.get_username(), self.get_password())
+
         which_query_return = self.which_query(purpose, dataRequester, additionalData, contractId,
                                               contractRequester, contractProvider)
+
         if("arg" in which_query_return.keys()):
             sparql_inits.setQuery(self.function_map(
                 which_query_return["map"])(which_query_return["arg"]))

@@ -7,11 +7,11 @@ import jwt
 class Credentials():
 
     def get_username(self):
-        username = os.getenv("user_name")  # "admin"
+        username = os.getenv("user_name")
         return username
 
     def get_password(self):
-        password = os.getenv("password")  # "Sm@shHitA_CT00L"
+        password = os.getenv("password")
         return password
     # check token
 

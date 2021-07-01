@@ -5,7 +5,7 @@ import os
 class SPARQL():
     def __init__(self):
         super().__init__()
-        host_get = os.getenv("HOST_URI")
+        host_get = os.getenv("HOST_URI_GET")
         self.HOST_URI = host_get
 
     def init_sparql(self, hostname, userid, password):
