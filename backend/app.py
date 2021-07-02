@@ -47,4 +47,4 @@ api.add_resource(ContractCreate, '/contract/create/')
 docs.register(ContractCreate)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
