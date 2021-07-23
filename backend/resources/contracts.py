@@ -150,8 +150,9 @@ class ContractByContractId(MethodResource, Resource):
         query = QueryEngine()
         response = json.loads(query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractId", contractId=contractId,
                                                      contractRequester=None, contractProvider=None))
-        response = response["results"]
-        return response, 200
+        res = jsonify(response["results"])
+        res.status_code = 200
+        return res  
 
 
 class ContractCreate(MethodResource, Resource):

@@ -77,8 +77,33 @@ class QueryEngine (Credentials, SPARQL, HelperContract):
             SELECT *   
                 WHERE {{ 
                 ?Contract a :ContractId;
+                        :hasContractStatus ?ContractStatus;
+                        :forPurpose ?Purpose;
+                        :contractType ?ContractType;
+                        :hasDataController ?DataController;
+                        :ContractRequester ?ContractRequester;
+                        :ContractProvider ?ContractProvider;
+                        dcat:startDate ?StartDate;
+                        dcat:endDate ?EndingDate;
+                        fibo-fnd-agr-ctr:hasEffectiveDate ?EffectiveDate;
+                        fibo-fnd-agr-ctr:hasExecutionDate ?ExecutionDate;
+                        :inMedium ?Medium;
+                        :hasWaiver ?Waiver;
+                        :hasAmendment ?Amendment;
+                        :hasConfidentialityObligation ?ConfidentialityObligation;
+                        :hasDataProtection ?DataProtection;
+                        :hasLimitationOnUse ?LimitationOnUse;
+                        :hasMethodOfNotice ?MethodOfNotice;
+                        :hasNoThirdPartyBeneficiaries ?NoThirdPartyBeneficiaries;
+                        :hasPermittedDisclosure ?PermittedDisclosure;
+                        :hasReceiptOfNotice ?ReceiptOfNotice;
+                        :hasSeverability ?Severability;
+                        :hasTerminationForInsolvency ?TerminationForInsolvency;
+                        :hasTerminationForMaterialBreach ?TerminationForMaterialBreach;
+                        :hasTerminationOnNotice ?TerminationOnNotice .
                 filter(?Contract=:{1}) .
             }}""").format(self.prefix(), id)
+        
         return query
 
     def insert_query(self, ContractId, ContractType, Purpose,
@@ -96,10 +121,10 @@ class QueryEngine (Credentials, SPARQL, HelperContract):
                        :ContractRequester :{4};
                        :ContractProvider :{5};
                        :hasDataController :{6};
-                        dcat:startDate :{7};
-                        fibo-fnd-agr-ctr:hasExecutionDate :{8};
-                        fibo-fnd-agr-ctr:hasEffectiveDate :{9};
-                        dcat:endDate :{10};
+                        dcat:startDate "{7}";
+                        fibo-fnd-agr-ctr:hasExecutionDate "{8}";
+                        fibo-fnd-agr-ctr:hasEffectiveDate "{9}";
+                        dcat:endDate "{10}";
                         :inMedium "{11}";
                         :hasWaiver "{12}";
                         :hasAmendment "{13}";

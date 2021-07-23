@@ -7,7 +7,7 @@ class HelperContract:
     def contract_exists(self, contract):
         try:
             contract_data = contract["results"]["bindings"][0]["ContractId"]["value"]
-            print(contract_data)
+            #print(contract_data)
             if len(contract_data.strip()) > 2:
                 return True
             return False
