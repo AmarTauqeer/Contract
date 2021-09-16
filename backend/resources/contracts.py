@@ -111,7 +111,7 @@ class BulkResponseQuerySchema(Schema):
 
 
 class Contracts(MethodResource, Resource):
-    @Credentials.check_for_token
+    # @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
@@ -122,7 +122,7 @@ class Contracts(MethodResource, Resource):
 
 
 class ContractByRequester(MethodResource, Resource):
-    @Credentials.check_for_token
+    # @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
     def get(self, requester):
         query = QueryEngine()
@@ -133,7 +133,7 @@ class ContractByRequester(MethodResource, Resource):
 
 
 class ContractByProvider(MethodResource, Resource):
-    @Credentials.check_for_token
+    # @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
     def get(self, provider):
         query = QueryEngine()
@@ -144,7 +144,7 @@ class ContractByProvider(MethodResource, Resource):
 
 
 class ContractByContractId(MethodResource, Resource):
-    @Credentials.check_for_token
+    # @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
     def get(self, contractId):
         query = QueryEngine()
@@ -152,11 +152,11 @@ class ContractByContractId(MethodResource, Resource):
                                                      contractRequester=None, contractProvider=None))
         res = jsonify(response["results"])
         res.status_code = 200
-        return res  
+        return res
 
 
 class ContractCreate(MethodResource, Resource):
-    @Credentials.check_for_token
+    # @Credentials.check_for_token
     @use_kwargs(ContractRequestSchema)
     def post(self, **kwargs):
         schema_serializer = ContractRequestSchema()
