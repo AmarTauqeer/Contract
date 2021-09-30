@@ -1,4 +1,5 @@
 from core.query_processor.QueryProcessor import QueryEngine
+from flask import jsonify
 
 
 class ContractValidation(QueryEngine):
@@ -6,7 +7,12 @@ class ContractValidation(QueryEngine):
     def __init__(self):
         super().__init__()
 
-    def post_data(self, validated_data):
+    def delete_contract(self,contractId):
+        response =self.post_sparql(self.get_username(), self.get_password(),self.delete_contract_by_id(contractId))
+        return response
+
+
+    def post_data(self, validated_data, type):
         ContractId = validated_data["ContractId"]
         ContractType = validated_data["ContractType"]
         Purpose = validated_data["Purpose"]
@@ -33,32 +39,70 @@ class ContractValidation(QueryEngine):
         TerminationOnNotice = validated_data["TerminationOnNotice"]
         ContractStatus = validated_data["ContractStatus"]
 
-        respone = self.post_sparql(self.get_username(), self.get_password(),
-                                   self.insert_query(ContractId=ContractId,
-                                                     ContractType=ContractType,
-                                                     Purpose=Purpose,
-                                                     ContractRequester=ContractRequester,
-                                                     ContractProvider=ContractProvider,
-                                                     DataController=DataController,
-                                                     StartDate=StartDate,
-                                                     ExecutionDate=ExecutionDate,
-                                                     EffectiveDate=EffectiveDate,
-                                                     ExpireDate=ExpireDate,
-                                                     Medium=Medium,
-                                                     Waiver=Waiver,
-                                                     Amendment=Amendment,
-                                                     ConfidentialityObligation=ConfidentialityObligation,
-                                                     DataProtection=DataProtection,
-                                                     LimitationOnUse=LimitationOnUse,
-                                                     MethodOfNotice=MethodOfNotice,
-                                                     NoThirdPartyBeneficiaries=NoThirdPartyBeneficiaries,
-                                                     PermittedDisclosure=PermittedDisclosure,
-                                                     ReceiptOfNotice=ReceiptOfNotice,
-                                                     Severability=Severability,
-                                                     TerminationForInsolvency=TerminationForInsolvency,
-                                                     TerminationForMaterialBreach=TerminationForMaterialBreach,
-                                                     TerminationOnNotice=TerminationOnNotice,
-                                                     ContractStatus=ContractStatus
-                                                     )
-                                   )
+        if type == "insert":
+            respone = self.post_sparql(self.get_username(), self.get_password(),
+                                       self.insert_query(ContractId=ContractId,
+                                                         ContractType=ContractType,
+                                                         Purpose=Purpose,
+                                                         ContractRequester=ContractRequester,
+                                                         ContractProvider=ContractProvider,
+                                                         DataController=DataController,
+                                                         StartDate=StartDate,
+                                                         ExecutionDate=ExecutionDate,
+                                                         EffectiveDate=EffectiveDate,
+                                                         ExpireDate=ExpireDate,
+                                                         Medium=Medium,
+                                                         Waiver=Waiver,
+                                                         Amendment=Amendment,
+                                                         ConfidentialityObligation=ConfidentialityObligation,
+                                                         DataProtection=DataProtection,
+                                                         LimitationOnUse=LimitationOnUse,
+                                                         MethodOfNotice=MethodOfNotice,
+                                                         NoThirdPartyBeneficiaries=NoThirdPartyBeneficiaries,
+                                                         PermittedDisclosure=PermittedDisclosure,
+                                                         ReceiptOfNotice=ReceiptOfNotice,
+                                                         Severability=Severability,
+                                                         TerminationForInsolvency=TerminationForInsolvency,
+                                                         TerminationForMaterialBreach=TerminationForMaterialBreach,
+                                                         TerminationOnNotice=TerminationOnNotice,
+                                                         ContractStatus=ContractStatus
+                                                         )
+
+                                       )
+        else:
+            if ContractId !="":
+                # delete from knowledge graph
+                response = self.post_sparql(self.get_username(), self.get_password(),
+                                            self.delete_contract_by_id(ContractId))
+
+                # insert into kg
+                respone = self.post_sparql(self.get_username(), self.get_password(),
+                                           self.insert_query(ContractId=ContractId,
+                                                             ContractType=ContractType,
+                                                             Purpose=Purpose,
+                                                             ContractRequester=ContractRequester,
+                                                             ContractProvider=ContractProvider,
+                                                             DataController=DataController,
+                                                             StartDate=StartDate,
+                                                             ExecutionDate=ExecutionDate,
+                                                             EffectiveDate=EffectiveDate,
+                                                             ExpireDate=ExpireDate,
+                                                             Medium=Medium,
+                                                             Waiver=Waiver,
+                                                             Amendment=Amendment,
+                                                             ConfidentialityObligation=ConfidentialityObligation,
+                                                             DataProtection=DataProtection,
+                                                             LimitationOnUse=LimitationOnUse,
+                                                             MethodOfNotice=MethodOfNotice,
+                                                             NoThirdPartyBeneficiaries=NoThirdPartyBeneficiaries,
+                                                             PermittedDisclosure=PermittedDisclosure,
+                                                             ReceiptOfNotice=ReceiptOfNotice,
+                                                             Severability=Severability,
+                                                             TerminationForInsolvency=TerminationForInsolvency,
+                                                             TerminationForMaterialBreach=TerminationForMaterialBreach,
+                                                             TerminationOnNotice=TerminationOnNotice,
+                                                             ContractStatus=ContractStatus
+                                                             )
+
+                                           )
         return respone

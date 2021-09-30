@@ -7,7 +7,7 @@ class HelperContract:
     def contract_exists(self, contract):
         try:
             contract_data = contract["results"]["bindings"][0]["ContractId"]["value"]
-            #print(contract_data)
+            # print(contract_data)
             if len(contract_data.strip()) > 2:
                 return True
             return False
@@ -24,7 +24,7 @@ class HelperContract:
             "get_contract_by_requester": self.get_contract_by_requester,
             "get_contract_by_provider": self.get_contract_by_provider,
             "get_contract_by_id": self.get_contract_by_id,
-
+            "get_all_contractors": self.get_all_contractors,
         }
         return mapfunc[name]
 
@@ -35,7 +35,7 @@ class HelperContract:
         """
         querydata = ""
         for vlaue in data:
-            strs = ":"+whatfor+" :" + vlaue + ";\n"
+            strs = ":" + whatfor + " :" + vlaue + ";\n"
             querydata = strs + querydata
         return querydata
 
@@ -64,8 +64,9 @@ class HelperContract:
         if additionalData == "contractId" and contractId is not None:
             return dict({"map": "get_contract_by_id", "arg": contractId})
 
-        if additionalData == "update_contract" and contractId is not None:
-            return dict({"map": "contract_update_by_id", "arg": contractId})
+        if additionalData == "contractors":
+            return dict({"map": "get_all_contractors"})
+
 
     def select_query_gdb(self, purpose=None, dataRequester=None, additionalData=None, contractId=None,
                          contractRequester=None, contractProvider=None):
@@ -76,12 +77,13 @@ class HelperContract:
         which_query_return = self.which_query(purpose, dataRequester, additionalData, contractId,
                                               contractRequester, contractProvider)
 
-        if("arg" in which_query_return.keys()):
+        if ("arg" in which_query_return.keys()):
             sparql_inits.setQuery(self.function_map(
                 which_query_return["map"])(which_query_return["arg"]))
         else:
             sparql_inits.setQuery(self.function_map(
                 which_query_return["map"])())
+
         sparql_inits.setReturnFormat(JSON)
         results = sparql_inits.query().convert()
         return json.dumps(results)

@@ -5,7 +5,7 @@ import textwrap
 from datetime import date
 
 
-class QueryEngine (Credentials, SPARQL, HelperContract):
+class QueryEngine(Credentials, SPARQL, HelperContract):
     def __init__(self):
         super().__init__()
 
@@ -103,8 +103,33 @@ class QueryEngine (Credentials, SPARQL, HelperContract):
                         :hasTerminationOnNotice ?TerminationOnNotice .
                 filter(?Contract=:{1}) .
             }}""").format(self.prefix(), id)
-        
+
         return query
+
+    def delete_contract_by_id(self, id):
+        query = textwrap.dedent("""{0}
+                delete{{?s ?p ?o}}   
+                    WHERE {{ 
+                    select ?s ?p ?o
+                        where{{
+                            ?s ?p ?o .
+                            filter(?s=:{1})
+                }}}}""").format(self.prefix(), id)
+        # print(query)
+        return query
+
+    def get_all_contractors(self):
+        query = textwrap.dedent("""{0}
+            select *
+            where{{  ?Contract a prov:Organization .
+             		optional{{?Contract :hasEmail ?email.}}
+    				optional{{?Contract :hasTelephone ?telephone .}}
+    				optional{{?Contract :hasStreetAddress ?address.}}
+        }}
+        """).format(self.prefix())
+        return query
+
+
 
     def insert_query(self, ContractId, ContractType, Purpose,
                      ContractRequester, ContractProvider, DataController, StartDate,

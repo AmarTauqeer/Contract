@@ -52,6 +52,7 @@ class GenerateToken(MethodResource, Resource):
                     return 'username or password is not correct'
             else:
                 return 'Basic authentication is required.'
+
         return wrapped
 
     @check_for_username_password
@@ -104,6 +105,34 @@ class ContractRequestSchema(Schema):
         required=False, description="Termination On Notice")
     ContractStatus = fields.String(
         required=False, description="Contract Status")
+    ContractRequesterCountry = fields.String(
+        required=False, description="Contract Requester Country")
+    ContractRequesterState = fields.String(
+        required=False, description="Contract Requester state")
+    ContractRequesterRegion = fields.String(
+        required=False, description="Contract Requester Region")
+    ContractRequesterCity = fields.String(
+        required=False, description="Contract Requester City")
+    ContractRequesterAddress = fields.String(
+        required=False, description="Contract Requester Address")
+    ContractProviderCountry = fields.String(
+        required=False, description="Contract Provider Country")
+    ContractProviderState = fields.String(
+        required=False, description="Contract Provider state")
+    ContractProviderRegion = fields.String(
+        required=False, description="Contract Provider Region")
+    ContractProviderCity = fields.String(
+        required=False, description="Contract Provider City")
+    ContractProviderAddress = fields.String(
+        required=False, description="Contract Provider Address")
+    ContractProviderEmail = fields.String(
+        required=False, description="Contract Provider Email")
+    ContractRequesterEmail = fields.String(
+        required=False, description="Contract Provider Email")
+    ContractProviderPhone = fields.String(
+        required=False, description="Contract Provider Phone")
+    ContractRequesterPhone = fields.String(
+        required=False, description="Contract Provider Phone")
 
 
 class BulkResponseQuerySchema(Schema):
@@ -111,60 +140,107 @@ class BulkResponseQuerySchema(Schema):
 
 
 class Contracts(MethodResource, Resource):
-    @Credentials.check_for_token
-    @marshal_with(BulkResponseQuerySchema)
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
-        response = json.loads(query.select_query_gdb(purpose=None, dataRequester=None, additionalData="bcontractId",  contractId=None,
-                                                     contractRequester=None, contractProvider=None,))
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="bcontractId", contractId=None,
+                                   contractRequester=None, contractProvider=None, ))
         response = response["results"]
         return response, 200
 
 
 class ContractByRequester(MethodResource, Resource):
-    @Credentials.check_for_token
-    @marshal_with(BulkResponseQuerySchema)
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
     def get(self, requester):
         query = QueryEngine()
-        response = json.loads(query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractId", contractId=None,
-                                                     contractRequester=requester, contractProvider=None))
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractId", contractId=None,
+                                   contractRequester=requester, contractProvider=None))
         response = response["results"]
         return response, 200
 
 
 class ContractByProvider(MethodResource, Resource):
-    @Credentials.check_for_token
-    @marshal_with(BulkResponseQuerySchema)
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
     def get(self, provider):
         query = QueryEngine()
-        response = json.loads(query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractId", contractId=None,
-                                                     contractRequester=None, contractProvider=provider))
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractId", contractId=None,
+                                   contractRequester=None, contractProvider=provider))
         response = response["results"]
         return response, 200
 
 
 class ContractByContractId(MethodResource, Resource):
-    @Credentials.check_for_token
-    @marshal_with(BulkResponseQuerySchema)
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
     def get(self, contractId):
         query = QueryEngine()
-        response = json.loads(query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractId", contractId=contractId,
-                                                     contractRequester=None, contractProvider=None))
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractId", contractId=contractId,
+                                   contractRequester=None, contractProvider=None))
         res = jsonify(response["results"])
         res.status_code = 200
         return res
 
 
+class ContractUpdate(MethodResource, Resource):
+    # @Credentials.check_for_token
+    @marshal_with(BulkResponseQuerySchema)
+    @use_kwargs(ContractRequestSchema)
+    def put(self, **kwargs):
+        schema_serializer = ContractRequestSchema()
+        data = request.get_json(force=True)
+        # print(data)
+        validated_data = schema_serializer.load(data)
+        cv = ContractValidation()
+        response = cv.post_data(validated_data, type="update")
+        if (response):
+            return response
+            # return jsonify({'Success': "Record inserted successfully."})
+        else:
+            return jsonify({'Error': "Record not inserted due to some errors."})
+
+
 class ContractCreate(MethodResource, Resource):
-    @Credentials.check_for_token
+    # @Credentials.check_for_token
     @use_kwargs(ContractRequestSchema)
     def post(self, **kwargs):
         schema_serializer = ContractRequestSchema()
         data = request.get_json(force=True)
         validated_data = schema_serializer.load(data)
         cv = ContractValidation()
-        response = cv.post_data(validated_data)
-        if(response):
+        response = cv.post_data(validated_data, type="insert")
+        if (response):
             return jsonify({'Success': "Record inserted successfully."})
         else:
             return jsonify({'Error': "Record not inserted due to some errors."})
+
+
+class ContractDeleteById(MethodResource, Resource):
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    # @use_kwargs(ContractRequestSchema)
+    def delete(self, contractId):
+        cv = ContractValidation()
+        response = cv.delete_contract(contractId)
+        if (response):
+            return jsonify({'Success': "Record deleted successfully."})
+        else:
+            return jsonify({'Error': "Record not deleted due to some errors."})
+
+
+class GetContractor(MethodResource, Resource):
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    def get(self):
+        query = QueryEngine()
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractors", contractId=None,
+                                   contractRequester=None, contractProvider=None, ))
+        response = response["results"]
+        return response, 200

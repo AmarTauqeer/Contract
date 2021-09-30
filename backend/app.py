@@ -3,11 +3,10 @@ from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from resources.contracts import Contracts, ContractByRequester, \
-    ContractByProvider, ContractByContractId, ContractCreate,\
-    GenerateToken
+    ContractByProvider, ContractByContractId, ContractCreate, \
+    GenerateToken, ContractUpdate, ContractDeleteById,GetContractor
 from flask_restful import Api
 from flask_cors import CORS
-
 
 app = Flask(__name__)
 cors = CORS(app, resources={
@@ -43,8 +42,19 @@ docs.register(ContractByProvider)
 api.add_resource(ContractByContractId,
                  '/contract/by_contractId/<string:contractId>/')
 docs.register(ContractByContractId)
+
+api.add_resource(ContractDeleteById,
+                 '/contract/delete/<string:contractId>/')
+docs.register(ContractDeleteById)
+
 api.add_resource(ContractCreate, '/contract/create/')
 docs.register(ContractCreate)
+
+api.add_resource(ContractUpdate, '/contract/update/')
+docs.register(ContractUpdate)
+
+api.add_resource(GetContractor, '/contract/contractors/')
+docs.register(GetContractor)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
