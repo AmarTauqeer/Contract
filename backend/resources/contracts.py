@@ -9,6 +9,8 @@ import os
 from datetime import datetime, timedelta
 from core.query_processor.QueryProcessor import QueryEngine
 from core.contract_validation.ContractValidation import ContractValidation
+from tests.contract_test import ContractApiTest
+import unittest
 from core.Credentials import Credentials
 
 
@@ -105,34 +107,6 @@ class ContractRequestSchema(Schema):
         required=False, description="Termination On Notice")
     ContractStatus = fields.String(
         required=False, description="Contract Status")
-    ContractRequesterCountry = fields.String(
-        required=False, description="Contract Requester Country")
-    ContractRequesterState = fields.String(
-        required=False, description="Contract Requester state")
-    ContractRequesterRegion = fields.String(
-        required=False, description="Contract Requester Region")
-    ContractRequesterCity = fields.String(
-        required=False, description="Contract Requester City")
-    ContractRequesterAddress = fields.String(
-        required=False, description="Contract Requester Address")
-    ContractProviderCountry = fields.String(
-        required=False, description="Contract Provider Country")
-    ContractProviderState = fields.String(
-        required=False, description="Contract Provider state")
-    ContractProviderRegion = fields.String(
-        required=False, description="Contract Provider Region")
-    ContractProviderCity = fields.String(
-        required=False, description="Contract Provider City")
-    ContractProviderAddress = fields.String(
-        required=False, description="Contract Provider Address")
-    ContractProviderEmail = fields.String(
-        required=False, description="Contract Provider Email")
-    ContractRequesterEmail = fields.String(
-        required=False, description="Contract Provider Email")
-    ContractProviderPhone = fields.String(
-        required=False, description="Contract Provider Phone")
-    ContractRequesterPhone = fields.String(
-        required=False, description="Contract Provider Phone")
 
 
 class BulkResponseQuerySchema(Schema):
@@ -244,3 +218,11 @@ class GetContractor(MethodResource, Resource):
                                    contractRequester=None, contractProvider=None, ))
         response = response["results"]
         return response, 200
+
+#
+# class GetContractTestResult(MethodResource, Resource):
+#     # @Credentials.check_for_token
+#     # @marshal_with(BulkResponseQuerySchema)
+#     def get(self):
+#         response=ContractApiTest.test_get_all_contracts()
+#         return response, 200

@@ -56,5 +56,8 @@ docs.register(ContractUpdate)
 api.add_resource(GetContractor, '/contract/contractors/')
 docs.register(GetContractor)
 
+# api.add_resource(GetContractTestResult, '/contract/tests/')
+# docs.register(GetContractTestResult)
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
