@@ -6,6 +6,7 @@ from marshmallow import Schema, fields
 from functools import wraps
 import jwt
 import os
+import re
 from datetime import datetime, timedelta
 from core.query_processor.QueryProcessor import QueryEngine
 from core.contract_validation.ContractValidation import ContractValidation
@@ -169,15 +170,23 @@ class ContractUpdate(MethodResource, Resource):
     def put(self, **kwargs):
         schema_serializer = ContractRequestSchema()
         data = request.get_json(force=True)
-        # print(data)
-        validated_data = schema_serializer.load(data)
-        cv = ContractValidation()
-        response = cv.post_data(validated_data, type="update")
-        if (response):
-            return response
-            # return jsonify({'Success': "Record inserted successfully."})
+        contract_id = data['ContractId']
+        # get contract status from db
+        result = ContractByContractId.get(self, contract_id)
+        my_json = result.data.decode('utf8')
+        decoded_data = json.loads(my_json)
+        status_value = decoded_data['bindings'][0]['ContractStatus']['value']
+        signed = re.findall(r"Signed", status_value)
+        if len(signed) == 0:
+            validated_data = schema_serializer.load(data)
+            cv = ContractValidation()
+            response = cv.post_data(validated_data, type="update")
+            if (response):
+                return response
+            else:
+                return jsonify({'Error': "Record not updated due to some errors."})
         else:
-            return jsonify({'Error': "Record not inserted due to some errors."})
+            return jsonify({'Error': "Contract can't be modified after signed"})
 
 
 class ContractCreate(MethodResource, Resource):
@@ -186,13 +195,22 @@ class ContractCreate(MethodResource, Resource):
     def post(self, **kwargs):
         schema_serializer = ContractRequestSchema()
         data = request.get_json(force=True)
-        validated_data = schema_serializer.load(data)
-        cv = ContractValidation()
-        response = cv.post_data(validated_data, type="insert")
-        if (response):
-            return jsonify({'Success': "Record inserted successfully."})
+        contract_id = data['ContractId']
+        # get contract status from db
+        result = ContractByContractId.get(self, contract_id)
+        my_json = result.data.decode('utf8')
+        decoded_data = json.loads(my_json)
+
+        if len(decoded_data['bindings']) == 1:
+            return jsonify({'Error': "Contract id already exist"})
         else:
-            return jsonify({'Error': "Record not inserted due to some errors."})
+            validated_data = schema_serializer.load(data)
+            cv = ContractValidation()
+            response = cv.post_data(validated_data, type="insert")
+            if (response):
+                return jsonify({'Success': "Record inserted successfully."})
+            else:
+                return jsonify({'Error': "Record not inserted due to some errors."})
 
 
 class ContractDeleteById(MethodResource, Resource):
@@ -200,13 +218,24 @@ class ContractDeleteById(MethodResource, Resource):
     # @marshal_with(BulkResponseQuerySchema)
     # @use_kwargs(ContractRequestSchema)
     def delete(self, contractId):
-        cv = ContractValidation()
-        response = cv.delete_contract(contractId)
-        if (response):
-            return jsonify({'Success': "Record deleted successfully."})
+        # get contract status from db
+        result = ContractByContractId.get(self, contractId)
+        my_json = result.data.decode('utf8')
+        decoded_data = json.loads(my_json)
+        if len(decoded_data['bindings']) == 1:
+            status_value = decoded_data['bindings'][0]['ContractStatus']['value']
+            signed = re.findall(r"Signed", status_value)
+            if len(signed) == 0:
+                cv = ContractValidation()
+                response = cv.delete_contract(contractId)
+                if (response):
+                    return jsonify({'Success': "Record deleted successfully."})
+                else:
+                    return jsonify({'Error': "Record not deleted due to some errors."})
+            else:
+                return jsonify({'Error': "Contract can't be deleted after signed"})
         else:
-            return jsonify({'Error': "Record not deleted due to some errors."})
-
+            return jsonify({'Error': "Contract doesn't exist"})
 
 class GetContractor(MethodResource, Resource):
     # @Credentials.check_for_token

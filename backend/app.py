@@ -17,7 +17,7 @@ cors = CORS(app, resources={
 # swagger configuration
 app.config.update({
     'APISPEC_SPEC': APISpec(
-        title='Automatic Contracting API Specification',
+        title='Contracts API Specification',
         version='v01',
         plugins=[MarshmallowPlugin()],
         openapi_version='2.0.0'
