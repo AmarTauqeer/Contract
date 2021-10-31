@@ -25,11 +25,11 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
     def get_all_contracts(self):
         query = textwrap.dedent("""{0}
             select * 
-            where{{  ?Contract a :ContractId;
+            where{{  ?Contract a :contractID;
                         :hasContractStatus ?ContractStatus;
                         :forPurpose ?Purpose;
                         :contractType ?ContractType;
-                        :hasDataController ?DataController;
+                        :DataController ?DataController;
                         :ContractRequester ?ContractRequester;
                         :ContractProvider ?ContractProvider;
                         dcat:startDate ?StartDate;
@@ -58,7 +58,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
         query = textwrap.dedent("""{0}
                 SELECT ?Contract   
                     WHERE {{ 
-                    ?Contract a :ContractId;
+                    ?Contract a :contractID;
                             :ContractRequester :{1}.
                 }}""").format(self.prefix(), name)
         return query
@@ -67,7 +67,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
         query = textwrap.dedent("""{0}
             SELECT ?Contract   
                 WHERE {{ 
-                ?Contract a :ContractId;
+                ?Contract a :contractID;
                         :ContractProvider :{1}.
             }}""").format(self.prefix(), name)
         return query
@@ -76,11 +76,11 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
         query = textwrap.dedent("""{0}
             SELECT *   
                 WHERE {{ 
-                ?Contract a :ContractId;
+                ?Contract a :contractID;
                         :hasContractStatus ?ContractStatus;
                         :forPurpose ?Purpose;
                         :contractType ?ContractType;
-                        :hasDataController ?DataController;
+                        :DataController ?DataController;
                         :ContractRequester ?ContractRequester;
                         :ContractProvider ?ContractProvider;
                         dcat:startDate ?StartDate;
@@ -140,12 +140,12 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                      TerminationForMaterialBreach, TerminationOnNotice, ContractStatus):
         insquery = textwrap.dedent("""{0} 
             INSERT DATA {{
-            :{1} a <http://ontologies.atb-bremen.de/smashHitCore#ContractId>;
+            :{1} a <http://ontologies.atb-bremen.de/smashHitCore#contractID>;
             :contractType :{2};
                        :forPurpose "{3}";
                        :ContractRequester :{4};
                        :ContractProvider :{5};
-                       :hasDataController :{6};
+                       :DataController :{6};
                         dcat:startDate "{7}";
                         fibo-fnd-agr-ctr:hasExecutionDate "{8}";
                         fibo-fnd-agr-ctr:hasEffectiveDate "{9}";
