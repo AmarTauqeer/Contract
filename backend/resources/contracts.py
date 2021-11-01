@@ -10,6 +10,7 @@ import re
 from datetime import datetime, timedelta
 from core.query_processor.QueryProcessor import QueryEngine
 from core.contract_validation.ContractValidation import ContractValidation
+from core.agent_validation.AgentValidation import AgentValidation
 from tests.contract_test import ContractApiTest
 import unittest
 from core.Credentials import Credentials
@@ -61,6 +62,18 @@ class GenerateToken(MethodResource, Resource):
     @check_for_username_password
     def get(self):
         return True
+
+
+class AgentRequestSchema(Schema):
+    AgentId = fields.String(required=True, description="Agent ID")
+    AgentType = fields.String(required=True, description="Agent Type")
+    Name = fields.String(required=True, description="Name")
+    Email = fields.String(required=False, description="Email")
+    Phone = fields.String(required=False, description="Phone Number")
+    Address = fields.String(required=True, description="Street Address")
+    City = fields.String(required=False, description="City")
+    State = fields.String(required=False, description="State")
+    Country = fields.String(required=False, description="Country")
 
 
 class ContractRequestSchema(Schema):
@@ -121,7 +134,7 @@ class Contracts(MethodResource, Resource):
         query = QueryEngine()
         response = json.loads(
             query.select_query_gdb(purpose=None, dataRequester=None, additionalData="bcontractId", contractId=None,
-                                   contractRequester=None, contractProvider=None, ))
+                                   contractRequester=None, contractProvider=None, agent=None))
         response = response["results"]
         return response, 200
 
@@ -213,6 +226,62 @@ class ContractCreate(MethodResource, Resource):
                 return jsonify({'Error': "Record not inserted due to some errors."})
 
 
+class AgentByAgentId(MethodResource, Resource):
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    def get(self, agentId):
+        query = QueryEngine()
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="agentId", contractId=None,
+                                   contractRequester=None, contractProvider=None, agentId=agentId))
+        res = jsonify(response["results"])
+        res.status_code = 200
+        return res
+
+
+class AgentCreate(MethodResource, Resource):
+    # @Credentials.check_for_token
+    @use_kwargs(AgentRequestSchema)
+    def post(self, **kwargs):
+        schema_serializer = AgentRequestSchema()
+        data = request.get_json(force=True)
+        agent_id = data['AgentId']
+        # get agent from db
+        result = AgentByAgentId.get(self, agent_id)
+        my_json = result.data.decode('utf8')
+        decoded_data = json.loads(my_json)
+
+        if len(decoded_data['bindings']) == 1:
+            return jsonify({'Error': "Agent id already exist"})
+        else:
+            validated_data = schema_serializer.load(data)
+            av = AgentValidation()
+
+            response = av.post_data(validated_data, type="insert")
+            if (response):
+                return jsonify({'Success': "Record inserted successfully."})
+            else:
+                return jsonify({'Error': "Record not inserted due to some errors."})
+
+
+class AgentDeleteById(MethodResource, Resource):
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    # @use_kwargs(ContractRequestSchema)
+    def delete(self, agentId):
+        # get contract status from db
+        result = AgentByAgentId.get(self, agentId)
+        my_json = result.data.decode('utf8')
+        decoded_data = json.loads(my_json)
+        if len(decoded_data['bindings']) == 1:
+            av = AgentValidation()
+            response = av.delete_agent(agentId)
+            if (response):
+                return jsonify({'Success': "Record deleted successfully."})
+            else:
+                return jsonify({'Error': "Record not deleted due to some errors."})
+
+
 class ContractDeleteById(MethodResource, Resource):
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -237,13 +306,14 @@ class ContractDeleteById(MethodResource, Resource):
         else:
             return jsonify({'Error': "Contract doesn't exist"})
 
-class GetContractor(MethodResource, Resource):
+
+class GetAgents(MethodResource, Resource):
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
         response = json.loads(
-            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractors", contractId=None,
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="agents", contractId=None,
                                    contractRequester=None, contractProvider=None, ))
         response = response["results"]
         return response, 200

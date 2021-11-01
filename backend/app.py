@@ -4,7 +4,8 @@ from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from resources.contracts import Contracts, ContractByRequester, \
     ContractByProvider, ContractByContractId, ContractCreate, \
-    GenerateToken, ContractUpdate, ContractDeleteById,GetContractor
+    GenerateToken, ContractUpdate, ContractDeleteById,GetAgents, \
+    AgentDeleteById,AgentCreate,AgentByAgentId
 from flask_restful import Api
 from flask_cors import CORS
 
@@ -39,22 +40,34 @@ docs.register(ContractByRequester)
 api.add_resource(ContractByProvider,
                  '/contract/by_provider/<string:provider>/')
 docs.register(ContractByProvider)
+
 api.add_resource(ContractByContractId,
                  '/contract/by_contractId/<string:contractId>/')
 docs.register(ContractByContractId)
+
+api.add_resource(AgentByAgentId,
+                 '/agent/by_agentId/<string:agentId>/')
+docs.register(AgentByAgentId)
 
 api.add_resource(ContractDeleteById,
                  '/contract/delete/<string:contractId>/')
 docs.register(ContractDeleteById)
 
+api.add_resource(AgentDeleteById,
+                 '/Agent/delete/<string:agentId>/')
+docs.register(AgentDeleteById)
+
 api.add_resource(ContractCreate, '/contract/create/')
 docs.register(ContractCreate)
+
+api.add_resource(AgentCreate, '/Agent/create/')
+docs.register(AgentCreate)
 
 api.add_resource(ContractUpdate, '/contract/update/')
 docs.register(ContractUpdate)
 
-api.add_resource(GetContractor, '/contract/contractors/')
-docs.register(GetContractor)
+api.add_resource(GetAgents, '/contract/agents/')
+docs.register(GetAgents)
 
 # api.add_resource(GetContractTestResult, '/contract/tests/')
 # docs.register(GetContractTestResult)

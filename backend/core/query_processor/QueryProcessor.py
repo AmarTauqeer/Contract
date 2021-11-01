@@ -106,6 +106,24 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
 
         return query
 
+    def get_agent_by_id(self, id):
+        query = textwrap.dedent("""{0}
+            SELECT *   
+                WHERE {{ 
+                ?Agent a :agentID;
+                        :hasType ?type;
+                        :hasName ?name;
+                        :hasEmail ?email;
+                        :hasAddress ?address;
+                optional{{?Agent :hasTelephone ?phone.}}                        
+                optional{{?Agent :atCity ?city.}}
+                optional{{?Agent :atState ?state.}}
+                optional{{?Agent :atCountry ?country.}}
+                filter(?Agent=:{1}) .
+            }}""").format(self.prefix(), id)
+
+        return query
+
     def delete_contract_by_id(self, id):
         query = textwrap.dedent("""{0}
                 delete{{?s ?p ?o}}   
@@ -118,18 +136,32 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
         # print(query)
         return query
 
-    def get_all_contractors(self):
+    def delete_agent_by_id(self, id):
+        query = textwrap.dedent("""{0}
+                delete{{?s ?p ?o}}   
+                    WHERE {{ 
+                    select ?s ?p ?o
+                        where{{
+                            ?s ?p ?o .
+                            filter(?s=:{1})
+                }}}}""").format(self.prefix(), id)
+        # print(query)
+        return query
+
+    def get_all_agents(self):
         query = textwrap.dedent("""{0}
             select *
-            where{{  ?Contract a prov:Organization .
-             		optional{{?Contract :hasEmail ?email.}}
-    				optional{{?Contract :hasTelephone ?telephone .}}
-    				optional{{?Contract :hasStreetAddress ?address.}}
+            where{{  ?Agent a :agentID;
+                        :hasName ?Name;
+                        :hasAddress ?Address .
+             		optional{{?Agent :hasEmail ?email.}}
+    				optional{{?Agent :hasTelephone ?telephone .}}
+    				optional{{?Agent :atCity ?city.}}
+    				optional{{?Agent :atState ?state.}}
+    				optional{{?Agent :atCountry ?country.}}
         }}
         """).format(self.prefix())
         return query
-
-
 
     def insert_query(self, ContractId, ContractType, Purpose,
                      ContractRequester, ContractProvider, DataController, StartDate,
@@ -175,4 +207,20 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                      MethodOfNotice, NoThirdPartyBeneficiaries, PermittedDisclosure,
                      ReceiptOfNotice, Severability, TerminationForInsolvency,
                      TerminationForMaterialBreach, TerminationOnNotice, ContractStatus))
+        return insquery
+
+    def insert_query_agent(self, AgentId, AgentType, Name, Email, Phone, Address, City, State, Country):
+        insquery = textwrap.dedent("""{0} 
+        INSERT DATA {{
+            :{1} a <http://ontologies.atb-bremen.de/smashHitCore#agentID>;
+            :hasType "{2}";
+                        :hasName "{3}";
+                        :hasEmail "{4}";
+                        :hasTelephone "{5}";
+                        :hasAddress "{6}";
+                        :atCity "{7}";
+                        :atState "{8}";
+                        :atCountry "{9}" .
+                   }}       
+          """.format(self.prefix(), AgentId, AgentType, Name, Email, Phone, Address, City, State, Country))
         return insquery

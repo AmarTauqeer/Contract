@@ -24,7 +24,8 @@ class HelperContract:
             "get_contract_by_requester": self.get_contract_by_requester,
             "get_contract_by_provider": self.get_contract_by_provider,
             "get_contract_by_id": self.get_contract_by_id,
-            "get_all_contractors": self.get_all_contractors,
+            "get_agent_by_id": self.get_agent_by_id,
+            "get_all_agents": self.get_all_agents,
         }
         return mapfunc[name]
 
@@ -40,7 +41,7 @@ class HelperContract:
         return querydata
 
     def which_query(self, purpose=None, dataRequester=None, additionalData=None, contractId=None,
-                    contractRequester=None, contractProvider=None,
+                    contractRequester=None, contractProvider=None, agentId=None
                     ):
         """ Define mapping to appropriate function for query generation based on input
         :param purpose:
@@ -64,18 +65,20 @@ class HelperContract:
         if additionalData == "contractId" and contractId is not None:
             return dict({"map": "get_contract_by_id", "arg": contractId})
 
-        if additionalData == "contractors":
-            return dict({"map": "get_all_contractors"})
+        if additionalData == "agents":
+            return dict({"map": "get_all_agents"})
 
+        if additionalData == "agentId" and agentId is not None:
+            return dict({"map": "get_agent_by_id", "arg": agentId})
 
     def select_query_gdb(self, purpose=None, dataRequester=None, additionalData=None, contractId=None,
-                         contractRequester=None, contractProvider=None):
+                         contractRequester=None, contractProvider=None, agentId=None):
 
         sparql_inits = self.init_sparql(
             self.HOST_URI, self.get_username(), self.get_password())
 
         which_query_return = self.which_query(purpose, dataRequester, additionalData, contractId,
-                                              contractRequester, contractProvider)
+                                              contractRequester, contractProvider, agentId)
 
         if ("arg" in which_query_return.keys()):
             sparql_inits.setQuery(self.function_map(
