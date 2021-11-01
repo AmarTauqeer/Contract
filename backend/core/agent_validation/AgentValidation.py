@@ -23,7 +23,6 @@ class AgentValidation(QueryEngine):
         Country = validated_data["Country"]
 
         if type == "insert":
-            print(AgentId)
             respone = self.post_sparql(self.get_username(), self.get_password(),
                                        self.insert_query_agent(AgentId=AgentId,
                                                                AgentType=AgentType,
@@ -45,7 +44,7 @@ class AgentValidation(QueryEngine):
 
                 # insert into kg
                 respone = self.post_sparql(self.get_username(), self.get_password(),
-                                           self.insert_query(AgentId=AgentId,
+                                           self.insert_query_agent(AgentId=AgentId,
                                                              AgentType=AgentType,
                                                              Name=Name,
                                                              Email=Email,

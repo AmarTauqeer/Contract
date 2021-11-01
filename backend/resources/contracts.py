@@ -226,6 +226,30 @@ class ContractCreate(MethodResource, Resource):
                 return jsonify({'Error': "Record not inserted due to some errors."})
 
 
+class AgentUpdate(MethodResource, Resource):
+    # @Credentials.check_for_token
+    @marshal_with(BulkResponseQuerySchema)
+    @use_kwargs(AgentRequestSchema)
+    def put(self, **kwargs):
+        schema_serializer = AgentRequestSchema()
+        data = request.get_json(force=True)
+        agent_id = data['AgentId']
+        # get contract status from db
+        result = AgentByAgentId.get(self, agent_id)
+        my_json = result.data.decode('utf8')
+        decoded_data = json.loads(my_json)
+        if len(decoded_data) > 0:
+            validated_data = schema_serializer.load(data)
+            av = AgentValidation()
+            response = av.post_data(validated_data, type="update")
+            if (response):
+                return response
+            else:
+                return jsonify({'Error': "Record not updated due to some errors."})
+        else:
+            return jsonify({'Error': "Record doesn't exist ."})
+
+
 class AgentByAgentId(MethodResource, Resource):
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)

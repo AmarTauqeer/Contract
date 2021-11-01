@@ -5,7 +5,7 @@ from apispec.ext.marshmallow import MarshmallowPlugin
 from resources.contracts import Contracts, ContractByRequester, \
     ContractByProvider, ContractByContractId, ContractCreate, \
     GenerateToken, ContractUpdate, ContractDeleteById,GetAgents, \
-    AgentDeleteById,AgentCreate,AgentByAgentId
+    AgentDeleteById,AgentCreate,AgentByAgentId, AgentUpdate
 from flask_restful import Api
 from flask_cors import CORS
 
@@ -54,17 +54,21 @@ api.add_resource(ContractDeleteById,
 docs.register(ContractDeleteById)
 
 api.add_resource(AgentDeleteById,
-                 '/Agent/delete/<string:agentId>/')
+                 '/agent/delete/<string:agentId>/')
 docs.register(AgentDeleteById)
 
 api.add_resource(ContractCreate, '/contract/create/')
 docs.register(ContractCreate)
 
-api.add_resource(AgentCreate, '/Agent/create/')
+api.add_resource(AgentCreate, '/agent/create/')
 docs.register(AgentCreate)
 
 api.add_resource(ContractUpdate, '/contract/update/')
 docs.register(ContractUpdate)
+
+api.add_resource(AgentUpdate, '/agent/update/')
+docs.register(AgentUpdate)
+
 
 api.add_resource(GetAgents, '/contract/agents/')
 docs.register(GetAgents)
