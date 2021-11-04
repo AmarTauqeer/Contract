@@ -134,7 +134,7 @@ class Contracts(MethodResource, Resource):
         query = QueryEngine()
         response = json.loads(
             query.select_query_gdb(purpose=None, dataRequester=None, additionalData="bcontractId", contractId=None,
-                                   contractRequester=None, contractProvider=None, agent=None))
+                                   contractRequester=None, contractProvider=None))
         response = response["results"]
         return response, 200
 
