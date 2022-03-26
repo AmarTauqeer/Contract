@@ -11,7 +11,6 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
 
     def prefix(self):
         prefix = textwrap.dedent("""PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
-            PREFIX gconsent: <https://w3id.org/GConsent#>
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX dc: <http://purl.org/dc/elements/1.1/>
             PREFIX dpv: <http://www.w3.org/ns/dpv#>
@@ -26,30 +25,14 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
         query = textwrap.dedent("""{0}
             select * 
             where{{  ?Contract a :contractID;
-                        :hasContractStatus ?ContractStatus;
-                        :forPurpose ?Purpose;
-                        :contractType ?ContractType;
-                        :DataController ?DataController;
-                        :ContractRequester ?ContractRequester;
-                        :ContractProvider ?ContractProvider;
-                        dcat:startDate ?StartDate;
-                        dcat:endDate ?EndingDate;
-                        fibo-fnd-agr-ctr:hasEffectiveDate ?EffectiveDate;
-                        fibo-fnd-agr-ctr:hasExecutionDate ?ExecutionDate;
-                        :inMedium ?Medium;
-                        :hasWaiver ?Waiver;
-                        :hasAmendment ?Amendment;
-                        :hasConfidentialityObligation ?ConfidentialityObligation;
-                        :hasDataProtection ?DataProtection;
-                        :hasLimitationOnUse ?LimitationOnUse;
-                        :hasMethodOfNotice ?MethodOfNotice;
-                        :hasNoThirdPartyBeneficiaries ?NoThirdPartyBeneficiaries;
-                        :hasPermittedDisclosure ?PermittedDisclosure;
-                        :hasReceiptOfNotice ?ReceiptOfNotice;
-                        :hasSeverability ?Severability;
-                        :hasTerminationForInsolvency ?TerminationForInsolvency;
-                        :hasTerminationForMaterialBreach ?TerminationForMaterialBreach;
-                        :hasTerminationOnNotice ?TerminationOnNotice .
+    	    :hasContractStatus ?ContractStatus;
+		    :forPurpose ?Purpose;
+		    :contractType ?ContractType;
+		    fibo-fnd-agr-ctr:hasEffectiveDate ?EffectiveDate;
+		    fibo-fnd-agr-ctr:hasExecutionDate ?ExecutionDate;
+            :inMedium ?Medium;
+            dct:description ?consideration;
+            rdf:value ?value .
         }}
         """).format(self.prefix())
         return query
@@ -77,49 +60,34 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
             SELECT *   
                 WHERE {{ 
                 ?Contract a :contractID;
-                        :hasContractStatus ?ContractStatus;
-                        :forPurpose ?Purpose;
-                        :contractType ?ContractType;
-                        :DataController ?DataController;
-                        :ContractRequester ?ContractRequester;
-                        :ContractProvider ?ContractProvider;
-                        dcat:startDate ?StartDate;
-                        dcat:endDate ?EndingDate;
-                        fibo-fnd-agr-ctr:hasEffectiveDate ?EffectiveDate;
-                        fibo-fnd-agr-ctr:hasExecutionDate ?ExecutionDate;
-                        :inMedium ?Medium;
-                        :hasWaiver ?Waiver;
-                        :hasAmendment ?Amendment;
-                        :hasConfidentialityObligation ?ConfidentialityObligation;
-                        :hasDataProtection ?DataProtection;
-                        :hasLimitationOnUse ?LimitationOnUse;
-                        :hasMethodOfNotice ?MethodOfNotice;
-                        :hasNoThirdPartyBeneficiaries ?NoThirdPartyBeneficiaries;
-                        :hasPermittedDisclosure ?PermittedDisclosure;
-                        :hasReceiptOfNotice ?ReceiptOfNotice;
-                        :hasSeverability ?Severability;
-                        :hasTerminationForInsolvency ?TerminationForInsolvency;
-                        :hasTerminationForMaterialBreach ?TerminationForMaterialBreach;
-                        :hasTerminationOnNotice ?TerminationOnNotice .
+    	        :hasContractStatus ?ContractStatus;
+		        :forPurpose ?Purpose;
+		        :contractType ?ContractType;
+		        fibo-fnd-agr-ctr:hasEffectiveDate ?EffectiveDate;
+		        fibo-fnd-agr-ctr:hasExecutionDate ?ExecutionDate;
+                :inMedium ?Medium;
+                dct:description ?consideration;
+                rdf:value ?value;
+                :hasContractors ?contractors;
+                :hasTerms ?terms;
+    			:hasObligations ?obligations .
                 filter(?Contract=:{1}) .
             }}""").format(self.prefix(), id)
 
         return query
 
-    def get_agent_by_id(self, id):
+    def get_contractor_by_id(self, id):
         query = textwrap.dedent("""{0}
             SELECT *   
                 WHERE {{ 
-                ?Agent a :agentID;
-                        :hasType ?type;
-                        :hasName ?name;
-                        :hasEmail ?email;
-                        :hasAddress ?address;
-                optional{{?Agent :hasTelephone ?phone.}}                        
-                optional{{?Agent :atCity ?city.}}
-                optional{{?Agent :atState ?state.}}
-                optional{{?Agent :atCountry ?country.}}
-                filter(?Agent=:{1}) .
+                ?Contractor a :contractorID;
+                :hasName ?name;
+                :hasTelephone ?phone;
+                :hasEmail ?email;
+                :hasCountry ?country;
+                :hasTerritory ?territory;
+                :hasPostalAddress ?address .
+                filter(?Contractor=:{1}) .
             }}""").format(self.prefix(), id)
 
         return query
@@ -136,7 +104,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
         # print(query)
         return query
 
-    def delete_agent_by_id(self, id):
+    def delete_contractor_by_id(self, id):
         query = textwrap.dedent("""{0}
                 delete{{?s ?p ?o}}   
                     WHERE {{ 
@@ -148,79 +116,201 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
         # print(query)
         return query
 
-    def get_all_agents(self):
+    def get_all_contractors(self):
         query = textwrap.dedent("""{0}
             select *
-            where{{  ?Agent a :agentID;
-                        :hasName ?Name;
-                        :hasAddress ?Address .
-             		optional{{?Agent :hasEmail ?email.}}
-    				optional{{?Agent :hasTelephone ?telephone .}}
-    				optional{{?Agent :atCity ?city.}}
-    				optional{{?Agent :atState ?state.}}
-    				optional{{?Agent :atCountry ?country.}}
+            where{{  ?Contractor a :contractorID;
+                :hasName ?name;
+                :hasTelephone ?phone;
+                :hasEmail ?email;
+                :hasCountry ?country;
+                :hasTerritory ?territory;
+                :hasPostalAddress ?address .
         }}
         """).format(self.prefix())
         return query
 
+    def get_term_by_id(self, id):
+        query = textwrap.dedent("""{0}
+            SELECT *   
+                WHERE {{ 
+                ?Term a :termID;
+                :hasName ?name;
+                dct:description ?description .
+                filter(?Term=:{1}) .
+            }}""").format(self.prefix(), id)
+
+        return query
+
+    def get_all_terms(self):
+        query = textwrap.dedent("""{0}
+            select *
+            where{{  ?Term a :termID;
+                :hasName ?name;
+                dct:description ?description .
+        }}
+        """).format(self.prefix())
+        return query
+
+    def delete_term_by_id(self, id):
+        query = textwrap.dedent("""{0}
+                delete{{?s ?p ?o}}   
+                    WHERE {{ 
+                    select ?s ?p ?o
+                        where{{
+                            ?s ?p ?o .
+                            filter(?s=:{1})
+                }}}}""").format(self.prefix(), id)
+        # print(query)
+        return query
+
+    def get_contract_obligations(self, id):
+        query = textwrap.dedent("""{0}
+            SELECT *
+                WHERE {{
+                ?Contract a :contractID;
+                    :hasObligations ?obl .
+                    ?obl :hasStates ?state .
+                    ?obl dct:description ?obl_desc .
+                    ?obl fibo-fnd-agr-ctr:hasExecutionDate ?exe_date .
+                    ?obl :hasEndDate ?end_date .
+                filter(?Contract=:{1}) .
+            }}""").format(self.prefix(), id)
+        return query
+
+    def get_contract_terms(self, id):
+        query = textwrap.dedent("""{0}
+            SELECT *
+                WHERE {{
+                ?Contract a :contractID;
+                    :hasTerms ?term .
+                    ?term rdf:type ?tid .
+                    ?term dct:description ?description .
+                filter(?Contract=:{1}) .
+            }}""").format(self.prefix(), id)
+        return query
+
+    def get_contract_contractors(self, id):
+        query = textwrap.dedent("""{0}
+            SELECT *
+                WHERE {{
+                ?Contract a :contractID;
+                     :hasContractors ?contractor.
+                ?contractor :hasName ?name .
+                ?contractor :hasPostalAddress ?address .
+                ?contractor :hasEmail ?email .
+                ?contractor :hasTelephone ?phone .
+                ?contractor :hasCountry ?country .
+                ?contractor :hasTerritory ?territory .
+                filter(?Contract=:{1}) .
+            }}""").format(self.prefix(), id)
+        return query
+
+    def get_all_obligations(self):
+        query = textwrap.dedent("""{0}
+            select *
+            where{{  
+            ?Obligation a :obligationID;
+                dct:description ?description;
+                dct:identifier ?identifier;
+                fibo-fnd-agr-ctr:hasExecutionDate ?executiondate;
+                :hasEndDate ?enddate;
+                :hasStates ?state .
+        }}
+        """).format(self.prefix())
+        return query
+
+    def delete_obligation_by_id(self, id):
+        query = textwrap.dedent("""{0}
+                delete{{?s ?p ?o}}   
+                    WHERE {{ 
+                    select ?s ?p ?o
+                        where{{
+                            ?s ?p ?o .
+                            filter(?s=:{1})
+                }}}}""").format(self.prefix(), id)
+        # print(query)
+        return query
+
+    def get_obligation_by_id(self, id):
+        query = textwrap.dedent("""{0}
+            SELECT *   
+                WHERE {{ 
+                ?Obligation a :obligationID;
+                    dct:description ?description;
+                    dct:identifier ?identifier;
+                    fibo-fnd-agr-ctr:hasExecutionDate ?executiondate;
+                    :hasEndDate ?enddate;
+                    :hasStates ?state .
+                filter(?Obligation=:{1}) .
+            }}""").format(self.prefix(), id)
+
+        return query
+
     def insert_query(self, ContractId, ContractType, Purpose,
-                     ContractRequester, ContractProvider, DataController, StartDate,
-                     ExecutionDate, EffectiveDate, ExpireDate, Medium, Waiver, Amendment,
-                     ConfidentialityObligation, DataProtection, LimitationOnUse,
-                     MethodOfNotice, NoThirdPartyBeneficiaries, PermittedDisclosure,
-                     ReceiptOfNotice, Severability, TerminationForInsolvency,
-                     TerminationForMaterialBreach, TerminationOnNotice, ContractStatus):
+                     EffectiveDate, ExecutionDate, EndDate, Medium, ContractStatus,
+                     ConsiderationDescription, ConsiderationValue, Contractors, Terms, Obligations):
         insquery = textwrap.dedent("""{0} 
             INSERT DATA {{
             :{1} a <http://ontologies.atb-bremen.de/smashHitCore#contractID>;
-            :contractType :{2};
+                       :contractType :{2};
                        :forPurpose "{3}";
-                       :ContractRequester :{4};
-                       :ContractProvider :{5};
-                       :DataController :{6};
-                        dcat:startDate "{7}";
-                        fibo-fnd-agr-ctr:hasExecutionDate "{8}";
-                        fibo-fnd-agr-ctr:hasEffectiveDate "{9}";
-                        dcat:endDate "{10}";
-                        :inMedium "{11}";
-                        :hasWaiver "{12}";
-                        :hasAmendment "{13}";
-                        :hasConfidentialityObligation "{14}";
-                        :hasDataProtection "{15}";
-                        :hasLimitationOnUse "{16}";
-                        :hasMethodOfNotice "{17}";
-                        :hasNoThirdPartyBeneficiaries "{18}";
-                        :hasPermittedDisclosure "{19}";
-                        :hasReceiptOfNotice "{20}";
-                        :hasSeverability "{21}";
-                        :hasTerminationForInsolvency "{22}";
-                        :hasTerminationForMaterialBreach "{23}";
-                        :hasTerminationOnNotice "{24}";
-                        :hasContractStatus :{25} .
+                        fibo-fnd-agr-ctr:hasEffectiveDate :{4};
+                        fibo-fnd-agr-ctr:hasExecutionDate :{5};
+                        :hasEndDate :{6};
+                        :inMedium "{7}";
+                        :hasContractStatus :{8};
+                        dct:description "{9}";
+                        rdf:value {10};
+                         {11};
+                         {12};
+                         {13} .
                    }}       
                
-          """.format(self.prefix(), ContractId, ContractType,
-                     Purpose, ContractRequester,
-                     ContractProvider, DataController, StartDate,
-                     ExecutionDate, EffectiveDate, ExpireDate, Medium, Waiver, Amendment,
-                     ConfidentialityObligation, DataProtection, LimitationOnUse,
-                     MethodOfNotice, NoThirdPartyBeneficiaries, PermittedDisclosure,
-                     ReceiptOfNotice, Severability, TerminationForInsolvency,
-                     TerminationForMaterialBreach, TerminationOnNotice, ContractStatus))
+          """.format(self.prefix(), ContractId, ContractType, Purpose,
+                     EffectiveDate, ExecutionDate, EndDate, Medium, ContractStatus,
+                     ConsiderationDescription, ConsiderationValue, Contractors, Terms, Obligations))
+
         return insquery
 
-    def insert_query_agent(self, AgentId, AgentType, Name, Email, Phone, Address, City, State, Country):
+    def insert_query_contractor(self, ContractorId, Name, Email, Phone, Address, Territory, Country, Role):
         insquery = textwrap.dedent("""{0} 
         INSERT DATA {{
-            :{1} a <http://ontologies.atb-bremen.de/smashHitCore#agentID>;
-            :hasType "{2}";
-                        :hasName "{3}";
-                        :hasEmail "{4}";
-                        :hasTelephone "{5}";
-                        :hasAddress "{6}";
-                        :atCity "{7}";
-                        :atState "{8}";
-                        :atCountry "{9}" .
+            :{1} a <http://ontologies.atb-bremen.de/smashHitCore#contractorID>;
+                        :hasName "{2}";
+                        :hasEmail "{3}";
+                        :hasTelephone "{4}";
+                        :hasPostalAddress "{5}";
+                        :hasTerritory "{6}";
+                        :hasCountry "{7}";
+                        :hasRole "{8}" .
                    }}       
-          """.format(self.prefix(), AgentId, AgentType, Name, Email, Phone, Address, City, State, Country))
+          """.format(self.prefix(), ContractorId, Name, Email, Phone, Address, Territory, Country, Role))
+        return insquery
+
+    def insert_query_term(self, TermId, Name, Description):
+        insquery = textwrap.dedent("""{0} 
+        INSERT DATA {{
+            :{1} a <http://ontologies.atb-bremen.de/smashHitCore#termID>;
+                        :hasName "{2}";
+                        dct:description "{3}" .
+                   }}       
+          """.format(self.prefix(), TermId, Name, Description))
+        return insquery
+
+    def insert_query_obligation(self, ObligationId, Description, TermId, ContractorId, ContractId, State, ExecutionDate,
+                                EndDate):
+        insquery = textwrap.dedent("""{0} 
+        INSERT DATA {{
+            :{1} a <http://ontologies.atb-bremen.de/smashHitCore#obligationID>;
+                        dct:description "{2}";
+                        dct:identifier :{3};
+                        dct:identifier :{4};
+                        dct:identifier :{5};
+                        :hasStates :{6};
+                        fibo-fnd-agr-ctr:hasExecutionDate "{6}";
+                        :hasEndDate "{7}" .
+                   }}       
+          """.format(self.prefix(), ObligationId, Description, TermId, ContractorId, ContractId, State, ExecutionDate,
+                                EndDate))
         return insquery

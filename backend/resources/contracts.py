@@ -10,10 +10,14 @@ import re
 from datetime import datetime, timedelta
 from core.query_processor.QueryProcessor import QueryEngine
 from core.contract_validation.ContractValidation import ContractValidation
-from core.agent_validation.AgentValidation import AgentValidation
+from core.contractor_validation.ContractorValidation import ContractorValidation
+from core.term_validation.term_validation import TermValidation
+from core.obligation_validation.obligation_validation import ObligationValidation
 from tests.contract_test import ContractApiTest
 import unittest
 from core.Credentials import Credentials
+
+from resources.users import check_for_session
 
 
 class NestedSchema(Schema):
@@ -64,16 +68,32 @@ class GenerateToken(MethodResource, Resource):
         return True
 
 
-class AgentRequestSchema(Schema):
-    AgentId = fields.String(required=True, description="Agent ID")
-    AgentType = fields.String(required=True, description="Agent Type")
+class ObligationRequestSchema(Schema):
+    ObligationId = fields.String(required=True, description="Obligation ID")
+    Description = fields.String(required=True, description="Description")
+    TermId = fields.String(required=True, description="Term ID")
+    ContractorId = fields.String(required=True, description="Contractor ID")
+    ContractId = fields.String(required=True, description="Contract ID")
+    State = fields.String(required=False, description="Obligation State")
+    ExecutionDate = fields.String(required=False, description="Execution Date")
+    EndDate = fields.String(required=False, description="End Date")
+
+
+class ContractorRequestSchema(Schema):
+    ContractorId = fields.String(required=True, description="Contractor ID")
     Name = fields.String(required=True, description="Name")
     Email = fields.String(required=False, description="Email")
     Phone = fields.String(required=False, description="Phone Number")
     Address = fields.String(required=True, description="Street Address")
-    City = fields.String(required=False, description="City")
-    State = fields.String(required=False, description="State")
+    Territory = fields.String(required=False, description="Territory")
     Country = fields.String(required=False, description="Country")
+    Role = fields.String(required=False, description="Role")
+
+
+class TermRequestSchema(Schema):
+    TermId = fields.String(required=True, description="Term ID")
+    Name = fields.String(required=True, description="Name")
+    Description = fields.String(required=False, description="Description")
 
 
 class ContractRequestSchema(Schema):
@@ -81,46 +101,28 @@ class ContractRequestSchema(Schema):
     ContractType = fields.String(required=True,
                                  description="Contract Type")
     Purpose = fields.String(required=True, description="For What Purpose")
-    ContractRequester = fields.String(required=True,
-                                      description="Contract Requester")
-    ContractProvider = fields.String(required=True,
-                                     description="Contract Provider")
-    DataController = fields.String(required=True,
-                                   description="Data Controller")
-    StartDate = fields.Date(required=False,
-                            description="Start Date")
+
     ExecutionDate = fields.Date(required=False,
                                 description="Execution Date")
     EffectiveDate = fields.Date(required=False,
                                 description="Effective Date")
-    ExpireDate = fields.Date(required=False,
-                             description="Expire Date")
+    EndDate = fields.Date(required=False,
+                          description="Expire Date")
     Medium = fields.String(required=False, description="Medium")
-    Waiver = fields.String(required=False, description="Waiver")
-    Amendment = fields.String(required=False, description="Amendment")
-    ConfidentialityObligation = fields.String(
-        required=False, description="Confidentiality Obligation")
-    DataProtection = fields.String(
-        required=False, description="Data Protection")
-    LimitationOnUse = fields.String(
-        required=False, description="Limitation On Use")
-    MethodOfNotice = fields.String(
-        required=False, description="Method Of Notice")
-    NoThirdPartyBeneficiaries = fields.String(
-        required=False, description="No Third Party Beneficiaries")
-    PermittedDisclosure = fields.String(
-        required=False, description="Permitted Disclosure")
-    ReceiptOfNotice = fields.String(
-        required=False, description="Receipt Of Notice")
-    Severability = fields.String(required=False, description="Severability")
-    TerminationForInsolvency = fields.String(
-        required=False, description="Termination For Insolvency")
-    TerminationForMaterialBreach = fields.String(
-        required=False, description="Termination For Material Breach")
-    TerminationOnNotice = fields.String(
-        required=False, description="Termination On Notice")
+
     ContractStatus = fields.String(
         required=False, description="Contract Status")
+
+    ConsiderationDescription = fields.String(
+        required=False, description="Consideration description")
+    ConsiderationValue = fields.String(
+        required=False, description="Consideration Value")
+    Contractors = fields.List(fields.String(),
+                              required=False, description="Contractors")
+    Terms = fields.List(fields.String(),
+                        required=False, description="Contract Terms")
+    Obligations = fields.List(fields.String(),
+                              required=False, description="Contract Obligations")
 
 
 class BulkResponseQuerySchema(Schema):
@@ -128,48 +130,52 @@ class BulkResponseQuerySchema(Schema):
 
 
 class Contracts(MethodResource, Resource):
+    # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
         response = json.loads(
-            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="bcontractId", contractId=None,
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="bcontractId", contractID=None,
                                    contractRequester=None, contractProvider=None))
         response = response["results"]
         return response, 200
 
 
 class ContractByRequester(MethodResource, Resource):
+    # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, requester):
         query = QueryEngine()
         response = json.loads(
-            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractId", contractId=None,
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractID", contractID=None,
                                    contractRequester=requester, contractProvider=None))
         response = response["results"]
         return response, 200
 
 
 class ContractByProvider(MethodResource, Resource):
+    # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, provider):
         query = QueryEngine()
         response = json.loads(
-            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractId", contractId=None,
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractID", contractID=None,
                                    contractRequester=None, contractProvider=provider))
         response = response["results"]
         return response, 200
 
 
 class ContractByContractId(MethodResource, Resource):
+    # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
-    def get(self, contractId):
+    def get(self, contractID):
         query = QueryEngine()
         response = json.loads(
-            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractId", contractId=contractId,
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractID", contractID=contractID,
                                    contractRequester=None, contractProvider=None))
         res = jsonify(response["results"])
         res.status_code = 200
@@ -177,6 +183,7 @@ class ContractByContractId(MethodResource, Resource):
 
 
 class ContractUpdate(MethodResource, Resource):
+    # @check_for_session
     # @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
     @use_kwargs(ContractRequestSchema)
@@ -203,6 +210,7 @@ class ContractUpdate(MethodResource, Resource):
 
 
 class ContractCreate(MethodResource, Resource):
+    # @check_for_session
     # @Credentials.check_for_token
     @use_kwargs(ContractRequestSchema)
     def post(self, **kwargs):
@@ -214,7 +222,7 @@ class ContractCreate(MethodResource, Resource):
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
 
-        if len(decoded_data['bindings']) == 1:
+        if len(decoded_data['bindings']) >= 1:
             return jsonify({'Error': "Contract id already exist"})
         else:
             validated_data = schema_serializer.load(data)
@@ -226,21 +234,22 @@ class ContractCreate(MethodResource, Resource):
                 return jsonify({'Error': "Record not inserted due to some errors."})
 
 
-class AgentUpdate(MethodResource, Resource):
+class ContractorUpdate(MethodResource, Resource):
+    # @check_for_session
     # @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
-    @use_kwargs(AgentRequestSchema)
+    @use_kwargs(ContractorRequestSchema)
     def put(self, **kwargs):
-        schema_serializer = AgentRequestSchema()
+        schema_serializer = ContractorRequestSchema()
         data = request.get_json(force=True)
-        agent_id = data['AgentId']
+        contractor_id = data['ContractorId']
         # get contract status from db
-        result = AgentByAgentId.get(self, agent_id)
+        result = ContractorById.get(self, contractor_id)
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
         if len(decoded_data) > 0:
             validated_data = schema_serializer.load(data)
-            av = AgentValidation()
+            av = ContractorValidation()
             response = av.post_data(validated_data, type="update")
             if (response):
                 return response
@@ -250,56 +259,60 @@ class AgentUpdate(MethodResource, Resource):
             return jsonify({'Error': "Record doesn't exist ."})
 
 
-class AgentByAgentId(MethodResource, Resource):
+class ContractorById(MethodResource, Resource):
+    # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
-    def get(self, agentId):
+    def get(self, contractorID):
         query = QueryEngine()
         response = json.loads(
-            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="agentId", contractId=None,
-                                   contractRequester=None, contractProvider=None, agentId=agentId))
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractorID", contractID=None,
+                                   contractRequester=None, contractProvider=None, contractorID=contractorID))
         res = jsonify(response["results"])
         res.status_code = 200
         return res
 
 
-class AgentCreate(MethodResource, Resource):
+class ContractorCreate(MethodResource, Resource):
+    # @check_for_session
     # @Credentials.check_for_token
-    @use_kwargs(AgentRequestSchema)
+    @use_kwargs(ContractorRequestSchema)
     def post(self, **kwargs):
-        schema_serializer = AgentRequestSchema()
+        schema_serializer = ContractorRequestSchema()
         data = request.get_json(force=True)
-        agent_id = data['AgentId']
+        contractor_id = data['ContractorId']
         # get agent from db
-        result = AgentByAgentId.get(self, agent_id)
+        result = ContractorById.get(self, contractor_id)
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
 
-        if len(decoded_data['bindings']) == 1:
-            return jsonify({'Error': "Agent id already exist"})
+        if len(decoded_data['bindings']) >= 1:
+            return jsonify({'Error': "Contractor id already exist"})
         else:
             validated_data = schema_serializer.load(data)
-            av = AgentValidation()
+            av = ContractorValidation()
 
             response = av.post_data(validated_data, type="insert")
+
             if (response):
                 return jsonify({'Success': "Record inserted successfully."})
             else:
                 return jsonify({'Error': "Record not inserted due to some errors."})
 
 
-class AgentDeleteById(MethodResource, Resource):
+class ContractorDeleteById(MethodResource, Resource):
+    # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     # @use_kwargs(ContractRequestSchema)
-    def delete(self, agentId):
+    def delete(self, contractorID):
         # get contract status from db
-        result = AgentByAgentId.get(self, agentId)
+        result = ContractorById.get(self, contractorID)
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
         if len(decoded_data['bindings']) == 1:
-            av = AgentValidation()
-            response = av.delete_agent(agentId)
+            av = ContractorValidation()
+            response = av.delete_contractor(contractorID)
             if (response):
                 return jsonify({'Success': "Record deleted successfully."})
             else:
@@ -307,20 +320,35 @@ class AgentDeleteById(MethodResource, Resource):
 
 
 class ContractDeleteById(MethodResource, Resource):
+    # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     # @use_kwargs(ContractRequestSchema)
-    def delete(self, contractId):
+    def delete(self, contractID):
         # get contract status from db
-        result = ContractByContractId.get(self, contractId)
+        result = ContractByContractId.get(self, contractID)
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
-        if len(decoded_data['bindings']) == 1:
+        if len(decoded_data['bindings']) >= 1:
             status_value = decoded_data['bindings'][0]['ContractStatus']['value']
             signed = re.findall(r"Signed", status_value)
             if len(signed) == 0:
                 cv = ContractValidation()
-                response = cv.delete_contract(contractId)
+
+                # delete obligation
+                obl = GetObligationByContractId.get(self, contractID)
+                my_json = obl.data.decode('utf8')
+                decoded_data = json.loads(my_json)
+
+                if len(decoded_data['bindings']) >= 1:
+                    obl_data = decoded_data['bindings']
+                    for o in obl_data:
+                        data = o['oid']['value'];
+                        data = data[45:]
+                        ObligationDeleteById.delete(self, data)
+
+                response = cv.delete_contract(contractID)
+
                 if (response):
                     return jsonify({'Success': "Record deleted successfully."})
                 else:
@@ -331,18 +359,257 @@ class ContractDeleteById(MethodResource, Resource):
             return jsonify({'Error': "Contract doesn't exist"})
 
 
-class GetAgents(MethodResource, Resource):
+class GetContractors(MethodResource, Resource):
+    # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
         response = json.loads(
-            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="agents", contractId=None,
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractors", contractorID=None,
                                    contractRequester=None, contractProvider=None, ))
         response = response["results"]
         return response, 200
 
-#
+
+class GetTerms(MethodResource, Resource):
+    # @check_for_session
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    def get(self):
+        query = QueryEngine()
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="terms", termID=None,
+                                   contractRequester=None, contractProvider=None, ))
+        response = response["results"]
+        return response, 200
+
+
+class TermById(MethodResource, Resource):
+    # @check_for_session
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    def get(self, termID):
+        query = QueryEngine()
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="termID", contractID=None,
+                                   contractRequester=None, contractProvider=None, termID=termID))
+        res = jsonify(response["results"])
+        res.status_code = 200
+        return res
+
+
+class TermDeleteById(MethodResource, Resource):
+    # @check_for_session
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    # @use_kwargs(ContractRequestSchema)
+    def delete(self, termID):
+        # get contract status from db
+        result = TermById.get(self, termID)
+        my_json = result.data.decode('utf8')
+        decoded_data = json.loads(my_json)
+        if len(decoded_data['bindings']) == 1:
+            av = TermValidation()
+            response = av.delete_term(termID)
+            if (response):
+                return jsonify({'Success': "Record deleted successfully."})
+            else:
+                return jsonify({'Error': "Record not deleted due to some errors."})
+
+
+class TermCreate(MethodResource, Resource):
+    # @check_for_session
+    # @Credentials.check_for_token
+    @use_kwargs(TermRequestSchema)
+    def post(self, **kwargs):
+        schema_serializer = TermRequestSchema()
+        data = request.get_json(force=True)
+        term_id = data['TermId']
+        # get agent from db
+        result = TermById.get(self, term_id)
+        my_json = result.data.decode('utf8')
+        decoded_data = json.loads(my_json)
+
+        if len(decoded_data['bindings']) >= 1:
+            return jsonify({'Error': "Term id already exist"})
+        else:
+            validated_data = schema_serializer.load(data)
+            av = TermValidation()
+
+            response = av.post_data(validated_data, type="insert")
+
+            if (response):
+                return jsonify({'Success': "Record inserted successfully."})
+            else:
+                return jsonify({'Error': "Record not inserted due to some errors."})
+
+
+class TermUpdate(MethodResource, Resource):
+    # @check_for_session
+    # @Credentials.check_for_token
+    @marshal_with(BulkResponseQuerySchema)
+    @use_kwargs(TermRequestSchema)
+    def put(self, **kwargs):
+        schema_serializer = TermRequestSchema()
+        data = request.get_json(force=True)
+        term_id = data['TermId']
+        # get contract status from db
+        result = TermById.get(self, term_id)
+        my_json = result.data.decode('utf8')
+        decoded_data = json.loads(my_json)
+        if len(decoded_data) > 0:
+            validated_data = schema_serializer.load(data)
+            av = TermValidation()
+            response = av.post_data(validated_data, type="update")
+            if (response):
+                return response
+            else:
+                return jsonify({'Error': "Record not updated due to some errors."})
+        else:
+            return jsonify({'Error': "Record doesn't exist ."})
+
+
+class GetObligations(MethodResource, Resource):
+    # @check_for_session
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    def get(self):
+        query = QueryEngine()
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="obligations", termID=None,
+                                   contractRequester=None, contractProvider=None, ))
+        response = response["results"]
+        return response, 200
+
+
+class GetObligationByContractId(MethodResource, Resource):
+    # @check_for_session
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    def get(self, contractID):
+        query = QueryEngine()
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractObligation",
+                                   contractID=contractID,
+                                   contractRequester=None, contractProvider=None, contractorID=None, termID=None
+                                   ))
+        res = jsonify(response["results"])
+        res.status_code = 200
+        return res
+
+
+class GetContractTerms(MethodResource, Resource):
+    # @check_for_session
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    def get(self, contractID):
+        query = QueryEngine()
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractTerms",
+                                   contractID=contractID,
+                                   contractRequester=None, contractProvider=None, contractorID=None, termID=None
+                                   ))
+        res = jsonify(response["results"])
+        res.status_code = 200
+        return res
+
+
+class GetContractContractors(MethodResource, Resource):
+    # @check_for_session
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    def get(self, contractID):
+        query = QueryEngine()
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractContractors",
+                                   contractID=contractID,
+                                   contractRequester=None, contractProvider=None, contractorID=None, termID=None
+                                   ))
+        res = jsonify(response["results"])
+        res.status_code = 200
+        return res
+
+
+class ObligationById(MethodResource, Resource):
+    # @check_for_session
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    def get(self, obligationID):
+        query = QueryEngine()
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="obligationID",
+                                   obligationID=obligationID,
+                                   contractRequester=None, contractProvider=None))
+        res = jsonify(response["results"])
+        res.status_code = 200
+        return res
+
+
+class ObligationCreate(MethodResource, Resource):
+    # @check_for_session
+    # @Credentials.check_for_token
+    @use_kwargs(ObligationRequestSchema)
+    def post(self, **kwargs):
+        schema_serializer = ObligationRequestSchema()
+        data = request.get_json(force=True)
+        obligation_id = data['ObligationId']
+        contract_id = data['ContractId']
+        # get agent from db
+        # check contract id first
+        re = GetObligationByContractId.get(self, contract_id)
+
+        my_json = re.data.decode('utf8')
+        decoded_data = json.loads(my_json)
+
+        if len(decoded_data['bindings']) >= 1:
+            result = decoded_data['bindings']
+            for r in result:
+                ob = r['oid']['value']
+                if ob == obligation_id:
+                    return jsonify({'Error': "Obligation id already exist"})
+                else:
+                    validated_data = schema_serializer.load(data)
+                    av = ObligationValidation()
+
+                    response = av.post_data(validated_data, type="insert")
+
+                    if (response):
+                        return jsonify({'Success': "Record inserted successfully."})
+                    else:
+                        return jsonify({'Error': "Record not inserted due to some errors."})
+        else:
+            validated_data = schema_serializer.load(data)
+            av = ObligationValidation()
+
+            response = av.post_data(validated_data, type="insert")
+
+            if (response):
+                return jsonify({'Success': "Record inserted successfully."})
+            else:
+                return jsonify({'Error': "Record not inserted due to some errors."})
+
+
+class ObligationDeleteById(MethodResource, Resource):
+    # @check_for_session
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    # @use_kwargs(ContractRequestSchema)
+    def delete(self, obligationID):
+        print(obligationID)
+        # get contract status from db
+        result = ObligationById.get(self, obligationID)
+        my_json = result.data.decode('utf8')
+        decoded_data = json.loads(my_json)
+        print(len(decoded_data['bindings']))
+        if len(decoded_data['bindings']) >= 1:
+            av = ObligationValidation()
+            response = av.delete_obligation(obligationID)
+            if (response):
+                return jsonify({'Success': "Record deleted successfully."})
+            else:
+                return jsonify({'Error': "Record not deleted due to some errors."})
+
 # class GetContractTestResult(MethodResource, Resource):
 #     # @Credentials.check_for_token
 #     # @marshal_with(BulkResponseQuerySchema)

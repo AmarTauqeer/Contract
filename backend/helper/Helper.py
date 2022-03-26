@@ -24,8 +24,15 @@ class HelperContract:
             "get_contract_by_requester": self.get_contract_by_requester,
             "get_contract_by_provider": self.get_contract_by_provider,
             "get_contract_by_id": self.get_contract_by_id,
-            "get_agent_by_id": self.get_agent_by_id,
-            "get_all_agents": self.get_all_agents,
+            "get_contractor_by_id": self.get_contractor_by_id,
+            "get_all_contractors": self.get_all_contractors,
+            "get_all_terms": self.get_all_terms,
+            "get_term_by_id": self.get_term_by_id,
+            "get_obligation_by_id": self.get_obligation_by_id,
+            "get_all_obligations": self.get_all_obligations,
+            "get_contract_obligations": self.get_contract_obligations,
+            "get_contract_terms": self.get_contract_terms,
+            "get_contract_contractors": self.get_contract_contractors,
         }
         return mapfunc[name]
 
@@ -40,8 +47,8 @@ class HelperContract:
             querydata = strs + querydata
         return querydata
 
-    def which_query(self, purpose=None, dataRequester=None, additionalData=None, contractId=None,
-                    contractRequester=None, contractProvider=None, agentId=None
+    def which_query(self, purpose=None, dataRequester=None, additionalData=None, contractID=None,
+                    contractRequester=None, contractProvider=None, contractorID=None, termID=None, obligationID=None
                     ):
         """ Define mapping to appropriate function for query generation based on input
         :param purpose:
@@ -56,29 +63,51 @@ class HelperContract:
         if additionalData == "bcontractId":
             return dict({"map": "get_all_contracts"})
 
-        if additionalData == "contractId" and contractRequester is not None:
+        if additionalData == "contractID" and contractRequester is not None:
             return dict({"map": "get_contract_by_requester", "arg": contractRequester})
 
-        if additionalData == "contractId" and contractProvider is not None:
+        if additionalData == "contractID" and contractProvider is not None:
             return dict({"map": "get_contract_by_provider", "arg": contractProvider})
 
-        if additionalData == "contractId" and contractId is not None:
-            return dict({"map": "get_contract_by_id", "arg": contractId})
+        if additionalData == "contractID" and contractID is not None:
+            return dict({"map": "get_contract_by_id", "arg": contractID})
 
-        if additionalData == "agents":
-            return dict({"map": "get_all_agents"})
+        if additionalData == "contractors":
+            return dict({"map": "get_all_contractors"})
 
-        if additionalData == "agentId" and agentId is not None:
-            return dict({"map": "get_agent_by_id", "arg": agentId})
+        if additionalData == "contractorID" and contractorID is not None:
+            return dict({"map": "get_contractor_by_id", "arg": contractorID})
 
-    def select_query_gdb(self, purpose=None, dataRequester=None, additionalData=None, contractId=None,
-                         contractRequester=None, contractProvider=None, agentId=None):
+        if additionalData == "terms":
+            return dict({"map": "get_all_terms"})
+
+        if additionalData == "obligations":
+            return dict({"map": "get_all_obligations"})
+
+        if additionalData == "termID" and termID is not None:
+            return dict({"map": "get_term_by_id", "arg": termID})
+
+        if additionalData == "contractObligation" and contractID is not None:
+            return dict({"map": "get_contract_obligations", "arg": contractID})
+
+        if additionalData == "contractTerms" and contractID is not None:
+            return dict({"map": "get_contract_terms", "arg": contractID})
+
+        if additionalData == "contractContractors" and contractID is not None:
+            return dict({"map": "get_contract_contractors", "arg": contractID})
+
+        if additionalData == "obligationID" and obligationID is not None:
+            return dict({"map": "get_obligation_by_id", "arg": obligationID})
+
+    def select_query_gdb(self, purpose=None, dataRequester=None, additionalData=None, contractID=None,
+                         contractRequester=None, contractProvider=None, contractorID=None, termID=None,
+                         obligationID=None):
 
         sparql_inits = self.init_sparql(
             self.HOST_URI, self.get_username(), self.get_password())
 
-        which_query_return = self.which_query(purpose, dataRequester, additionalData, contractId,
-                                              contractRequester, contractProvider, agentId)
+        which_query_return = self.which_query(purpose, dataRequester, additionalData, contractID,
+                                              contractRequester, contractProvider, contractorID, termID,obligationID)
 
         if ("arg" in which_query_return.keys()):
             sparql_inits.setQuery(self.function_map(
