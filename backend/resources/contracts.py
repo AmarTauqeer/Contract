@@ -130,6 +130,7 @@ class BulkResponseQuerySchema(Schema):
 
 
 class Contracts(MethodResource, Resource):
+    @doc(description='Contracts', tags=['Contracts'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -169,6 +170,7 @@ class ContractByProvider(MethodResource, Resource):
 
 
 class ContractByContractId(MethodResource, Resource):
+    @doc(description='Contracts', tags=['Contracts'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -183,6 +185,7 @@ class ContractByContractId(MethodResource, Resource):
 
 
 class ContractUpdate(MethodResource, Resource):
+    @doc(description='Contracts', tags=['Contracts'])
     # @check_for_session
     # @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
@@ -210,6 +213,7 @@ class ContractUpdate(MethodResource, Resource):
 
 
 class ContractCreate(MethodResource, Resource):
+    @doc(description='Contracts', tags=['Contracts'])
     # @check_for_session
     # @Credentials.check_for_token
     @use_kwargs(ContractRequestSchema)
@@ -235,6 +239,7 @@ class ContractCreate(MethodResource, Resource):
 
 
 class ContractorUpdate(MethodResource, Resource):
+    @doc(description='Contractors', tags=['Contractors'])
     # @check_for_session
     # @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
@@ -260,6 +265,7 @@ class ContractorUpdate(MethodResource, Resource):
 
 
 class ContractorById(MethodResource, Resource):
+    @doc(description='Contractors', tags=['Contractors'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -274,6 +280,7 @@ class ContractorById(MethodResource, Resource):
 
 
 class ContractorCreate(MethodResource, Resource):
+    @doc(description='Contractors', tags=['Contractors'])
     # @check_for_session
     # @Credentials.check_for_token
     @use_kwargs(ContractorRequestSchema)
@@ -301,6 +308,7 @@ class ContractorCreate(MethodResource, Resource):
 
 
 class ContractorDeleteById(MethodResource, Resource):
+    @doc(description='Contractors', tags=['Contractors'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -320,6 +328,7 @@ class ContractorDeleteById(MethodResource, Resource):
 
 
 class ContractDeleteById(MethodResource, Resource):
+    @doc(description='Contracts', tags=['Contracts'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -360,6 +369,7 @@ class ContractDeleteById(MethodResource, Resource):
 
 
 class GetContractors(MethodResource, Resource):
+    @doc(description='Contractors', tags=['Contractors'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -373,6 +383,7 @@ class GetContractors(MethodResource, Resource):
 
 
 class GetTerms(MethodResource, Resource):
+    @doc(description='Terms', tags=['Terms'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -386,6 +397,7 @@ class GetTerms(MethodResource, Resource):
 
 
 class TermById(MethodResource, Resource):
+    @doc(description='Terms', tags=['Terms'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -400,6 +412,7 @@ class TermById(MethodResource, Resource):
 
 
 class TermDeleteById(MethodResource, Resource):
+    @doc(description='Terms', tags=['Terms'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -419,6 +432,7 @@ class TermDeleteById(MethodResource, Resource):
 
 
 class TermCreate(MethodResource, Resource):
+    @doc(description='Terms', tags=['Terms'])
     # @check_for_session
     # @Credentials.check_for_token
     @use_kwargs(TermRequestSchema)
@@ -446,6 +460,7 @@ class TermCreate(MethodResource, Resource):
 
 
 class TermUpdate(MethodResource, Resource):
+    @doc(description='Terms', tags=['Terms'])
     # @check_for_session
     # @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
@@ -471,6 +486,7 @@ class TermUpdate(MethodResource, Resource):
 
 
 class GetObligations(MethodResource, Resource):
+    @doc(description='Obligations', tags=['Obligations'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -484,6 +500,7 @@ class GetObligations(MethodResource, Resource):
 
 
 class GetObligationByContractId(MethodResource, Resource):
+    @doc(description='Contract Obligations', tags=['Contract Obligations'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -500,6 +517,7 @@ class GetObligationByContractId(MethodResource, Resource):
 
 
 class GetContractTerms(MethodResource, Resource):
+    @doc(description='Contract Terms', tags=['Contract Terms'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -516,6 +534,7 @@ class GetContractTerms(MethodResource, Resource):
 
 
 class GetContractContractors(MethodResource, Resource):
+    @doc(description='Contract Contractors', tags=['Contract Contractors'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -532,6 +551,7 @@ class GetContractContractors(MethodResource, Resource):
 
 
 class ObligationById(MethodResource, Resource):
+    @doc(description='Obligations', tags=['Obligations'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -547,6 +567,7 @@ class ObligationById(MethodResource, Resource):
 
 
 class ObligationCreate(MethodResource, Resource):
+    @doc(description='Obligations', tags=['Obligations'])
     # @check_for_session
     # @Credentials.check_for_token
     @use_kwargs(ObligationRequestSchema)
@@ -591,6 +612,7 @@ class ObligationCreate(MethodResource, Resource):
 
 
 class ObligationDeleteById(MethodResource, Resource):
+    @doc(description='Obligations', tags=['Obligations'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)

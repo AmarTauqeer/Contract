@@ -7,8 +7,8 @@ from resources.contracts import Contracts, ContractByRequester, \
     GenerateToken, ContractUpdate, ContractDeleteById, GetContractors, \
     ContractorDeleteById, ContractorCreate, ContractorById, ContractorUpdate, \
     GetTerms, TermUpdate, TermCreate, TermById, TermDeleteById, GetObligationByContractId, \
-    GetContractTerms, GetContractContractors,GetObligations, ObligationById, ObligationCreate, \
-ObligationDeleteById
+    GetContractTerms, GetContractContractors, GetObligations, ObligationById, ObligationCreate, \
+    ObligationDeleteById
 from resources.users import RegisterUser, Login, Logout, DeleteUser, AllUsers
 from flask_restful import Api
 from flask_cors import CORS
@@ -31,12 +31,16 @@ cors = CORS(app, resources={
 # swagger configuration
 app.config.update({
     'APISPEC_SPEC': APISpec(
-        title='Contracts API Specification',
-        version='v01',
+        title='Automatic Contracting Tool Contracts API Specification',
+        info=dict(description="Author: Amar Tauqeer, Email: amar.tauqeer@sti2.at"),
+        version='v001',
         plugins=[MarshmallowPlugin()],
-        openapi_version='2.0.0'
-    ),
+        openapi_version='2.0.0',
+
+    )
+    ,
     'APISPEC_SWAGGER_UI_URL': '/swagger-ui/',
+
 })
 app.config.from_object(ApplicationConfig)
 server_session = Session(app)
@@ -78,11 +82,11 @@ docs.register(Contracts)
 # docs.register(ContractByProvider)
 
 api.add_resource(ContractByContractId,
-                 '/contract/by_contractId/<string:contractID>/')
+                 '/contract/<string:contractID>/')
 docs.register(ContractByContractId)
 
 api.add_resource(ContractorById,
-                 '/contractor/by_contractorId/<string:contractorID>/')
+                 '/contractor/<string:contractorID>/')
 docs.register(ContractorById)
 
 api.add_resource(ContractDeleteById,
@@ -125,7 +129,7 @@ api.add_resource(TermDeleteById,
 docs.register(TermDeleteById)
 
 api.add_resource(TermById,
-                 '/term/by_termId/<string:termID>/')
+                 '/term/<string:termID>/')
 docs.register(TermById)
 
 api.add_resource(GetObligationByContractId,
@@ -141,7 +145,7 @@ api.add_resource(GetContractContractors,
 docs.register(GetContractContractors)
 
 api.add_resource(ObligationById,
-                 '/obligation/by_obligationId/<string:obligationID>/')
+                 '/obligation/<string:obligationID>/')
 docs.register(ObligationById)
 
 api.add_resource(ObligationCreate, '/obligation/create/')
