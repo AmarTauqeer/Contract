@@ -486,7 +486,7 @@ class TermUpdate(MethodResource, Resource):
 
 
 class GetObligations(MethodResource, Resource):
-    @doc(description='Obligations', tags=['Obligations'])
+    @doc(description='Contract Obligations', tags=['Contract Obligations'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -551,7 +551,7 @@ class GetContractContractors(MethodResource, Resource):
 
 
 class ObligationById(MethodResource, Resource):
-    @doc(description='Obligations', tags=['Obligations'])
+    @doc(description='Contract Obligations', tags=['Contract Obligations'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
@@ -567,7 +567,7 @@ class ObligationById(MethodResource, Resource):
 
 
 class ObligationCreate(MethodResource, Resource):
-    @doc(description='Obligations', tags=['Obligations'])
+    @doc(description='Contract Obligations', tags=['Contract Obligations'])
     # @check_for_session
     # @Credentials.check_for_token
     @use_kwargs(ObligationRequestSchema)
@@ -612,7 +612,7 @@ class ObligationCreate(MethodResource, Resource):
 
 
 class ObligationDeleteById(MethodResource, Resource):
-    @doc(description='Obligations', tags=['Obligations'])
+    @doc(description='Contract Obligations', tags=['Contract Obligations'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
