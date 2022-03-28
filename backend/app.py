@@ -8,7 +8,7 @@ from resources.contracts import Contracts, ContractByRequester, \
     ContractorDeleteById, ContractorCreate, ContractorById, ContractorUpdate, \
     GetTerms, TermUpdate, TermCreate, TermById, TermDeleteById, GetObligationByContractId, \
     GetContractTerms, GetContractContractors, GetObligations, ObligationById, ObligationCreate, \
-    ObligationDeleteById
+    ObligationDeleteById, GetContractCompliance
 from resources.users import RegisterUser, Login, Logout, DeleteUser, AllUsers
 from flask_restful import Api
 from flask_cors import CORS
@@ -154,6 +154,10 @@ docs.register(ObligationCreate)
 api.add_resource(ObligationDeleteById,
                  '/obligation/delete/<string:obligationID>/')
 docs.register(ObligationDeleteById)
+
+api.add_resource(GetContractCompliance, '/contract/compliance')
+docs.register(GetContractCompliance)
+
 # api.add_resource(GetContractTestResult, '/contract/tests/')
 # docs.register(GetContractTestResult)
 

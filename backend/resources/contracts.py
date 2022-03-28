@@ -1,3 +1,6 @@
+import textwrap
+from core.storage.Sparql import SPARQL
+from SPARQLWrapper import JSON, SPARQLWrapper, BASIC
 from flask import json, jsonify
 from flask_restful import Resource, request
 from flask_apispec.views import MethodResource
@@ -7,6 +10,7 @@ from functools import wraps
 import jwt
 import os
 import re
+from datetime import *
 from datetime import datetime, timedelta
 from core.query_processor.QueryProcessor import QueryEngine
 from core.contract_validation.ContractValidation import ContractValidation
@@ -18,6 +22,8 @@ import unittest
 from core.Credentials import Credentials
 
 from resources.users import check_for_session
+
+
 
 
 class NestedSchema(Schema):
@@ -75,8 +81,8 @@ class ObligationRequestSchema(Schema):
     ContractorId = fields.String(required=True, description="Contractor ID")
     ContractId = fields.String(required=True, description="Contract ID")
     State = fields.String(required=False, description="Obligation State")
-    ExecutionDate = fields.String(required=False, description="Execution Date")
-    EndDate = fields.String(required=False, description="End Date")
+    ExecutionDate = fields.Date(required=False, description="Execution Date")
+    EndDate = fields.Date(required=False, description="End Date")
 
 
 class ContractorRequestSchema(Schema):
@@ -585,8 +591,9 @@ class ObligationCreate(MethodResource, Resource):
 
         if len(decoded_data['bindings']) >= 1:
             result = decoded_data['bindings']
+
             for r in result:
-                ob = r['oid']['value']
+                ob = r['obl']['value']
                 if ob == obligation_id:
                     return jsonify({'Error': "Obligation id already exist"})
                 else:
@@ -631,6 +638,177 @@ class ObligationDeleteById(MethodResource, Resource):
                 return jsonify({'Success': "Record deleted successfully."})
             else:
                 return jsonify({'Error': "Record not deleted due to some errors."})
+
+
+class ContractObligationUpdate(MethodResource, Resource):
+    @doc(description='Contract Obligations', tags=['Contract Obligations'])
+    # @check_for_session
+    # @Credentials.check_for_token
+    @marshal_with(BulkResponseQuerySchema)
+    @use_kwargs(ObligationRequestSchema)
+    def put(self, **kwargs):
+        schema_serializer = ObligationRequestSchema()
+        data = request.get_json(force=True)
+        obligation_id = data['ObligationId']
+
+        result = ObligationById.get(self, obligation_id)
+        my_json = result.data.decode('utf8')
+        decoded_data = json.loads(my_json)
+        if len(decoded_data) > 0:
+            validated_data = schema_serializer.load(data)
+            av = ObligationValidation()
+            response = av.post_data(validated_data, type="update")
+            if (response):
+                return response
+            else:
+                return jsonify({'Error': "Record not updated due to some errors."})
+        else:
+            return jsonify({'Error': "Record doesn't exist ."})
+
+
+def contract_status_update_by_id(self, id):
+
+    host_post = os.getenv("HOST_URI_POST")
+    hostname = host_post
+    userid= os.getenv("user_name")
+    password = os.getenv("password")
+
+    violation_date = date.today()
+    sparql = SPARQLWrapper(hostname)
+    sparql.setHTTPAuth(BASIC)
+    sparql.setCredentials(userid, password)
+    query = textwrap.dedent("""
+     PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+     PREFIX dct: <http://purl.org/dc/terms/>
+        DELETE {{?ContractId :hasContractStatus :hasCreated.
+                ?ContractId :hasContractStatus :hasRenewed.
+                ?ContractId :hasContractStatus :hasPending.}}
+        INSERT {{?ContractId :hasContractStatus :hasViolated.
+        ?ContractId :RevokedAtTime {0}.
+        }}
+         WHERE {{
+         ?ContractId a <http://ontologies.atb-bremen.de/smashHitCore#contractID>.
+          FILTER(?ContractId = :{1})
+         }}""").format('\'{}^^xsd:dateTime\''.format(violation_date), id)
+
+    # print(query)
+    sparql.setQuery(query)
+    sparql.method = "POST"
+    sparql.queryType = "INSERT"
+    sparql.setReturnFormat('json')
+    result = sparql.query()
+    if str(result.response.read().decode("utf-8")) == "":
+        return "Success"
+    else:
+        return "Fail"
+
+
+
+class GetContractCompliance(MethodResource, Resource):
+    @doc(description='Contract Compliance', tags=['Contract Compliance'])
+    # @check_for_session
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    def get(self):
+        query = QueryEngine()
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="compliance", termID=None,
+                                   contractRequester=None, contractProvider=None, ))
+
+        obligatons = response["results"]['bindings']
+        # current_data = today
+        current_data = date(2022, 3, 28)
+
+        for x in obligatons:
+            identifier = x["identifier"]["value"]
+            if "CONT" in identifier:
+                contract_id = identifier[45:]
+                # print(contract_id)
+
+                # get contract
+                res_contract = ContractByContractId.get(self, contract_id)
+                data = res_contract.json
+                contract_status = data["bindings"][0]['ContractStatus']['value']
+                contract_status = contract_status[45:]
+                # print(contract_status)
+
+                # get contract obligation
+                res = GetObligationByContractId.get(self, contract_id)
+                data = res.json
+
+                for d in data["bindings"]:
+                    # print(d["state"]['value'])
+                    oid = d["obl"]["value"]
+                    sdate = d["exe_date"]["value"]
+                    edate = d["end_date"]["value"]
+                    obl_state = d["state"]["value"]
+                    obl_state = obl_state[45:]
+                    obl_desc = d["obl_desc"]["value"]
+
+                    obligation_id = oid[45:]
+                    contractor_id = ""
+                    term_id = ""
+
+                    # get contractor and term
+                    ob = ObligationById.get(self, obligation_id)
+                    data = ob.json
+                    for d in data['bindings']:
+                        ob_data = d['identifier']['value']
+                        if "CONT" not in ob_data:
+                            new_ob_data = ob_data
+                            if "T" in new_ob_data:
+                                term_id = new_ob_data
+                            else:
+                                contractor_id = new_ob_data
+
+                    # print(contractor_id)
+                    # print(term_id)
+
+                    date_time_str = edate[45:]
+                    date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%d').date()
+
+                    # print(current_data)
+                    # print(date_time_obj)
+                    # print(obl_state)
+
+                    if current_data >= date_time_obj and obl_state == 'hasPendingState' and contract_status not in (
+                            'Violated', 'Terminated'):
+                        new_data = {
+                            "ObligationId": obligation_id,
+                            "Description": obl_desc,
+                            "TermId": term_id[45:],
+                            "ContractorId": contractor_id[45:],
+                            "ContractId": contract_id[45:],
+                            "State": "hasViolated",
+                            "ExecutionDate": sdate[45:],
+                            "EndDate": edate[45:],
+                        }
+
+                        # update contract status
+                        status = contract_status_update_by_id(self,contract_id)
+
+
+                        # update obligation
+                        schema_serializer = ObligationRequestSchema()
+                        data = new_data
+                        obligation_id = data['ObligationId']
+
+                        result = ObligationById.get(self, obligation_id)
+                        my_json = result.data.decode('utf8')
+                        decoded_data = json.loads(my_json)
+
+                        if len(decoded_data['bindings']) >= 1:
+                            # for d in decoded_data['bindings']:
+                            #     print(d['state']['value'])
+
+                            validated_data = schema_serializer.load(data)
+                            av = ObligationValidation()
+                            resp = av.post_data(validated_data, type="update")
+
+                            if status and resp:
+                                return "Success"
+                            return "Something wrong to update contract status"
+
 
 # class GetContractTestResult(MethodResource, Resource):
 #     # @Credentials.check_for_token

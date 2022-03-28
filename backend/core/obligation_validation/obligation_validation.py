@@ -42,7 +42,7 @@ class ObligationValidation(QueryEngine):
 
                 # insert into kg
                 respone = self.post_sparql(self.get_username(), self.get_password(),
-                                           self.insert_query_term(ObligationId=ObligationId,
+                                           self.insert_query_obligation(ObligationId=ObligationId,
                                                                   Description=Description,
                                                                   TermId=TermId,
                                                                   ContractorId=ContractorId,

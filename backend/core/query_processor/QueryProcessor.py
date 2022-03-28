@@ -176,6 +176,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                     ?obl :hasEndDate ?end_date .
                 filter(?Contract=:{1}) .
             }}""").format(self.prefix(), id)
+
         return query
 
     def get_contract_terms(self, id):
@@ -184,7 +185,6 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                 WHERE {{
                 ?Contract a :contractID;
                     :hasTerms ?term .
-                    ?term rdf:type ?tid .
                     ?term dct:description ?description .
                 filter(?Contract=:{1}) .
             }}""").format(self.prefix(), id)
@@ -220,6 +220,20 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
         """).format(self.prefix())
         return query
 
+    def get_contract_compliance(self):
+        query = textwrap.dedent("""{0}
+            select *
+            where{{  
+            ?Obligation a ?oid;
+           :hasStates ?state;
+    		dct:description ?obl_desc;
+    		fibo-fnd-agr-ctr:hasExecutionDate ?exe_date;
+    		:hasEndDate ?end_date;
+      		dct:identifier ?identifier .
+        }}
+        """).format(self.prefix())
+        return query
+
     def delete_obligation_by_id(self, id):
         query = textwrap.dedent("""{0}
                 delete{{?s ?p ?o}}   
@@ -245,6 +259,22 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                 filter(?Obligation=:{1}) .
             }}""").format(self.prefix(), id)
 
+        return query
+
+    def contract_update_status(self, id):
+        violation_date = date.today()
+        query = textwrap.dedent("""{0}
+            DELETE {{?ContractId :hasContractStatus :hasCreated.
+                    ?ContractId :hasContractStatus :hasPending.
+                    ?ContractId :hasContractStatus :hasRenewed.}}
+            INSERT {{?ContractId :hasContractStatus :hasViolated.
+            ?ContractId :RevokedAtTime {1}.
+            }}
+             WHERE {{
+             ?ContractId a :<http://ontologies.atb-bremen.de/smashHitCore#contractID>.
+              FILTER(?ContractId = :{2})}}""").format(self.prefix(), '\'{}^^xsd:dateTime\''.format(violation_date), id)
+
+        # print(query)
         return query
 
     def insert_query(self, ContractId, ContractType, Purpose,
@@ -308,9 +338,9 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                         dct:identifier :{4};
                         dct:identifier :{5};
                         :hasStates :{6};
-                        fibo-fnd-agr-ctr:hasExecutionDate "{6}";
-                        :hasEndDate "{7}" .
+                        fibo-fnd-agr-ctr:hasExecutionDate :{7};
+                        :hasEndDate :{8} .
                    }}       
           """.format(self.prefix(), ObligationId, Description, TermId, ContractorId, ContractId, State, ExecutionDate,
-                                EndDate))
+                     EndDate))
         return insquery

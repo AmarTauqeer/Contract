@@ -33,6 +33,8 @@ class HelperContract:
             "get_contract_obligations": self.get_contract_obligations,
             "get_contract_terms": self.get_contract_terms,
             "get_contract_contractors": self.get_contract_contractors,
+            "get_contract_compliance": self.get_contract_compliance,
+            "contract_update_status": self.contract_update_status,
         }
         return mapfunc[name]
 
@@ -62,6 +64,13 @@ class HelperContract:
 
         if additionalData == "bcontractId":
             return dict({"map": "get_all_contracts"})
+
+        if additionalData == "compliance":
+            return dict({"map": "get_contract_compliance"})
+
+        if additionalData == "contractStatus" and contractID is not None:
+            return dict({"map": "contract_update_status", "arg": contractID})
+
 
         if additionalData == "contractID" and contractRequester is not None:
             return dict({"map": "get_contract_by_requester", "arg": contractRequester})
