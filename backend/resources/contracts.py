@@ -896,7 +896,8 @@ class GetContractCompliance(MethodResource, Resource):
         obligatons = response["results"]['bindings']
 
         # current_data = today
-        current_data = date(2022, 4, 1)
+        # current_data = date(2022, 4, 1)
+        current_data = date.today()
         contractor_id = ""
         term_id = ""
 
@@ -988,6 +989,7 @@ class GetContractCompliance(MethodResource, Resource):
                             server.starttls()
                             server.login(os.environ.get('MAIL_USERNAME'), os.environ.get('MAIL_PASSWORD'))
                             server.sendmail(from_email, email, message)
+        return 'Success'
 
 # class GetContractTestResult(MethodResource, Resource):
 #     # @Credentials.check_for_token

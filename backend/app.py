@@ -154,7 +154,7 @@ api.add_resource(ObligationDeleteById,
                  '/obligation/delete/<string:obligationID>/')
 docs.register(ObligationDeleteById)
 
-api.add_resource(GetContractCompliance, '/contract/compliance')
+api.add_resource(GetContractCompliance, '/contract/compliance/')
 docs.register(GetContractCompliance)
 
 # api.add_resource(GetContractTestResult, '/contract/tests/')
