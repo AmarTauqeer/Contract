@@ -37,6 +37,43 @@ insert data{
     :CONT001 dct:identifier :OB002 .
     :CONT001 :hasContractStatus :hasCreated .
     
+    
+    
+    insert data{
+
+    :contractID dct:identifier :CONT001 .
+    :CONT001 rdf:type :contractID .
+    :CONT001 :contractType :WrittenContract .
+    :CONT001 fibo-fnd-agr-ctr:hasEffectiveDate "05-05-2021" .
+    :CONT001 fibo-fnd-agr-ctr:hasExecutionDate "05-05-2021" .
+    :CONT001 :hasEndDate "05-05-2022" .
+    :CONT001 :forPurpose "Creation of Contract for Vehicle data" .
+    :CONT001 :hasContractStatus :hasCreated .
+    :CONT001 :inMedium :MobileApp123 .
+    :CONT001 dct:description "Selling a car" .
+    :CONT001 rdf:value 200 .
+   
+    :CONT001 :hasContractors [
+        a rdf:Bag;
+        :contractorID :C001;
+    	:contractorID :C002
+    ] .
+    :CONT001 :hasTerms [
+        a rdf:Bag;
+        :termID :T001;
+    	:termID :T002
+    ] .
+    :CONT001 :hasObligations [
+        a rdf:Bag;
+        :obligationID :OB001;
+    	:obligationID :OB002
+    ] .
+
+}
+
+    
+    
+    
     ===================contractor====================
     :contractorID dct:identifier :C001 .
     :C001 rdf:type :contractorID .
@@ -97,6 +134,36 @@ insert data{
 
 }
 
+
+============================update contract status=======================================
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+DELETE {?ContractId :hasContractStatus :hasCreated.
+?ContractId :hasContractStatus :hasPending.
+?ContractId :hasContractStatus :hasRenewed.}
+            INSERT {?ContractId :hasContractStatus :hasViolated.
+            ?ContractId :RevokedAtTime "2022-3-28".
+            }
+             WHERE {
+             ?ContractId a :contractID.
+              FILTER(?ContractId = :CONT001)
+}
+
+
+================================contract compliance======================================
+
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+PREFIX dct: <http://purl.org/dc/terms/>
+   PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+DELETE {?ContractId :hasContractStatus :hasCreated.
+           ?ContractId :hasContractStatus :hasRenewed.
+           ?ContractId :hasContractStatus :hasPending.}
+   INSERT {?ContractId :hasContractStatus :hasViolated.
+   ?ContractId :RevokedAtTime '2022-03-28^^xsd:dateTime'.
+   }
+    WHERE {
+    ?ContractId a <http://ontologies.atb-bremen.de/smashHitCore#contractID>.
+     FILTER(?ContractId = :CONT001)
+    }
 
 ============================new select contract query====================================
 PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>

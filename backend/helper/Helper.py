@@ -21,7 +21,7 @@ class HelperContract:
         """
         mapfunc = {
             "get_all_contracts": self.get_all_contracts,
-            "get_contract_by_requester": self.get_contract_by_requester,
+            "get_contract_by_contractor": self.get_contract_by_contractor,
             "get_contract_by_provider": self.get_contract_by_provider,
             "get_contract_by_id": self.get_contract_by_id,
             "get_contractor_by_id": self.get_contractor_by_id,
@@ -35,6 +35,8 @@ class HelperContract:
             "get_contract_contractors": self.get_contract_contractors,
             "get_contract_compliance": self.get_contract_compliance,
             "contract_update_status": self.contract_update_status,
+            "get_obligation_identifier_by_id": self.get_obligation_identifier_by_id,
+
         }
         return mapfunc[name]
 
@@ -72,8 +74,8 @@ class HelperContract:
             return dict({"map": "contract_update_status", "arg": contractID})
 
 
-        if additionalData == "contractID" and contractRequester is not None:
-            return dict({"map": "get_contract_by_requester", "arg": contractRequester})
+        if additionalData == "contractByContractorID" and contractorID is not None:
+            return dict({"map": "get_contract_by_contractor", "arg": contractorID})
 
         if additionalData == "contractID" and contractProvider is not None:
             return dict({"map": "get_contract_by_provider", "arg": contractProvider})
@@ -107,6 +109,10 @@ class HelperContract:
 
         if additionalData == "obligationID" and obligationID is not None:
             return dict({"map": "get_obligation_by_id", "arg": obligationID})
+
+        if additionalData == "obligationIdentifier" and obligationID is not None:
+            return dict({"map": "get_obligation_identifier_by_id", "arg": obligationID})
+
 
     def select_query_gdb(self, purpose=None, dataRequester=None, additionalData=None, contractID=None,
                          contractRequester=None, contractProvider=None, contractorID=None, termID=None,

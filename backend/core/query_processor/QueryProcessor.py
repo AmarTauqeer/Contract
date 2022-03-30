@@ -30,6 +30,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
 		    :contractType ?ContractType;
 		    fibo-fnd-agr-ctr:hasEffectiveDate ?EffectiveDate;
 		    fibo-fnd-agr-ctr:hasExecutionDate ?ExecutionDate;
+		    :hasEndDate ?EndDate;
             :inMedium ?Medium;
             dct:description ?consideration;
             rdf:value ?value .
@@ -37,12 +38,13 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
         """).format(self.prefix())
         return query
 
-    def get_contract_by_requester(self, name):
+    def get_contract_by_contractor(self, name):
         query = textwrap.dedent("""{0}
                 SELECT ?Contract   
                     WHERE {{ 
-                    ?Contract a :contractID;
-                            :ContractRequester :{1}.
+                     ?Contract a :contractID;
+                        :hasContractors ?contractors .
+                    filter(?contractors=:{1})
                 }}""").format(self.prefix(), name)
         return query
 
@@ -67,10 +69,8 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
 		        fibo-fnd-agr-ctr:hasExecutionDate ?ExecutionDate;
                 :inMedium ?Medium;
                 dct:description ?consideration;
-                rdf:value ?value;
-                :hasContractors ?contractors;
-                :hasTerms ?terms;
-    			:hasObligations ?obligations .
+                rdf:value ?value .
+                
                 filter(?Contract=:{1}) .
             }}""").format(self.prefix(), id)
 
@@ -210,9 +210,8 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
         query = textwrap.dedent("""{0}
             select *
             where{{  
-            ?Obligation a :obligationID;
+             ?Obligation a :obligationID;
                 dct:description ?description;
-                dct:identifier ?identifier;
                 fibo-fnd-agr-ctr:hasExecutionDate ?executiondate;
                 :hasEndDate ?enddate;
                 :hasStates ?state .
@@ -222,7 +221,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
 
     def get_contract_compliance(self):
         query = textwrap.dedent("""{0}
-            select *
+            select ?Obligation ?state ?obl_desc ?exe_date ?end_date ?identifier
             where{{  
             ?Obligation a ?oid;
            :hasStates ?state;
@@ -252,10 +251,20 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                 WHERE {{ 
                 ?Obligation a :obligationID;
                     dct:description ?description;
-                    dct:identifier ?identifier;
                     fibo-fnd-agr-ctr:hasExecutionDate ?executiondate;
                     :hasEndDate ?enddate;
                     :hasStates ?state .
+                filter(?Obligation=:{1}) .
+            }}""").format(self.prefix(), id)
+
+        return query
+
+    def get_obligation_identifier_by_id(self, id):
+        query = textwrap.dedent("""{0}
+            SELECT ?identifier   
+                WHERE {{ 
+                 ?Obligation a :obligationID;
+                dct:identifier ?identifier;
                 filter(?Obligation=:{1}) .
             }}""").format(self.prefix(), id)
 

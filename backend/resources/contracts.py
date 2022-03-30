@@ -1,4 +1,8 @@
 import textwrap
+
+import smtplib
+from flask_mail import Message
+
 from core.storage.Sparql import SPARQL
 from SPARQLWrapper import JSON, SPARQLWrapper, BASIC
 from flask import json, jsonify
@@ -22,8 +26,6 @@ import unittest
 from core.Credentials import Credentials
 
 from resources.users import check_for_session
-
-
 
 
 class NestedSchema(Schema):
@@ -145,21 +147,83 @@ class Contracts(MethodResource, Resource):
         response = json.loads(
             query.select_query_gdb(purpose=None, dataRequester=None, additionalData="bcontractId", contractID=None,
                                    contractRequester=None, contractProvider=None))
-        response = response["results"]
-        return response, 200
+        data = response["results"]['bindings']
+        all_data = []
+        for d in data:
+            contractor_array = []
+            term_array = []
+            obligation_array = []
+
+            contid = d['Contract']['value']
+            contid = contid[45:]
+            # print(contid)
+
+            # get contractors
+            contractors = GetContractContractors.get(self, contid)
+            contractors = contractors.json
+            for c in contractors:
+                cid = c['contractorID']
+                contractor_array.append(cid)
+
+            # get terms
+            terms = GetContractTerms.get(self, contid)
+            terms = terms.json
+
+            for t in terms:
+                tid = t['termID']
+                term_array.append(tid)
+
+            # get obligation
+            obl = GetObligationByContractId.get(self, contid)
+            obl = obl.json
+            for o in obl:
+                oid = o['obligationID']
+                obligation_array.append(oid)
+
+            obj = {
+                'contractors': contractor_array,
+                'terms': term_array,
+                'obligations': obligation_array
+            }
+            new_data = {
+                'Contract': d['Contract']['value'][45:],
+                'ContractStatus': d['ContractStatus']['value'][45:],
+                'Purpose': d['Purpose']['value'],
+                'ContractType': d['ContractType']['value'][45:],
+                'EffectiveDate': d['EffectiveDate']['value'][45:],
+                'ExecutionDate': d['ExecutionDate']['value'][45:],
+                'EndDate': d['EndDate']['value'][45:],
+                'Medium': d['Medium']['value'],
+                'consideration': d['consideration']['value'],
+                'value': d['value']['value'],
+                'identifiers': obj
+            }
+
+            all_data.append(new_data)
+        return all_data
 
 
-class ContractByRequester(MethodResource, Resource):
+class ContractByContractor(MethodResource, Resource):
+    @doc(description='Contracts', tags=['Contracts'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
-    def get(self, requester):
+    def get(self, contractorID):
         query = QueryEngine()
         response = json.loads(
-            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractID", contractID=None,
-                                   contractRequester=requester, contractProvider=None))
-        response = response["results"]
-        return response, 200
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractByContractorID",
+                                   contractorID=contractorID,
+                                   contractRequester=None, contractProvider=None))
+        response = response["results"]['bindings']
+        main_data=[]
+        for r in response:
+            contract_id= r['Contract']['value'][45:]
+            res=ContractByContractId.get(self,contract_id)
+            # print(res.json)
+            data=res.json
+            for d in data:
+                main_data.append(d)
+        return main_data, 200
 
 
 class ContractByProvider(MethodResource, Resource):
@@ -181,13 +245,47 @@ class ContractByContractId(MethodResource, Resource):
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, contractID):
+
         query = QueryEngine()
         response = json.loads(
             query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractID", contractID=contractID,
-                                   contractRequester=None, contractProvider=None))
-        res = jsonify(response["results"])
-        res.status_code = 200
-        return res
+                                   contractRequester=None, contractProvider=None, contractorID=None))
+
+        data = response["results"]['bindings']
+        contractor_array = []
+        term_array = []
+        obligation_array = []
+
+        for d in data:
+            # get contractors
+            contractors = GetContractContractors.get(self, contractID)
+            contractors = contractors.json
+            for c in contractors:
+                cid = c['contractorID']
+                contractor_array.append(cid)
+
+            # get terms
+            terms = GetContractTerms.get(self, contractID)
+            terms = terms.json
+            # print(terms)
+            for t in terms:
+                tid = t['termID']
+                term_array.append(tid)
+
+            # get obligation
+            obl = GetObligationByContractId.get(self, contractID)
+            obl = obl.json
+            for o in obl:
+                oid = o['obligationID']
+                obligation_array.append(oid)
+
+        obj = {
+            'contractors': contractor_array,
+            'terms': term_array,
+            'obligations': obligation_array
+        }
+        data.append(obj)
+        return data
 
 
 class ContractUpdate(MethodResource, Resource):
@@ -204,7 +302,7 @@ class ContractUpdate(MethodResource, Resource):
         result = ContractByContractId.get(self, contract_id)
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
-        status_value = decoded_data['bindings'][0]['ContractStatus']['value']
+        status_value = decoded_data[0]['ContractStatus']['value']
         signed = re.findall(r"Signed", status_value)
         if len(signed) == 0:
             validated_data = schema_serializer.load(data)
@@ -232,7 +330,7 @@ class ContractCreate(MethodResource, Resource):
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
 
-        if len(decoded_data['bindings']) >= 1:
+        if len(decoded_data) > 1:
             return jsonify({'Error': "Contract id already exist"})
         else:
             validated_data = schema_serializer.load(data)
@@ -344,8 +442,8 @@ class ContractDeleteById(MethodResource, Resource):
         result = ContractByContractId.get(self, contractID)
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
-        if len(decoded_data['bindings']) >= 1:
-            status_value = decoded_data['bindings'][0]['ContractStatus']['value']
+        if len(decoded_data) >= 1:
+            status_value = decoded_data[0]['ContractStatus']['value']
             signed = re.findall(r"Signed", status_value)
             if len(signed) == 0:
                 cv = ContractValidation()
@@ -355,10 +453,11 @@ class ContractDeleteById(MethodResource, Resource):
                 my_json = obl.data.decode('utf8')
                 decoded_data = json.loads(my_json)
 
-                if len(decoded_data['bindings']) >= 1:
-                    obl_data = decoded_data['bindings']
+                if len(decoded_data) >= 1:
+                    obl_data = decoded_data
+                    # print(obl_data)
                     for o in obl_data:
-                        data = o['oid']['value'];
+                        data = o['obl']['value'];
                         data = data[45:]
                         ObligationDeleteById.delete(self, data)
 
@@ -501,8 +600,28 @@ class GetObligations(MethodResource, Resource):
         response = json.loads(
             query.select_query_gdb(purpose=None, dataRequester=None, additionalData="obligations", termID=None,
                                    contractRequester=None, contractProvider=None, ))
-        response = response["results"]
-        return response, 200
+        data = response["results"]['bindings']
+        obligation_sub_array = []
+        for d in data:
+            # print(d)
+            obligation_id = d['Obligation']['value'][45:]
+
+            # get contract id, term id and contractor id
+            obl = ObligationById.get(self, obligation_id)
+            obl_data = obl.json
+            # print(obl_data)
+            new_data = {
+                'obligationID': obligation_id,
+                'state': obl_data[0]['state'],
+                'description': obl_data[0]['description'],
+                'exection_date': obl_data[0]['execution_date'],
+                'end_date': obl_data[0]['end_date'],
+                'identifier': obl_data[0]['identifier'],
+            }
+            obligation_sub_array.append(new_data)
+        obligation_array = [{'Obligations': obligation_sub_array}]
+        # print(obligation_array)
+        return obligation_array
 
 
 class GetObligationByContractId(MethodResource, Resource):
@@ -517,9 +636,19 @@ class GetObligationByContractId(MethodResource, Resource):
                                    contractID=contractID,
                                    contractRequester=None, contractProvider=None, contractorID=None, termID=None
                                    ))
-        res = jsonify(response["results"])
-        res.status_code = 200
-        return res
+        data = response["results"]['bindings']
+        obligation_array = []
+        for d in data:
+            obligation_id = d['obl']['value']
+            obligation_id = obligation_id[45:]
+            new_data = {'obligationID': obligation_id,
+                        'state': d['state']['value'][45:],
+                        'description': d['obl_desc']['value'],
+                        'exection_date': d['exe_date']['value'][45:],
+                        'end_date': d['end_date']['value'][45:],
+                        }
+            obligation_array.append(new_data)
+        return obligation_array
 
 
 class GetContractTerms(MethodResource, Resource):
@@ -534,9 +663,14 @@ class GetContractTerms(MethodResource, Resource):
                                    contractID=contractID,
                                    contractRequester=None, contractProvider=None, contractorID=None, termID=None
                                    ))
-        res = jsonify(response["results"])
-        res.status_code = 200
-        return res
+        data = response["results"]["bindings"]
+        term_arry = []
+        for d in data:
+            term = d['term']['value']
+            term = term[45:]
+            new_data = {'termID': term, 'description': d['description']['value']}
+            term_arry.append(new_data)
+        return term_arry
 
 
 class GetContractContractors(MethodResource, Resource):
@@ -551,9 +685,19 @@ class GetContractContractors(MethodResource, Resource):
                                    contractID=contractID,
                                    contractRequester=None, contractProvider=None, contractorID=None, termID=None
                                    ))
-        res = jsonify(response["results"])
-        res.status_code = 200
-        return res
+        data = response["results"]["bindings"]
+        contractor_array = []
+        for d in data:
+            contractor = d['contractor']['value']
+            contractor = contractor[45:]
+            new_data = {'contractorID': contractor,
+                        'name': d['name']['value'],
+                        'email': d['email']['value'],
+                        'country': d['country']['value'],
+                        'territory': d['territory']['value']
+                        }
+            contractor_array.append(new_data)
+        return contractor_array
 
 
 class ObligationById(MethodResource, Resource):
@@ -567,7 +711,40 @@ class ObligationById(MethodResource, Resource):
             query.select_query_gdb(purpose=None, dataRequester=None, additionalData="obligationID",
                                    obligationID=obligationID,
                                    contractRequester=None, contractProvider=None))
-        res = jsonify(response["results"])
+        data = response["results"]['bindings']
+        identifier_array = []
+        obligation_array = []
+        for d in data:
+            id = GetObligationIdentifierById.get(self, obligationID)
+            id = id.json
+            for i in id:
+                ids = i['identifier']['value'][45:]
+                identifier_array.append(ids)
+
+            new_data = {'obligationID': obligationID,
+                        'state': d['state']['value'][45:],
+                        'description': d['description']['value'],
+                        'execution_date': d['executiondate']['value'][45:],
+                        'end_date': d['enddate']['value'][45:],
+                        'identifier': identifier_array
+                        }
+            obligation_array.append(new_data)
+        return obligation_array
+
+
+class GetObligationIdentifierById(MethodResource, Resource):
+    @doc(description='Contract Obligations', tags=['Contract Obligations'])
+    # @check_for_session
+    # @Credentials.check_for_token
+    # @marshal_with(BulkResponseQuerySchema)
+    def get(self, obligationID):
+        query = QueryEngine()
+        response = json.loads(
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="obligationIdentifier",
+                                   obligationID=obligationID,
+                                   contractRequester=None, contractProvider=None))
+        res = jsonify(response["results"]['bindings'])
+        # print(res)
         res.status_code = 200
         return res
 
@@ -589,23 +766,28 @@ class ObligationCreate(MethodResource, Resource):
         my_json = re.data.decode('utf8')
         decoded_data = json.loads(my_json)
 
-        if len(decoded_data['bindings']) >= 1:
-            result = decoded_data['bindings']
+        # print(decoded_data)
+
+        if len(decoded_data) >= 1:
+            result = decoded_data
 
             for r in result:
-                ob = r['obl']['value']
-                if ob == obligation_id:
-                    return jsonify({'Error': "Obligation id already exist"})
-                else:
-                    validated_data = schema_serializer.load(data)
-                    av = ObligationValidation()
-
-                    response = av.post_data(validated_data, type="insert")
-
-                    if (response):
-                        return jsonify({'Success': "Record inserted successfully."})
+                ob = r['obligations']
+                for o in ob:
+                    print(o['obligationID'])
+                    print(obligation_id)
+                    if o['obligationID'] == obligation_id:
+                        return jsonify({'Error': "Obligation id already exist"})
                     else:
-                        return jsonify({'Error': "Record not inserted due to some errors."})
+                        validated_data = schema_serializer.load(data)
+                        av = ObligationValidation()
+
+                        response = av.post_data(validated_data, type="insert")
+
+                        if (response):
+                            return jsonify({'Success': "Record inserted successfully."})
+                        else:
+                            return jsonify({'Error': "Record not inserted due to some errors."})
         else:
             validated_data = schema_serializer.load(data)
             av = ObligationValidation()
@@ -625,13 +807,11 @@ class ObligationDeleteById(MethodResource, Resource):
     # @marshal_with(BulkResponseQuerySchema)
     # @use_kwargs(ContractRequestSchema)
     def delete(self, obligationID):
-        print(obligationID)
         # get contract status from db
         result = ObligationById.get(self, obligationID)
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
-        print(len(decoded_data['bindings']))
-        if len(decoded_data['bindings']) >= 1:
+        if len(decoded_data) >= 1:
             av = ObligationValidation()
             response = av.delete_obligation(obligationID)
             if (response):
@@ -667,10 +847,9 @@ class ContractObligationUpdate(MethodResource, Resource):
 
 
 def contract_status_update_by_id(self, id):
-
     host_post = os.getenv("HOST_URI_POST")
     hostname = host_post
-    userid= os.getenv("user_name")
+    userid = os.getenv("user_name")
     password = os.getenv("password")
 
     violation_date = date.today()
@@ -703,7 +882,6 @@ def contract_status_update_by_id(self, id):
         return "Fail"
 
 
-
 class GetContractCompliance(MethodResource, Resource):
     @doc(description='Contract Compliance', tags=['Contract Compliance'])
     # @check_for_session
@@ -716,99 +894,100 @@ class GetContractCompliance(MethodResource, Resource):
                                    contractRequester=None, contractProvider=None, ))
 
         obligatons = response["results"]['bindings']
+
         # current_data = today
-        current_data = date(2022, 3, 28)
+        current_data = date(2022, 4, 1)
+        contractor_id = ""
+        term_id = ""
 
         for x in obligatons:
             identifier = x["identifier"]["value"]
             if "CONT" in identifier:
                 contract_id = identifier[45:]
-                # print(contract_id)
 
                 # get contract
                 res_contract = ContractByContractId.get(self, contract_id)
                 data = res_contract.json
-                contract_status = data["bindings"][0]['ContractStatus']['value']
+                contract_status = data[0]['ContractStatus']['value']
                 contract_status = contract_status[45:]
-                # print(contract_status)
 
                 # get contract obligation
                 res = GetObligationByContractId.get(self, contract_id)
                 data = res.json
 
-                for d in data["bindings"]:
-                    # print(d["state"]['value'])
-                    oid = d["obl"]["value"]
-                    sdate = d["exe_date"]["value"]
-                    edate = d["end_date"]["value"]
-                    obl_state = d["state"]["value"]
-                    obl_state = obl_state[45:]
-                    obl_desc = d["obl_desc"]["value"]
-
-                    obligation_id = oid[45:]
-                    contractor_id = ""
-                    term_id = ""
+                for d in data:
+                    oid = d["obligationID"]
+                    sdate = d["exection_date"]
+                    edate = d["end_date"]
+                    obl_state = d["state"]
+                    obl_desc = d["description"]
+                    obligation_id = oid
 
                     # get contractor and term
-                    ob = ObligationById.get(self, obligation_id)
+                    ob = GetObligationIdentifierById.get(self, obligation_id)
                     data = ob.json
-                    for d in data['bindings']:
-                        ob_data = d['identifier']['value']
-                        if "CONT" not in ob_data:
-                            new_ob_data = ob_data
-                            if "T" in new_ob_data:
-                                term_id = new_ob_data
+                    for d in data:
+                        # print(d)
+                        ob_data = d['identifier']['value'][45:]
+                        if 'CONT' not in ob_data:
+                            if 'T' in ob_data:
+                                term_id = ob_data
                             else:
-                                contractor_id = new_ob_data
-
+                                contractor_id = ob_data
                     # print(contractor_id)
                     # print(term_id)
 
-                    date_time_str = edate[45:]
+                    date_time_str = edate
                     date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%d').date()
-
+                    #
                     # print(current_data)
                     # print(date_time_obj)
                     # print(obl_state)
+                    # print(contract_id)
+                    # print(contract_status)
 
                     if current_data >= date_time_obj and obl_state == 'hasPendingState' and contract_status not in (
-                            'Violated', 'Terminated'):
+                            'hasViolated', 'hasTerminated'):
                         new_data = {
                             "ObligationId": obligation_id,
                             "Description": obl_desc,
-                            "TermId": term_id[45:],
-                            "ContractorId": contractor_id[45:],
-                            "ContractId": contract_id[45:],
+                            "TermId": term_id,
+                            "ContractorId": contractor_id,
+                            "ContractId": contract_id,
                             "State": "hasViolated",
-                            "ExecutionDate": sdate[45:],
-                            "EndDate": edate[45:],
+                            "ExecutionDate": sdate,
+                            "EndDate": edate,
                         }
-
+                        # print(new_data)
                         # update contract status
-                        status = contract_status_update_by_id(self,contract_id)
-
-
+                        contract_status_update_by_id(self, contract_id)
                         # update obligation
                         schema_serializer = ObligationRequestSchema()
                         data = new_data
                         obligation_id = data['ObligationId']
-
                         result = ObligationById.get(self, obligation_id)
                         my_json = result.data.decode('utf8')
                         decoded_data = json.loads(my_json)
 
-                        if len(decoded_data['bindings']) >= 1:
-                            # for d in decoded_data['bindings']:
-                            #     print(d['state']['value'])
-
+                        if len(decoded_data) >= 1:
                             validated_data = schema_serializer.load(data)
                             av = ObligationValidation()
                             resp = av.post_data(validated_data, type="update")
 
-                            if status and resp:
-                                return "Success"
-                            return "Something wrong to update contract status"
+                        # Email to contractors in case of violation
 
+                        message = 'In contract id = ' + str(contract_id) + ' ' + obl_desc + '  is violated'
+                        from_email = 'amar.tauqeer@gmail.com'
+                        # get contract contractors
+                        res = GetContractContractors.get(self, contract_id)
+                        contractors = res.json
+
+                        for c in contractors:
+                            email = c['email']
+                            server = smtplib.SMTP("smtp.gmail.com", 587)
+                            server.starttls()
+                            server.login(os.environ.get('MAIL_USERNAME'), os.environ.get('MAIL_PASSWORD'))
+                            server.sendmail(from_email, email, message)
 
 # class GetContractTestResult(MethodResource, Resource):
 #     # @Credentials.check_for_token

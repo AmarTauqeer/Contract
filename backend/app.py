@@ -2,8 +2,7 @@ from flask import Flask
 from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
-from resources.contracts import Contracts, ContractByRequester, \
-    ContractByProvider, ContractByContractId, ContractCreate, \
+from resources.contracts import Contracts, ContractByContractor, ContractByContractId, ContractCreate, \
     GenerateToken, ContractUpdate, ContractDeleteById, GetContractors, \
     ContractorDeleteById, ContractorCreate, ContractorById, ContractorUpdate, \
     GetTerms, TermUpdate, TermCreate, TermById, TermDeleteById, GetObligationByContractId, \
@@ -73,16 +72,16 @@ api.add_resource(GenerateToken, '/contract/token/')
 api.add_resource(Contracts, '/contract/list_of_contracts/')
 docs.register(Contracts)
 
-# api.add_resource(ContractByRequester,
-#                  '/contract/by_requester/<string:requester>/')
-# docs.register(ContractByRequester)
-#
+api.add_resource(ContractByContractor,
+                 '/contract/byContractor/<string:contractorID>/')
+docs.register(ContractByContractor)
+
 # api.add_resource(ContractByProvider,
 #                  '/contract/by_provider/<string:provider>/')
 # docs.register(ContractByProvider)
 
 api.add_resource(ContractByContractId,
-                 '/contract/<string:contractID>/')
+                 '/contract/byContract/<string:contractID>/')
 docs.register(ContractByContractId)
 
 api.add_resource(ContractorById,
