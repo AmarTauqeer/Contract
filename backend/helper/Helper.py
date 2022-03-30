@@ -37,6 +37,7 @@ class HelperContract:
             "contract_update_status": self.contract_update_status,
             "get_obligation_identifier_by_id": self.get_obligation_identifier_by_id,
 
+
         }
         return mapfunc[name]
 
@@ -72,7 +73,6 @@ class HelperContract:
 
         if additionalData == "contractStatus" and contractID is not None:
             return dict({"map": "contract_update_status", "arg": contractID})
-
 
         if additionalData == "contractByContractorID" and contractorID is not None:
             return dict({"map": "get_contract_by_contractor", "arg": contractorID})
@@ -113,7 +113,6 @@ class HelperContract:
         if additionalData == "obligationIdentifier" and obligationID is not None:
             return dict({"map": "get_obligation_identifier_by_id", "arg": obligationID})
 
-
     def select_query_gdb(self, purpose=None, dataRequester=None, additionalData=None, contractID=None,
                          contractRequester=None, contractProvider=None, contractorID=None, termID=None,
                          obligationID=None):
@@ -122,7 +121,7 @@ class HelperContract:
             self.HOST_URI, self.get_username(), self.get_password())
 
         which_query_return = self.which_query(purpose, dataRequester, additionalData, contractID,
-                                              contractRequester, contractProvider, contractorID, termID,obligationID)
+                                              contractRequester, contractProvider, contractorID, termID, obligationID)
 
         if ("arg" in which_query_return.keys()):
             sparql_inits.setQuery(self.function_map(

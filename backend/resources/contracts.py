@@ -845,41 +845,96 @@ class ContractObligationUpdate(MethodResource, Resource):
         else:
             return jsonify({'Error': "Record doesn't exist ."})
 
+class ObligationStatusUpdateByObligationId(MethodResource, Resource):
+    @doc(description='Contract Obligations', tags=['Contract Obligations'])
 
-def contract_status_update_by_id(self, id):
-    host_post = os.getenv("HOST_URI_POST")
-    hostname = host_post
-    userid = os.getenv("user_name")
-    password = os.getenv("password")
+    def get(self, obligationID,contractID,contractorID,state):
 
-    violation_date = date.today()
-    sparql = SPARQLWrapper(hostname)
-    sparql.setHTTPAuth(BASIC)
-    sparql.setCredentials(userid, password)
-    query = textwrap.dedent("""
-     PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
-     PREFIX dct: <http://purl.org/dc/terms/>
-        DELETE {{?ContractId :hasContractStatus :hasCreated.
-                ?ContractId :hasContractStatus :hasRenewed.
-                ?ContractId :hasContractStatus :hasPending.}}
-        INSERT {{?ContractId :hasContractStatus :hasViolated.
-        ?ContractId :RevokedAtTime {0}.
-        }}
-         WHERE {{
-         ?ContractId a <http://ontologies.atb-bremen.de/smashHitCore#contractID>.
-          FILTER(?ContractId = :{1})
-         }}""").format('\'{}^^xsd:dateTime\''.format(violation_date), id)
+        host_post = os.getenv("HOST_URI_POST")
+        hostname = host_post
+        userid = os.getenv("user_name")
+        password = os.getenv("password")
 
-    # print(query)
-    sparql.setQuery(query)
-    sparql.method = "POST"
-    sparql.queryType = "INSERT"
-    sparql.setReturnFormat('json')
-    result = sparql.query()
-    if str(result.response.read().decode("utf-8")) == "":
-        return "Success"
-    else:
-        return "Fail"
+        updated_date = date.today()
+        sparql = SPARQLWrapper(hostname)
+        sparql.setHTTPAuth(BASIC)
+        sparql.setCredentials(userid, password)
+        query = textwrap.dedent("""
+         PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+         PREFIX dct: <http://purl.org/dc/terms/>
+            DELETE {{?Obligation :hasStates :hasPendingState.
+                    ?Obligation :hasStates :hasViolated.
+                    ?Obligation :hasStates :hasFulfilled.}}
+            INSERT {{?Obligation :hasStates :{3}.}}
+            where {{
+                     ?Obligation a <http://ontologies.atb-bremen.de/smashHitCore#obligationID>;
+                                 :hasStates ?state;
+                     FILTER(?Obligation = :{0}) .
+                    {{
+                    select ?Contract
+                    where{{
+                    ?Contract a :contractID;
+                              filter(?Contract=:{1}) .
+
+                    }}
+                    }}
+                     {{
+                    select ?Contractor
+                    where{{
+                    ?Contractor a :contractorID;
+                                filter(?Contractor=:{2})
+                    }}
+                    }}
+    }}""").format(obligationID,contractID,contractorID,state)
+        sparql.setQuery(query)
+        sparql.method = "POST"
+        sparql.queryType = "INSERT"
+        sparql.setReturnFormat('json')
+        result = sparql.query()
+        if str(result.response.read().decode("utf-8")) == "":
+            return "Success"
+        else:
+            return "Fail"
+
+
+class ContractStatusUpdateById(MethodResource, Resource):
+    @doc(description='Contracts', tags=['Contracts'])
+
+    def get(self, contractID,status):
+
+        host_post = os.getenv("HOST_URI_POST")
+        hostname = host_post
+        userid = os.getenv("user_name")
+        password = os.getenv("password")
+
+        violation_date = date.today()
+        sparql = SPARQLWrapper(hostname)
+        sparql.setHTTPAuth(BASIC)
+        sparql.setCredentials(userid, password)
+        query = textwrap.dedent("""
+         PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+         PREFIX dct: <http://purl.org/dc/terms/>
+            DELETE {{?ContractId :hasContractStatus :hasCreated.
+                    ?ContractId :hasContractStatus :hasRenewed.
+                    ?ContractId :hasContractStatus :hasPending.}}
+            INSERT {{?ContractId :hasContractStatus :{2}.
+            ?ContractId :RevokedAtTime {0}.
+            }}
+             WHERE {{
+             ?ContractId a <http://ontologies.atb-bremen.de/smashHitCore#contractID>.
+              FILTER(?ContractId = :{1})
+             }}""").format('\'{}^^xsd:dateTime\''.format(violation_date), contractID,status)
+
+        # print(query)
+        sparql.setQuery(query)
+        sparql.method = "POST"
+        sparql.queryType = "INSERT"
+        sparql.setReturnFormat('json')
+        result = sparql.query()
+        if str(result.response.read().decode("utf-8")) == "":
+            return "Success"
+        else:
+            return "Fail"
 
 
 class GetContractCompliance(MethodResource, Resource):
@@ -961,7 +1016,7 @@ class GetContractCompliance(MethodResource, Resource):
                         }
                         # print(new_data)
                         # update contract status
-                        contract_status_update_by_id(self, contract_id)
+                        re=ContractStatusUpdateById(self, contract_id,contract_status)
                         # update obligation
                         schema_serializer = ObligationRequestSchema()
                         data = new_data
