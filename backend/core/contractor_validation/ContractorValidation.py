@@ -11,8 +11,7 @@ class ContractorValidation(QueryEngine):
                                     self.delete_contractor_by_id(contractorID))
         return response
 
-    def post_data(self, validated_data, type):
-        ContractorId = validated_data["ContractorId"]
+    def post_data(self, validated_data, type, contractor_id):
         Name = validated_data["Name"]
         Email = validated_data["Email"]
         Phone = validated_data["Phone"]
@@ -22,6 +21,7 @@ class ContractorValidation(QueryEngine):
         Role = validated_data["Role"]
 
         if type == "insert":
+            ContractorId = contractor_id
             respone = self.post_sparql(self.get_username(), self.get_password(),
                                        self.insert_query_contractor(ContractorId=ContractorId,
                                                                     Name=Name,
@@ -35,6 +35,7 @@ class ContractorValidation(QueryEngine):
 
                                        )
         else:
+            ContractorId = validated_data["ContractorId"]
             if ContractorId != "":
                 # delete from knowledge graph
                 response = self.post_sparql(self.get_username(), self.get_password(),

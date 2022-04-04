@@ -26,6 +26,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
             select * 
             where{{  ?Contract a :contractID;
     	    :hasContractStatus ?ContractStatus;
+    	    :hasContractCategory ?ContractCategory;
 		    :forPurpose ?Purpose;
 		    :contractType ?ContractType;
 		    fibo-fnd-agr-ctr:hasEffectiveDate ?EffectiveDate;
@@ -63,10 +64,12 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                 WHERE {{ 
                 ?Contract a :contractID;
     	        :hasContractStatus ?ContractStatus;
+    	        :hasContractCategory ?ContractCategory;
 		        :forPurpose ?Purpose;
 		        :contractType ?ContractType;
 		        fibo-fnd-agr-ctr:hasEffectiveDate ?EffectiveDate;
 		        fibo-fnd-agr-ctr:hasExecutionDate ?ExecutionDate;
+		        :hasEndDate ?EndDate;
                 :inMedium ?Medium;
                 dct:description ?consideration;
                 rdf:value ?value .
@@ -135,24 +138,60 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
             SELECT *   
                 WHERE {{ 
                 ?Term a :termID;
-                :hasName ?name;
+                 :hasTermTypes ?type;
+                 dct:identifier ?contract;
                 dct:description ?description .
                 filter(?Term=:{1}) .
             }}""").format(self.prefix(), id)
 
         return query
 
-    def get_all_terms(self):
+    def get_term_type_by_id(self, id):
+        query = textwrap.dedent("""{0}
+            SELECT *   
+                WHERE {{ 
+                ?TermType a :termTypeID;
+                :hasName ?name;
+                dct:description ?description .
+                filter(?TermType=:{1}) .
+            }}""").format(self.prefix(), id)
+
+        return query
+
+    def get_all_term_types(self):
         query = textwrap.dedent("""{0}
             select *
-            where{{  ?Term a :termID;
+            where{{  ?TermType a :termTypeID;
                 :hasName ?name;
                 dct:description ?description .
         }}
         """).format(self.prefix())
         return query
 
+    def get_all_terms(self):
+        query = textwrap.dedent("""{0}
+            select *
+            where{{  ?Term a :termID;
+                 :hasTermTypes ?type;
+                 dct:identifier ?contract;
+                dct:description ?description .
+        }}
+        """).format(self.prefix())
+        return query
+
     def delete_term_by_id(self, id):
+        query = textwrap.dedent("""{0}
+                delete{{?s ?p ?o}}   
+                    WHERE {{ 
+                    select ?s ?p ?o
+                        where{{
+                            ?s ?p ?o .
+                            filter(?s=:{1})
+                }}}}""").format(self.prefix(), id)
+        # print(query)
+        return query
+
+    def delete_term_type_by_id(self, id):
         query = textwrap.dedent("""{0}
                 delete{{?s ?p ?o}}   
                     WHERE {{ 
@@ -287,7 +326,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
         return query
 
     def insert_query(self, ContractId, ContractType, Purpose,
-                     EffectiveDate, ExecutionDate, EndDate, Medium, ContractStatus,
+                     EffectiveDate, ExecutionDate, EndDate, Medium, ContractStatus, ContractCategory,
                      ConsiderationDescription, ConsiderationValue, Contractors, Terms, Obligations):
         insquery = textwrap.dedent("""{0} 
             INSERT DATA {{
@@ -299,15 +338,16 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                         :hasEndDate :{6};
                         :inMedium "{7}";
                         :hasContractStatus :{8};
-                        dct:description "{9}";
-                        rdf:value {10};
-                         {11};
+                        :hasContractCategory :{9};
+                        dct:description "{10}";
+                        rdf:value {11};
                          {12};
-                         {13} .
+                         {13};
+                         {14} .
                    }}       
                
           """.format(self.prefix(), ContractId, ContractType, Purpose,
-                     EffectiveDate, ExecutionDate, EndDate, Medium, ContractStatus,
+                     EffectiveDate, ExecutionDate, EndDate, Medium, ContractStatus, ContractCategory,
                      ConsiderationDescription, ConsiderationValue, Contractors, Terms, Obligations))
 
         return insquery
@@ -327,14 +367,25 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
           """.format(self.prefix(), ContractorId, Name, Email, Phone, Address, Territory, Country, Role))
         return insquery
 
-    def insert_query_term(self, TermId, Name, Description):
+    def insert_query_term(self, TermId, TermTypeId,ContractId, Description):
         insquery = textwrap.dedent("""{0} 
         INSERT DATA {{
             :{1} a <http://ontologies.atb-bremen.de/smashHitCore#termID>;
+                        :hasTermTypes :{2};
+                        dct:identifier :{3};
+                        dct:description "{4}" .
+                   }}       
+          """.format(self.prefix(), TermId, TermTypeId, ContractId, Description))
+        return insquery
+
+    def insert_query_term_type(self, TermTypeId, Name, Description):
+        insquery = textwrap.dedent("""{0} 
+        INSERT DATA {{
+            :{1} a <http://ontologies.atb-bremen.de/smashHitCore#termTypeID>;
                         :hasName "{2}";
                         dct:description "{3}" .
                    }}       
-          """.format(self.prefix(), TermId, Name, Description))
+          """.format(self.prefix(), TermTypeId, Name, Description))
         return insquery
 
     def insert_query_obligation(self, ObligationId, Description, TermId, ContractorId, ContractId, State, ExecutionDate,

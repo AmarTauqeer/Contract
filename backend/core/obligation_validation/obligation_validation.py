@@ -11,8 +11,7 @@ class ObligationValidation(QueryEngine):
                                     self.delete_obligation_by_id(obligationID))
         return response
 
-    def post_data(self, validated_data, type):
-        ObligationId = validated_data["ObligationId"]
+    def post_data(self, validated_data, type, obligation_id):
         Description = validated_data["Description"]
         TermId = validated_data["TermId"]
         ContractorId = validated_data["ContractorId"]
@@ -22,6 +21,7 @@ class ObligationValidation(QueryEngine):
         EndDate = validated_data["EndDate"]
 
         if type == "insert":
+            ObligationId = obligation_id
             respone = self.post_sparql(self.get_username(), self.get_password(),
                                        self.insert_query_obligation(ObligationId=ObligationId,
                                                               Description=Description,
@@ -35,6 +35,7 @@ class ObligationValidation(QueryEngine):
 
                                        )
         else:
+            ObligationId = validated_data["ObligationId"]
             if ObligationId != "":
                 # delete from knowledge graph
                 response = self.post_sparql(self.get_username(), self.get_password(),

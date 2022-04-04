@@ -4,11 +4,11 @@ from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from resources.contracts import Contracts, ContractByContractor, ContractByContractId, ContractCreate, \
     GenerateToken, ContractUpdate, ContractDeleteById, GetContractors, \
-    ContractorDeleteById, ContractorCreate, ContractorById, ContractorUpdate, \
-    GetTerms, TermUpdate, TermCreate, TermById, TermDeleteById, GetObligationByContractId, \
+    ContractorDeleteById, ContractorCreate, ContractorById, ContractorUpdate, GetTermTypes,\
+    GetTerms, TermUpdate, TermCreate,TermTypeById, TermById, TermDeleteById, GetObligationByContractId, \
     GetContractTerms, GetContractContractors, GetObligations, ObligationById, ObligationCreate, \
     ObligationDeleteById, GetContractCompliance, GetObligationIdentifierById, ObligationStatusUpdateByObligationId, \
-    ContractStatusUpdateById
+    ContractStatusUpdateById, TermTypeUpdate, TermTypeCreate, TermTypeDeleteById
 from resources.users import RegisterUser, Login, Logout, DeleteUser, AllUsers
 from flask_restful import Api
 from flask_cors import CORS
@@ -112,24 +112,44 @@ docs.register(ContractorUpdate)
 api.add_resource(GetContractors, '/contractors/')
 docs.register(GetContractors)
 
-api.add_resource(GetTerms, '/terms/')
+api.add_resource(GetTermTypes, '/term/types')
+docs.register(GetTermTypes)
+
+
+api.add_resource(GetTerms, '/contract/terms/')
 docs.register(GetTerms)
 
 api.add_resource(GetObligations, '/obligations/')
 docs.register(GetObligations)
 
-api.add_resource(TermUpdate, '/term/update/')
+api.add_resource(TermUpdate, '/contract/term/update/')
 docs.register(TermUpdate)
 
-api.add_resource(TermCreate, '/term/create/')
+api.add_resource(TermCreate, '/contract/term/create/')
 docs.register(TermCreate)
 
+api.add_resource(TermTypeUpdate, '/contract/term/type/update/')
+docs.register(TermTypeUpdate)
+
+
+api.add_resource(TermTypeCreate, '/term/type/create/')
+docs.register(TermTypeCreate)
+
 api.add_resource(TermDeleteById,
-                 '/term/delete/<string:termID>/')
+                 '/contract/term/delete/<string:termID>/')
 docs.register(TermDeleteById)
 
+api.add_resource(TermTypeDeleteById,
+                 '/term/type/delete/<string:termTypeID>/')
+docs.register(TermTypeDeleteById)
+
+
+api.add_resource(TermTypeById,
+                 '/termType/<string:termTypeID>/')
+docs.register(TermTypeById)
+
 api.add_resource(TermById,
-                 '/term/<string:termID>/')
+                 '/contract/term/<string:termID>/')
 docs.register(TermById)
 
 api.add_resource(GetObligationByContractId,

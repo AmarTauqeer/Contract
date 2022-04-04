@@ -27,10 +27,12 @@ class HelperContract:
             "get_contractor_by_id": self.get_contractor_by_id,
             "get_all_contractors": self.get_all_contractors,
             "get_all_terms": self.get_all_terms,
+            "get_term_type_by_id": self.get_term_type_by_id,
             "get_term_by_id": self.get_term_by_id,
             "get_obligation_by_id": self.get_obligation_by_id,
             "get_all_obligations": self.get_all_obligations,
             "get_contract_obligations": self.get_contract_obligations,
+            "get_all_term_types": self.get_all_term_types,
             "get_contract_terms": self.get_contract_terms,
             "get_contract_contractors": self.get_contract_contractors,
             "get_contract_compliance": self.get_contract_compliance,
@@ -53,7 +55,8 @@ class HelperContract:
         return querydata
 
     def which_query(self, purpose=None, dataRequester=None, additionalData=None, contractID=None,
-                    contractRequester=None, contractProvider=None, contractorID=None, termID=None, obligationID=None
+                    contractRequester=None, contractProvider=None, contractorID=None, termID=None, obligationID=None, \
+                    termTypeID=None
                     ):
         """ Define mapping to appropriate function for query generation based on input
         :param purpose:
@@ -89,11 +92,19 @@ class HelperContract:
         if additionalData == "contractorID" and contractorID is not None:
             return dict({"map": "get_contractor_by_id", "arg": contractorID})
 
+        if additionalData == "termTypes":
+            return dict({"map": "get_all_term_types"})
+
+
         if additionalData == "terms":
             return dict({"map": "get_all_terms"})
 
         if additionalData == "obligations":
             return dict({"map": "get_all_obligations"})
+
+        if additionalData == "termTypeID" and termTypeID is not None:
+            return dict({"map": "get_term_type_by_id", "arg": termTypeID})
+
 
         if additionalData == "termID" and termID is not None:
             return dict({"map": "get_term_by_id", "arg": termID})
@@ -115,13 +126,13 @@ class HelperContract:
 
     def select_query_gdb(self, purpose=None, dataRequester=None, additionalData=None, contractID=None,
                          contractRequester=None, contractProvider=None, contractorID=None, termID=None,
-                         obligationID=None):
+                         obligationID=None,termTypeID=None):
 
         sparql_inits = self.init_sparql(
             self.HOST_URI, self.get_username(), self.get_password())
 
         which_query_return = self.which_query(purpose, dataRequester, additionalData, contractID,
-                                              contractRequester, contractProvider, contractorID, termID, obligationID)
+                                              contractRequester, contractProvider, contractorID, termID, obligationID,termTypeID)
 
         if ("arg" in which_query_return.keys()):
             sparql_inits.setQuery(self.function_map(
