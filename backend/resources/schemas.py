@@ -1,0 +1,185 @@
+from resources.imports import *
+
+
+class NestedSchema(Schema):
+    Contract = fields.Dict(
+        required=True, keys=fields.Str(),
+        values=fields.Str()
+    )
+
+
+class ForNestedSchema(Schema):
+    data = fields.List(fields.String())
+
+
+class GenerateToken(MethodResource, Resource):
+    # check username and password
+    def check_for_username_password(func):
+        @wraps(func)
+        def wrapped(*args, **kwargs):
+            username = os.getenv('user_name')
+            password = os.getenv('password')
+            secret_key = os.getenv('SECRET_KEY')
+
+            if request.authorization and request.authorization.username and request.authorization.password:
+                if request.authorization.username == username and request.authorization.password == password:
+                    token = jwt.encode({
+                        'username': username,
+                        'exp': datetime.utcnow() + timedelta(days=100)
+                    }, secret_key)
+                    return jsonify({'token': token.decode('UTF-8')})
+                else:
+                    return 'username or password is not correct'
+            elif request.headers.get('username') and request.headers.get('password'):
+                if request.headers.get('username') == username and request.headers.get('password') == password:
+                    token = jwt.encode({
+                        'username': username,
+                        'exp': datetime.utcnow() + timedelta(days=100)
+                    }, secret_key)
+                    return jsonify({'token': token.decode('UTF-8')})
+                else:
+                    return 'username or password is not correct'
+            else:
+                return 'Basic authentication is required.'
+
+        return wrapped
+
+    @check_for_username_password
+    def get(self):
+        return True
+
+
+class ObligationRequestSchema(Schema):
+    Description = fields.String(required=True, description="Description")
+    TermId = fields.String(required=True, description="Term ID")
+    ContractorId = fields.String(required=True, description="Contractor ID")
+    ContractId = fields.String(required=True, description="Contract ID")
+    ContractIdB2C = fields.String(required=False, description="Contract ID B2C")
+    State = fields.String(required=False, description="Obligation State")
+    ExecutionDate = fields.Date(required=False, description="Execution Date")
+    EndDate = fields.Date(required=False, description="End Date")
+
+
+class ObligationUpdateSchema(Schema):
+    ObligationId = fields.String(required=True, description="Obligation ID")
+    Description = fields.String(required=True, description="Description")
+    TermId = fields.String(required=True, description="Term ID")
+    ContractorId = fields.String(required=True, description="Contractor ID")
+    ContractId = fields.String(required=True, description="Contract ID")
+    ContractIdB2C = fields.String(required=False, description="Contract ID B2C")
+    State = fields.String(required=False, description="Obligation State")
+    ExecutionDate = fields.Date(required=False, description="Execution Date")
+    EndDate = fields.Date(required=False, description="End Date")
+
+
+class ContractorRequestSchema(Schema):
+    Name = fields.String(required=True, description="Name")
+    Email = fields.String(required=False, description="Email")
+    Phone = fields.String(required=False, description="Phone Number")
+    Address = fields.String(required=True, description="Street Address")
+    Territory = fields.String(required=False, description="Territory")
+    Country = fields.String(required=False, description="Country")
+    Role = fields.String(required=False, description="Role")
+
+
+class ContractorUpdateSchema(Schema):
+    ContractorId = fields.String(required=True, description="Contractor ID")
+    Name = fields.String(required=True, description="Name")
+    Email = fields.String(required=False, description="Email")
+    Phone = fields.String(required=False, description="Phone Number")
+    Address = fields.String(required=True, description="Street Address")
+    Territory = fields.String(required=False, description="Territory")
+    Country = fields.String(required=False, description="Country")
+    Role = fields.String(required=False, description="Role")
+
+
+class TermTypeUpdateSchema(Schema):
+    TermTypeId = fields.String(required=True, description="TermId")
+    Name = fields.String(required=False, description="Name")
+    Description = fields.String(required=False, description="Description")
+
+
+class TermTypeRequestSchema(Schema):
+    Name = fields.String(required=False, description="Name")
+    Description = fields.String(required=False, description="Description")
+
+
+class TermUpdateSchema(Schema):
+    TermId = fields.String(required=True, description="TermId")
+    TermTypeId = fields.String(required=True, description="TermTypeId")
+    ContractId = fields.String(required=True, description="Contract ID")
+    Description = fields.String(required=False, description="Description")
+
+
+class TermRequestSchema(Schema):
+    TermTypeId = fields.String(required=True, description="TermTypeId")
+    ContractId = fields.String(required=True, description="Contract ID")
+    Description = fields.String(required=False, description="Description")
+
+
+class ContractUpdateSchema(Schema):
+    ContractId = fields.String(required=True, description="Contract ID")
+    ConsentId = fields.String(required=False, description="Consent ID")
+    ContractType = fields.String(required=True,
+                                 description="Contract Type")
+    Purpose = fields.String(required=True, description="For What Purpose")
+
+    ExecutionDate = fields.Date(required=False,
+                                description="Execution Date")
+    EffectiveDate = fields.Date(required=False,
+                                description="Effective Date")
+    EndDate = fields.Date(required=False,
+                          description="Expire Date")
+    Medium = fields.String(required=False, description="Medium")
+
+    ContractStatus = fields.String(
+        required=False, description="Contract Status")
+
+    ConsiderationDescription = fields.String(
+        required=False, description="Consideration description")
+    ConsiderationValue = fields.String(
+        required=False, description="Consideration Value")
+    ContractCategory = fields.String(
+        required=False, description="Contract Category")
+    Contractors = fields.List(fields.String(),
+                              required=False, description="Contractors")
+    Terms = fields.List(fields.String(),
+                        required=False, description="Contract Terms")
+    Obligations = fields.List(fields.String(),
+                              required=False, description="Contract Obligations")
+
+
+class ContractRequestSchema(Schema):
+    ConsentId = fields.String(required=False, description="Consent ID")
+    ContractType = fields.String(required=True,
+                                 description="Contract Type")
+    Purpose = fields.String(required=True, description="For What Purpose")
+
+    ExecutionDate = fields.Date(required=False,
+                                description="Execution Date")
+    EffectiveDate = fields.Date(required=False,
+                                description="Effective Date")
+    EndDate = fields.Date(required=False,
+                          description="Expire Date")
+    Medium = fields.String(required=False, description="Medium")
+
+    ContractStatus = fields.String(
+        required=False, description="Contract Status")
+
+    ContractCategory = fields.String(
+        required=False, description="Contract Category")
+
+    ConsiderationDescription = fields.String(
+        required=False, description="Consideration description")
+    ConsiderationValue = fields.String(
+        required=False, description="Consideration Value")
+    Contractors = fields.List(fields.String(),
+                              required=False, description="Contractors")
+    Terms = fields.List(fields.String(),
+                        required=False, description="Contract Terms")
+    Obligations = fields.List(fields.String(),
+                              required=False, description="Contract Obligations")
+
+
+class BulkResponseQuerySchema(Schema):
+    bindings = fields.List(fields.Nested(NestedSchema), required=True)

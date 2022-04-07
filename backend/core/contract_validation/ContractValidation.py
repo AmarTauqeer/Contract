@@ -31,6 +31,9 @@ class ContractValidation(QueryEngine):
         Medium = validated_data["Medium"]
         ContractStatus = validated_data["ContractStatus"]
         ContractCategory = validated_data["ContractCategory"]
+        ConsentId = validated_data["ConsentId"]
+        if ContractCategory!='hasBusinessToConsumer':
+            ConsentId=''
         ConsiderationDescription = validated_data["ConsiderationDescription"]
         ConsiderationValue = validated_data["ConsiderationValue"]
         Contractors = validated_data["Contractors"]
@@ -49,6 +52,7 @@ class ContractValidation(QueryEngine):
                                                          Medium=Medium,
                                                          ContractStatus=ContractStatus,
                                                          ContractCategory=ContractCategory,
+                                                         ConsentId=ConsentId,
                                                          ConsiderationDescription=ConsiderationDescription,
                                                          ConsiderationValue=ConsiderationValue,
                                                          Contractors=self.list_to_query(Contractors, "hasContractors"),
@@ -75,6 +79,7 @@ class ContractValidation(QueryEngine):
                                                              Medium=Medium,
                                                              ContractStatus=ContractStatus,
                                                              ContractCategory=ContractCategory,
+                                                             ConsentId=ConsentId,
                                                              ConsiderationDescription=ConsiderationDescription,
                                                              ConsiderationValue=ConsiderationValue,
                                                              Contractors=self.list_to_query(Contractors,

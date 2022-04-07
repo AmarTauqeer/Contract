@@ -27,6 +27,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
             where{{  ?Contract a :contractID;
     	    :hasContractStatus ?ContractStatus;
     	    :hasContractCategory ?ContractCategory;
+    	    dct:identifier ?Consent;
 		    :forPurpose ?Purpose;
 		    :contractType ?ContractType;
 		    fibo-fnd-agr-ctr:hasEffectiveDate ?EffectiveDate;
@@ -65,6 +66,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                 ?Contract a :contractID;
     	        :hasContractStatus ?ContractStatus;
     	        :hasContractCategory ?ContractCategory;
+    	        dct:identifier ?Consent;
 		        :forPurpose ?Purpose;
 		        :contractType ?ContractType;
 		        fibo-fnd-agr-ctr:hasEffectiveDate ?EffectiveDate;
@@ -260,14 +262,14 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
 
     def get_contract_compliance(self):
         query = textwrap.dedent("""{0}
-            select ?Obligation ?state ?obl_desc ?exe_date ?end_date ?identifier
+            select ?Obligation ?state ?obl_desc ?exe_date ?end_date
             where{{  
             ?Obligation a ?oid;
            :hasStates ?state;
     		dct:description ?obl_desc;
     		fibo-fnd-agr-ctr:hasExecutionDate ?exe_date;
-    		:hasEndDate ?end_date;
-      		dct:identifier ?identifier .
+    		:hasEndDate ?end_date .
+      		
         }}
         """).format(self.prefix())
         return query
@@ -326,7 +328,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
         return query
 
     def insert_query(self, ContractId, ContractType, Purpose,
-                     EffectiveDate, ExecutionDate, EndDate, Medium, ContractStatus, ContractCategory,
+                     EffectiveDate, ExecutionDate, EndDate, Medium, ContractStatus, ContractCategory, ConsentId,
                      ConsiderationDescription, ConsiderationValue, Contractors, Terms, Obligations):
         insquery = textwrap.dedent("""{0} 
             INSERT DATA {{
@@ -339,17 +341,17 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                         :inMedium "{7}";
                         :hasContractStatus :{8};
                         :hasContractCategory :{9};
-                        dct:description "{10}";
-                        rdf:value {11};
-                         {12};
+                        dct:identifier :{10};
+                        dct:description "{11}";
+                        rdf:value {12};
                          {13};
-                         {14} .
+                         {14};
+                         {15} .
                    }}       
                
           """.format(self.prefix(), ContractId, ContractType, Purpose,
-                     EffectiveDate, ExecutionDate, EndDate, Medium, ContractStatus, ContractCategory,
+                     EffectiveDate, ExecutionDate, EndDate, Medium, ContractStatus, ContractCategory, ConsentId,
                      ConsiderationDescription, ConsiderationValue, Contractors, Terms, Obligations))
-
         return insquery
 
     def insert_query_contractor(self, ContractorId, Name, Email, Phone, Address, Territory, Country, Role):
@@ -367,7 +369,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
           """.format(self.prefix(), ContractorId, Name, Email, Phone, Address, Territory, Country, Role))
         return insquery
 
-    def insert_query_term(self, TermId, TermTypeId,ContractId, Description):
+    def insert_query_term(self, TermId, TermTypeId, ContractId, Description):
         insquery = textwrap.dedent("""{0} 
         INSERT DATA {{
             :{1} a <http://ontologies.atb-bremen.de/smashHitCore#termID>;
@@ -388,8 +390,8 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
           """.format(self.prefix(), TermTypeId, Name, Description))
         return insquery
 
-    def insert_query_obligation(self, ObligationId, Description, TermId, ContractorId, ContractId, State, ExecutionDate,
-                                EndDate):
+    def insert_query_obligation(self, ObligationId, Description, TermId, ContractorId, ContractId, ContractIdB2C, State,
+                                ExecutionDate, EndDate):
         insquery = textwrap.dedent("""{0} 
         INSERT DATA {{
             :{1} a <http://ontologies.atb-bremen.de/smashHitCore#obligationID>;
@@ -397,10 +399,12 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                         dct:identifier :{3};
                         dct:identifier :{4};
                         dct:identifier :{5};
-                        :hasStates :{6};
-                        fibo-fnd-agr-ctr:hasExecutionDate :{7};
-                        :hasEndDate :{8} .
+                        dct:identifier :{6};
+                        :hasStates :{7};
+                        fibo-fnd-agr-ctr:hasExecutionDate :{8};
+                        :hasEndDate :{9} .
                    }}       
-          """.format(self.prefix(), ObligationId, Description, TermId, ContractorId, ContractId, State, ExecutionDate,
-                     EndDate))
+          """.format(self.prefix(), ObligationId, Description, TermId, ContractorId, ContractId, ContractIdB2C, State,
+                     ExecutionDate, EndDate))
+        print(insquery)
         return insquery

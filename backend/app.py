@@ -2,14 +2,14 @@ from flask import Flask
 from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
-from resources.contracts import Contracts, ContractByContractor, ContractByContractId, ContractCreate, \
-    GenerateToken, ContractUpdate, ContractDeleteById, GetContractors, \
-    ContractorDeleteById, ContractorCreate, ContractorById, ContractorUpdate, GetTermTypes,\
-    GetTerms, TermUpdate, TermCreate,TermTypeById, TermById, TermDeleteById, GetObligationByContractId, \
-    GetContractTerms, GetContractContractors, GetObligations, ObligationById, ObligationCreate, \
-    ObligationDeleteById, GetContractCompliance, GetObligationIdentifierById, ObligationStatusUpdateByObligationId, \
-    ContractStatusUpdateById, TermTypeUpdate, TermTypeCreate, TermTypeDeleteById
+from resources.contracts import *
 from resources.users import RegisterUser, Login, Logout, DeleteUser, AllUsers
+from resources.contractors import *
+from resources.contract_terms import *
+from resources.contract_obligation import *
+from resources.term_types import *
+from resources.contract_compliance import *
+
 from flask_restful import Api
 from flask_cors import CORS
 from flask_migrate import Migrate
