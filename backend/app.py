@@ -9,6 +9,7 @@ from resources.contract_terms import *
 from resources.contract_obligation import *
 from resources.term_types import *
 from resources.contract_compliance import *
+from resources.contract_signatures import *
 
 from flask_restful import Api
 from flask_cors import CORS
@@ -119,6 +120,13 @@ docs.register(GetTermTypes)
 api.add_resource(GetTerms, '/contract/terms/')
 docs.register(GetTerms)
 
+api.add_resource(GetContractSignatures, '/contract/signatures/<string:contractID>')
+docs.register(GetContractSignatures)
+
+api.add_resource(GetSignatures, '/signatures/')
+docs.register(GetSignatures)
+
+
 api.add_resource(GetObligations, '/obligations/')
 docs.register(GetObligations)
 
@@ -127,6 +135,20 @@ docs.register(TermUpdate)
 
 api.add_resource(TermCreate, '/contract/term/create/')
 docs.register(TermCreate)
+
+api.add_resource(ContractSignatureCreate, '/contract/signature/create/')
+docs.register(ContractSignatureCreate)
+
+api.add_resource(ContractSignatureUpdate, '/contract/signature/update/')
+docs.register(ContractSignatureUpdate)
+
+api.add_resource(SignatureById,
+                 '/signature/<string:signatureID>/')
+docs.register(SignatureById)
+
+api.add_resource(SignatureDeleteById,
+                 '/signature/delete/<string:signatureID>/')
+docs.register(SignatureDeleteById)
 
 api.add_resource(TermTypeUpdate, '/contract/term/type/update/')
 docs.register(TermTypeUpdate)

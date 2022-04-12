@@ -147,6 +147,8 @@ class ContractUpdateSchema(Schema):
                         required=False, description="Contract Terms")
     Obligations = fields.List(fields.String(),
                               required=False, description="Contract Obligations")
+    Signatures = fields.List(fields.String(),
+                              required=False, description="Contractor Signatures")
 
 
 class ContractRequestSchema(Schema):
@@ -179,6 +181,21 @@ class ContractRequestSchema(Schema):
                         required=False, description="Contract Terms")
     Obligations = fields.List(fields.String(),
                               required=False, description="Contract Obligations")
+    Signatures = fields.List(fields.String(),
+                              required=False, description="Contractor Signatures")
+
+class ContractorSignaturesRequestSchema(Schema):
+    ContractId = fields.String(required=True, description="Contract ID")
+    ContractorId = fields.String(required=True, description="Contractor ID")
+    CreateDate = fields.Date(required=False, description="Create Date")
+    Signature = fields.String(required=True, description="Signature")
+
+class ContractorSignaturesUpdateSchema(Schema):
+    SignatureId = fields.String(required=True, description="Signature ID")
+    ContractId = fields.String(required=True, description="Contract ID")
+    ContractorId = fields.String(required=True, description="Contractor ID")
+    CreateDate = fields.Date(required=False, description="Create Date")
+    Signature = fields.String(required=True, description="Signature")
 
 
 class BulkResponseQuerySchema(Schema):

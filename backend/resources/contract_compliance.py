@@ -83,8 +83,10 @@ class GetContractCompliance(MethodResource, Resource):
                                     id = a['obligationID']
                                     state = a['state']
                                     description = a['description']
+                                    # current_data=date(2023, 2, 11)
                                     if current_data >= date_time_obj and state == 'hasPendingState' \
-                                            and b2c_contract_status not in ('hasViolated', 'hasTerminated'):
+                                            and b2c_contract_status not in (
+                                    'hasViolated', 'hasTerminated', 'hasExpired'):
                                         ContractStatusUpdateById.get(self, b2c_contract_id, 'hasViolated')
                                         ObligationStatusUpdateById.get(self, id, 'hasViolated')
                                         self.send_email('violation', b2c_contract_id, description, id)
@@ -97,6 +99,7 @@ class GetContractCompliance(MethodResource, Resource):
                         ContractStatusUpdateById.get(self, b2b_contract_id, 'hasViolated')
                         ObligationStatusUpdateById.get(self, obligation_id, 'hasViolated')
                         self.send_email('violation', b2b_contract_id, obl_desc, obligation_id)
+        return 'Success'
 
     def send_email(self, type, contract_id, obl_desc, obligation_id):
         # Email to contractors in case of violation
@@ -109,7 +112,7 @@ class GetContractCompliance(MethodResource, Resource):
         message = 'In contract id = ' + str(
             contract_id) + ' ' + obl_desc + ' with obligation id ' + obligation_id + \
                   ' ' + message_violation_expiration
-        from_email = 'amar.tauqeer@gmail.com'
+        from_email = 'act.contract.notification@gmail.com'
         # get contract contractors
         res = GetContractContractors.get(self, contract_id)
         contractors = res.json

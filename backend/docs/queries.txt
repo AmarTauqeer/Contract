@@ -41,6 +41,11 @@ insert data{
     
     insert data{
 
+	CONTB2B_86beee42-b419-11ec-a6c6-61c6cccc58ac
+	Term_6f5b3986-b4b4-11ec-a6c6-61c6cccc58ac
+	C_b56f9be2-b2a7-11ec-a6c6-61c6cccc58ac
+	C_cc415522-b2a7-11ec-a6c6-61c6cccc58ac
+	
     :contractID dct:identifier :CONT001 .
     :CONT001 rdf:type :contractID .
     :CONT001 :contractType :WrittenContract .

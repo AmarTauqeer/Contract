@@ -39,6 +39,7 @@ class ContractValidation(QueryEngine):
         Contractors = validated_data["Contractors"]
         Terms = validated_data["Terms"]
         Obligations = validated_data["Obligations"]
+        Signatures = validated_data["Signatures"]
 
         if type == "insert":
             ContractId = contract_id
@@ -57,7 +58,8 @@ class ContractValidation(QueryEngine):
                                                          ConsiderationValue=ConsiderationValue,
                                                          Contractors=self.list_to_query(Contractors, "hasContractors"),
                                                          Terms=self.list_to_query(Terms, "hasTerms"),
-                                                         Obligations=self.list_to_query(Obligations, "hasObligations")
+                                                         Obligations=self.list_to_query(Obligations, "hasObligations"),
+                                                         Signatures=self.list_to_query(Signatures, "hasSignatures")
                                                          )
 
                                        )
@@ -86,7 +88,8 @@ class ContractValidation(QueryEngine):
                                                                                             "hasContractors"),
                                                              Terms=self.list_to_query(Terms, "hasTerms"),
                                                              Obligations=self.list_to_query(Obligations,
-                                                                                            "hasObligations")
+                                                                                            "hasObligations"),
+                                                             Signatures=self.list_to_query(Signatures, "hasSignatures")
                                                              )
 
                                            )

@@ -67,6 +67,7 @@ class GetObligationByContractId(MethodResource, Resource):
             return obligation_array
         return 'No record found for this ID'
 
+
 class ObligationById(MethodResource, Resource):
     @doc(description='Contract Obligations', tags=['Contract Obligations'])
     # @check_for_session
@@ -88,13 +89,13 @@ class ObligationById(MethodResource, Resource):
                 id = id.json
                 for i in id:
                     identifier_array.append(i)
-                    new_data = {'obligationID': obligationID,
-                                'state': d['state']['value'][45:],
-                                'description': d['description']['value'],
-                                'execution_date': d['executiondate']['value'][45:],
-                                'end_date': d['enddate']['value'][45:],
-                                'identifier': identifier_array
-                                }
+                new_data = {'obligationID': obligationID,
+                            'state': d['state']['value'][45:],
+                            'description': d['description']['value'],
+                            'execution_date': d['executiondate']['value'][45:],
+                            'end_date': d['enddate']['value'][45:],
+                            'identifier': identifier_array
+                            }
                 obligation_array.append(new_data)
             if len(obligation_array) != 0:
                 return obligation_array
@@ -135,7 +136,7 @@ class ObligationCreate(MethodResource, Resource):
         contract_data = ContractByContractId.get(self, ContractId)
         contract_data = contract_data.json
         ContractCategory = contract_data["ContractCategory"]
-        print(ContractCategory)
+        # print(ContractCategory)
         uuidOne = uuid.uuid1()
         obligation_id = "OB_" + str(uuidOne)
         validated_data = schema_serializer.load(data)
@@ -145,23 +146,6 @@ class ObligationCreate(MethodResource, Resource):
         if (response):
             return jsonify({'Success': "Record inserted successfully."})
         return jsonify({'Error': "Record not inserted due to some errors."})
-
-        # contract_id = data['ContractId']
-        # # check contract id first
-        # re = GetObligationByContractId.get(self, contract_id)
-        #
-        # my_json = re.data.decode('utf8')
-        # decoded_data = json.loads(my_json)
-        # # print(decoded_data)
-        #
-        # if decoded_data != 'No record found for this ID':
-        #     result = decoded_data
-        #     for r in result:
-        #         # print(r['obligationID'])
-        #         print(obligation_id)
-        #         if r['obligationID'] == str(obligation_id):
-        #             return jsonify({'Error': "Obligation id already exist"})
-        # else:
 
 
 class ObligationDeleteById(MethodResource, Resource):
@@ -261,6 +245,7 @@ class ObligationStatusUpdateByObligationId(MethodResource, Resource):
             return "Success"
         else:
             return "Fail"
+
 
 class ObligationStatusUpdateById(MethodResource, Resource):
     @doc(description='Contract Obligations', tags=['Contract Obligations'])

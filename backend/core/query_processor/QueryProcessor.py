@@ -148,6 +148,19 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
 
         return query
 
+
+    def get_signature_by_id(self, id):
+        query = textwrap.dedent("""{0}
+            SELECT *   
+                WHERE {{ 
+                ?Signature a :signatureID;
+                 :hasSignature ?signature_text;
+                :hasCreationDate ?create_date .
+                filter(?Signature=:{1}) .
+            }}""").format(self.prefix(), id)
+
+        return query
+
     def get_term_type_by_id(self, id):
         query = textwrap.dedent("""{0}
             SELECT *   
@@ -181,6 +194,18 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
         """).format(self.prefix())
         return query
 
+
+    def get_all_signatures(self):
+        query = textwrap.dedent("""{0}
+            select *
+            where{{  ?Signature a :signatureID;
+                 :hasCreationDate ?create_date;
+                :hasSignature ?signature_text .
+        }}
+        """).format(self.prefix())
+        return query
+
+
     def delete_term_by_id(self, id):
         query = textwrap.dedent("""{0}
                 delete{{?s ?p ?o}}   
@@ -192,6 +217,19 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                 }}}}""").format(self.prefix(), id)
         # print(query)
         return query
+
+    def delete_contract_signature_by_id(self, id):
+        query = textwrap.dedent("""{0}
+                delete{{?s ?p ?o}}   
+                    WHERE {{ 
+                    select ?s ?p ?o
+                        where{{
+                            ?s ?p ?o .
+                            filter(?s=:{1})
+                }}}}""").format(self.prefix(), id)
+        # print(query)
+        return query
+
 
     def delete_term_type_by_id(self, id):
         query = textwrap.dedent("""{0}
@@ -230,6 +268,19 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                 filter(?Contract=:{1}) .
             }}""").format(self.prefix(), id)
         return query
+
+    def get_contract_signatures(self, id):
+        query = textwrap.dedent("""{0}
+            SELECT ?signature ?signature_text ?create_date
+                WHERE {{
+                ?Contract a :contractID;
+                    :hasSignatures ?signature .
+                    ?signature :hasSignature ?signature_text .
+                    ?signature :hasCreationDate ?create_date .
+                filter(?Contract=:{1}) .
+            }}""").format(self.prefix(), id)
+        return query
+
 
     def get_contract_contractors(self, id):
         query = textwrap.dedent("""{0}
@@ -311,12 +362,26 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
 
         return query
 
+
+    def get_signature_identifier_by_id(self, id):
+        query = textwrap.dedent("""{0}
+            SELECT ?identifier   
+                WHERE {{ 
+                 ?Signature a :signatureID;
+                dct:identifier ?identifier;
+                filter(?Signature=:{1}) .
+            }}""").format(self.prefix(), id)
+
+        return query
+
     def contract_update_status(self, id):
         violation_date = date.today()
         query = textwrap.dedent("""{0}
             DELETE {{?ContractId :hasContractStatus :hasCreated.
                     ?ContractId :hasContractStatus :hasPending.
-                    ?ContractId :hasContractStatus :hasRenewed.}}
+                    ?ContractId :hasContractStatus :hasRenewed.
+                    ?ContractId :hasContractStatus :hasUpdated.
+                    ?ContractId :hasContractStatus :hasSigned.}}
             INSERT {{?ContractId :hasContractStatus :hasViolated.
             ?ContractId :RevokedAtTime {1}.
             }}
@@ -329,7 +394,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
 
     def insert_query(self, ContractId, ContractType, Purpose,
                      EffectiveDate, ExecutionDate, EndDate, Medium, ContractStatus, ContractCategory, ConsentId,
-                     ConsiderationDescription, ConsiderationValue, Contractors, Terms, Obligations):
+                     ConsiderationDescription, ConsiderationValue, Contractors, Terms, Obligations,Signatures):
         insquery = textwrap.dedent("""{0} 
             INSERT DATA {{
             :{1} a <http://ontologies.atb-bremen.de/smashHitCore#contractID>;
@@ -346,12 +411,13 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                         rdf:value {12};
                          {13};
                          {14};
-                         {15} .
+                         {15};
+                         {16} .
                    }}       
                
           """.format(self.prefix(), ContractId, ContractType, Purpose,
                      EffectiveDate, ExecutionDate, EndDate, Medium, ContractStatus, ContractCategory, ConsentId,
-                     ConsiderationDescription, ConsiderationValue, Contractors, Terms, Obligations))
+                     ConsiderationDescription, ConsiderationValue, Contractors, Terms, Obligations,Signatures))
         return insquery
 
     def insert_query_contractor(self, ContractorId, Name, Email, Phone, Address, Territory, Country, Role):
@@ -406,5 +472,19 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                    }}       
           """.format(self.prefix(), ObligationId, Description, TermId, ContractorId, ContractId, ContractIdB2C, State,
                      ExecutionDate, EndDate))
-        print(insquery)
+        # print(insquery)
+        return insquery
+
+
+    def insert_query_contract_signature(self, SignatureId,ContractId, ContractorId, CreateDate, Signature):
+        insquery = textwrap.dedent("""{0} 
+        INSERT DATA {{
+            :{1} a <http://ontologies.atb-bremen.de/smashHitCore#signatureID>;
+                        dct:identifier :{2};
+                        dct:identifier :{3};
+                        :hasCreationDate :{4};
+                        :hasSignature "{5}" .
+                   }}       
+          """.format(self.prefix(), SignatureId,ContractId, ContractorId, CreateDate, Signature))
+        # print(insquery)
         return insquery

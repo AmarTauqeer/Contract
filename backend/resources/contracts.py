@@ -1,5 +1,6 @@
 from resources.contract_obligation import GetObligationByContractId, ObligationDeleteById
-from resources.contract_terms import GetContractTerms
+from resources.contract_signatures import GetContractSignatures, SignatureDeleteById
+from resources.contract_terms import GetContractTerms, TermDeleteById
 from resources.imports import *
 from resources.schemas import *
 
@@ -22,6 +23,7 @@ class Contracts(MethodResource, Resource):
                 contractor_array = []
                 term_array = []
                 obligation_array = []
+                signature_array = []
 
                 contid = d['Contract']['value']
                 contid = contid[45:]
@@ -51,10 +53,20 @@ class Contracts(MethodResource, Resource):
                         oid = o['obligationID']
                         obligation_array.append(oid)
 
+                # get signatures
+                sig = GetContractSignatures.get(self, contid)
+                sig = sig.json
+                # print(sig)
+                if sig != 'No record found for this ID':
+                    for s in sig:
+                        sid = s['signatureID']
+                        signature_array.append(sid)
+
                 obj = {
                     'contractors': contractor_array,
                     'terms': term_array,
-                    'obligations': obligation_array
+                    'obligations': obligation_array,
+                    'signatures': signature_array
                 }
 
                 ConsentId = d['Consent']['value'][45:]
@@ -128,17 +140,18 @@ class ContractByContractId(MethodResource, Resource):
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, contractID):
-
         query = QueryEngine()
         response = json.loads(
             query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractID", contractID=contractID,
                                    contractRequester=None, contractProvider=None, contractorID=None))
 
         data = response["results"]['bindings']
+        # print(data)
         if len(data) != 0:
             contractor_array = []
             term_array = []
             obligation_array = []
+            signature_array =[]
 
             for d in data:
 
@@ -167,10 +180,22 @@ class ContractByContractId(MethodResource, Resource):
                         oid = o['obligationID']
                         obligation_array.append(oid)
 
+                # get signatures
+                sig = GetContractSignatures.get(self, contractID)
+                sig = sig.json
+                # print(sig)
+                if sig != 'No record found for this ID':
+                    for s in sig:
+                        # print(s)
+                        sid = s['signatureID']
+                        signature_array.append(sid)
+
+
             obj = {
                 'contractors': contractor_array,
                 'terms': term_array,
-                'obligations': obligation_array
+                'obligations': obligation_array,
+                'signatures': signature_array
             }
             ConsentId = d['Consent']['value'][45:]
             category_data = d['ContractCategory']['value'][45:]
@@ -266,6 +291,7 @@ class ContractDeleteById(MethodResource, Resource):
         result = ContractByContractId.get(self, contractID)
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
+        print(decoded_data)
         if decoded_data != 'No data found for this ID' and decoded_data['Contract'] == contractID:
             status_value = decoded_data['ContractStatus']
             signed = re.findall(r"Signed", status_value)
@@ -279,6 +305,26 @@ class ContractDeleteById(MethodResource, Resource):
                     for o in obl_data:
                         obligation_id = o['obligationID'];
                         ObligationDeleteById.delete(self, obligation_id)
+
+                # delete term
+                obl = GetContractTerms.get(self, contractID)
+                my_json = obl.data.decode('utf-8')
+                decoded_data = json.loads(my_json)
+                if decoded_data != 'No record found for this ID':
+                    term_data = decoded_data
+                    for t in term_data:
+                        term_id = t['termID'];
+                        TermDeleteById.delete(self, term_id)
+
+                # delete signature
+                obl = GetContractSignatures.get(self, contractID)
+                my_json = obl.data.decode('utf-8')
+                decoded_data = json.loads(my_json)
+                if decoded_data != 'No record found for this ID':
+                    sig_data = decoded_data
+                    for s in sig_data:
+                        sig_id = s['signatureID'];
+                        SignatureDeleteById.delete(self, sig_id)
 
                 cv = ContractValidation()
 
