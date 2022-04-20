@@ -143,8 +143,10 @@ class ObligationCreate(MethodResource, Resource):
         av = ObligationValidation()
         response = av.post_data(validated_data, type="insert", obligation_id=obligation_id,
                                 contract_category=ContractCategory)
-        if (response):
-            return jsonify({'Success': "Record inserted successfully."})
+        if response=='Success':
+            contract_obj = ObligationById.get(self, obligation_id)
+            contract_obj = contract_obj.json
+            return contract_obj
         return jsonify({'Error': "Record not inserted due to some errors."})
 
 

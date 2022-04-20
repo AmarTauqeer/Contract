@@ -87,8 +87,10 @@ class TermTypeCreate(MethodResource, Resource):
         # print(validated_data)
         av = TermTypeValidation()
         response = av.post_data(validated_data, type="insert", term_type_id=term_type_id)
-        if (response):
-            return jsonify({'Success': "Record inserted successfully."})
+        if response == 'Success':
+            contract_obj = TermTypeById.get(self, term_type_id)
+            contract_obj = contract_obj.json
+            return contract_obj
         else:
             return jsonify({'Error': "Record not inserted due to some errors."})
 

@@ -68,8 +68,10 @@ class ContractorCreate(MethodResource, Resource):
 
         response = av.post_data(validated_data, type="insert", contractor_id=contractor_id)
 
-        if (response):
-            return jsonify({'Success': "Record inserted successfully."})
+        if response == 'Success':
+            contract_obj = ContractorById.get(self, contractor_id)
+            contract_obj = contract_obj.json
+            return contract_obj
         else:
             return jsonify({'Error': "Record not inserted due to some errors."})
 

@@ -106,8 +106,10 @@ class ContractSignatureCreate(MethodResource, Resource):
         # print(validated_data)
         av = ContractSignatureValidation()
         response = av.post_data(validated_data, type="insert", signature_id=signature_id)
-        if (response):
-            return jsonify({'Success': "Record inserted successfully."})
+        if response=='Success':
+            contract_obj = SignatureById.get(self, signature_id)
+            contract_obj = contract_obj.json
+            return contract_obj
         else:
             return jsonify({'Error': "Record not inserted due to some errors."})
 

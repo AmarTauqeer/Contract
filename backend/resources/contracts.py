@@ -274,8 +274,10 @@ class ContractCreate(MethodResource, Resource):
         validated_data = schema_serializer.load(data)
         cv = ContractValidation()
         response = cv.post_data(validated_data, type="insert", contract_id=contract_id)
-        if (response):
-            return jsonify({'Success': "Record inserted successfully."})
+        if response=='Success':
+            contract_obj=ContractByContractId.get(self,contract_id)
+            contract_obj=contract_obj.json
+            return contract_obj
         else:
             return jsonify({'Error': "Record not inserted due to some errors."})
 
