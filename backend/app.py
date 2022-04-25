@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Flask
 from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
@@ -10,7 +12,6 @@ from resources.contract_obligation import *
 from resources.term_types import *
 from resources.contract_compliance import *
 from resources.contract_signatures import *
-
 from flask_restful import Api
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -19,9 +20,14 @@ from core.config import ApplicationConfig
 from flask_bcrypt import Bcrypt
 from core.models import User, db
 
+from flask_apscheduler import APScheduler
+import time
+import requests
+
 # from resources.users import Register,Logout
 
 app = Flask(__name__)
+scheduler =APScheduler()
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 cors = CORS(app, resources={
@@ -52,6 +58,8 @@ with app.app_context():
 
 api = Api(app)
 docs = FlaskApiSpec(app)
+
+
 # token
 # generate token
 api.add_resource(GenerateToken, '/contract/token/')
@@ -215,5 +223,18 @@ docs.register(GetContractCompliance)
 # api.add_resource(GetContractTestResult, '/contract/tests/')
 # docs.register(GetContractTestResult)
 
+# contract compliance schedule
+# current_date = date(2022, 4, 26)
+
+current_date= date.today()
+def compliance():
+    CONTRACT_URL = "https://actool.contract.sti2.at/contract/compliance/"
+    # CONTRACT_URL = "http://172.25.0.81:5000/contract/compliance/"
+    data = requests.get(CONTRACT_URL)
+    data=data.json()
+
 if __name__ == '__main__':
+    scheduler.add_job(id='Contract compliance task',func=compliance, trigger='interval', minutes=1440)
+    if current_date==date(2022, 4, 26):
+        scheduler.start()
     app.run(debug=True, host='0.0.0.0')

@@ -18,6 +18,7 @@ class GetContractCompliance(MethodResource, Resource):
             query.select_query_gdb(purpose=None, dataRequester=None, additionalData="compliance", termID=None,
                                    contractRequester=None, contractProvider=None, ))
 
+        print('scheduler')
         obligatons = response["results"]['bindings']
         # current_data = date(2022, 4, 5)
         current_data = date.today()
@@ -57,7 +58,7 @@ class GetContractCompliance(MethodResource, Resource):
 
                 # print(b2c_data)
                 consent_id = b2c_data["ConsentId"]
-                consent_state = 'Invalid'
+                consent_state = 'Valid'
                 # consent based status
                 if consent_state in ['Invalid', 'Expired'] and b2b_contract_status \
                         not in ('hasViolated', 'hasTerminated', 'hasExpired'):
@@ -68,7 +69,7 @@ class GetContractCompliance(MethodResource, Resource):
                     ObligationStatusUpdateById.get(self, obligation_id, 'hasExpired')
                     self.send_email('expire', b2b_contract_id, obl_desc, obligation_id)
                 else:
-                    # current_data = date(2023, 2, 11)
+                    # current_data = date(2023, 4, 24)
                     if current_data >= date_time_obj and obl_state == 'hasPendingState' \
                             and b2b_contract_status not in (
                             'hasViolated', 'hasTerminated', 'hasExpired'):
@@ -88,7 +89,7 @@ class GetContractCompliance(MethodResource, Resource):
                     ObligationStatusUpdateById.get(self, obligation_id, 'hasExpired')
                     self.send_email('expire', b2c, obl_desc, obligation_id)
                 else:
-                    # current_data = date(2023, 2, 11)
+                    # current_data = date(2023, 4, 24)
                     if current_data >= date_time_obj and obl_state == 'hasPendingState' \
                             and b2c_contract_status not in (
                             'hasViolated', 'hasTerminated', 'hasExpired'):
