@@ -12,6 +12,7 @@ from resources.contract_obligation import *
 from resources.term_types import *
 from resources.contract_compliance import *
 from resources.contract_signatures import *
+from tests.contract_test import *
 from flask_restful import Api
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -27,7 +28,7 @@ import requests
 # from resources.users import Register,Logout
 
 app = Flask(__name__)
-scheduler =APScheduler()
+scheduler = APScheduler()
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 cors = CORS(app, resources={
@@ -59,7 +60,6 @@ with app.app_context():
 api = Api(app)
 docs = FlaskApiSpec(app)
 
-
 # token
 # generate token
 api.add_resource(GenerateToken, '/contract/token/')
@@ -85,10 +85,6 @@ docs.register(Contracts)
 api.add_resource(ContractByContractor,
                  '/contract/byContractor/<string:contractorID>/')
 docs.register(ContractByContractor)
-
-# api.add_resource(ContractByProvider,
-#                  '/contract/by_provider/<string:provider>/')
-# docs.register(ContractByProvider)
 
 api.add_resource(ContractByContractId,
                  '/contract/byContract/<string:contractID>/')
@@ -124,7 +120,6 @@ docs.register(GetContractors)
 api.add_resource(GetTermTypes, '/term/types')
 docs.register(GetTermTypes)
 
-
 api.add_resource(GetTerms, '/contract/terms/')
 docs.register(GetTerms)
 
@@ -133,7 +128,6 @@ docs.register(GetContractSignatures)
 
 api.add_resource(GetSignatures, '/signatures/')
 docs.register(GetSignatures)
-
 
 api.add_resource(GetObligations, '/obligations/')
 docs.register(GetObligations)
@@ -158,9 +152,8 @@ api.add_resource(SignatureDeleteById,
                  '/signature/delete/<string:signatureID>/')
 docs.register(SignatureDeleteById)
 
-api.add_resource(TermTypeUpdate, '/contract/term/type/update/')
+api.add_resource(TermTypeUpdate, '/term/type/update/')
 docs.register(TermTypeUpdate)
-
 
 api.add_resource(TermTypeCreate, '/term/type/create/')
 docs.register(TermTypeCreate)
@@ -172,7 +165,6 @@ docs.register(TermDeleteById)
 api.add_resource(TermTypeDeleteById,
                  '/term/type/delete/<string:termTypeID>/')
 docs.register(TermTypeDeleteById)
-
 
 api.add_resource(TermTypeById,
                  '/termType/<string:termTypeID>/')
@@ -220,21 +212,24 @@ docs.register(ContractStatusUpdateById)
 api.add_resource(GetContractCompliance, '/contract/compliance/')
 docs.register(GetContractCompliance)
 
-# api.add_resource(GetContractTestResult, '/contract/tests/')
-# docs.register(GetContractTestResult)
+# api.add_resource(ContractApiTest.test_get_all_contracts, '/contract/tests/')
+# docs.register(ContractApiTest.test_get_all_contracts)
 
 # contract compliance schedule
 # current_date = date(2022, 4, 26)
 
-current_date= date.today()
+current_date = date.today()
+
+
 def compliance():
     CONTRACT_URL = "https://actool.contract.sti2.at/contract/compliance/"
     # CONTRACT_URL = "http://172.25.0.81:5000/contract/compliance/"
     data = requests.get(CONTRACT_URL)
-    data=data.json()
+    data = data.json()
+
 
 if __name__ == '__main__':
-    scheduler.add_job(id='Contract compliance task',func=compliance, trigger='interval', minutes=1440)
-    if current_date==date(2022, 4, 26):
+    scheduler.add_job(id='Contract compliance task', func=compliance, trigger='interval', minutes=1440)
+    if current_date == date(2022, 4, 26):
         scheduler.start()
     app.run(debug=True, host='0.0.0.0')

@@ -11,6 +11,12 @@ Automated Contracting Tool, a component of smashHit. smashHit is a Horizon 2020 
 - [SPARQLWrapper](https://rdflib.dev/sparqlwrapper/)
 - [unittest](https://docs.python.org/3/library/unittest.html)
 
+## Steps to be followed
+- git clone https://github.com/AmarTauqeer/Contract.git
+- go to the backend folder
+- update the .env file
+- sudo docker-compose -f docker-compose.yml up
+
 ## Running Locally
 
 Run the command below from the root directory for deployement and access via [http://localhost:5001](http://localhost:5001). The Swagger API documentation can be accessed via [http://localhost:5001/swagger-ui/](http://localhost:5001/swagger-ui/).
@@ -20,18 +26,10 @@ python -m flask run
 
 ```
 
-## Deployment in Remote Server
-
-## Usage
-
-```python
-import math
-
-```
-
 ## Contributors
 
 - Amar Tauqeer
+  amar.tauqeer@sti2.at
 
 ## Project
 

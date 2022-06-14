@@ -1,0 +1,948 @@
+{
+	"id": "c40be316-3632-4fca-88bb-1dbfcb6f73f5",
+	"name": "smashHit Contract APIs",
+	"timestamp": "2022-06-14T09:36:36.889Z",
+	"collection_id": "0-9cf780cb-8aaf-4541-98a8-7baf402c87d5",
+	"folder_id": 0,
+	"environment_id": "cf727512-e54e-4a09-84d9-0fbeb3b9b5d8",
+	"totalPass": 30,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "e7371793-8c94-49d5-8c34-10d1eafb3478",
+			"name": "Create new term type",
+			"url": "http://172.25.4.90:5000/term/type/create/",
+			"time": 55,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"new new term type pass": true
+			},
+			"testPassFailCounts": {
+				"new new term type pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				55
+			],
+			"allTests": [
+				{
+					"new new term type pass": true
+				}
+			]
+		},
+		{
+			"id": "adf25f75-f3f7-4fa1-b939-17845ff357a5",
+			"name": "Update term type",
+			"url": "http://172.25.4.90:5000/term/type/update/",
+			"time": 58,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Update term type pass": true
+			},
+			"testPassFailCounts": {
+				"Update term type pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				58
+			],
+			"allTests": [
+				{
+					"Update term type pass": true
+				}
+			]
+		},
+		{
+			"id": "5dca1a24-5b7a-496b-9960-2793e1f6a849",
+			"name": "New business to business contract",
+			"url": "http://172.25.4.90:5000/contract/create/",
+			"time": 83,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"new business to business contract pass": true
+			},
+			"testPassFailCounts": {
+				"new business to business contract pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				83
+			],
+			"allTests": [
+				{
+					"new business to business contract pass": true
+				}
+			]
+		},
+		{
+			"id": "6f0be3f0-7288-4fca-aa62-a2ab1cfef27b",
+			"name": "New business to consumer contract",
+			"url": "http://172.25.4.90:5000/contract/create/",
+			"time": 70,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"new business to consumer contract pass": true
+			},
+			"testPassFailCounts": {
+				"new business to consumer contract pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				70
+			],
+			"allTests": [
+				{
+					"new business to consumer contract pass": true
+				}
+			]
+		},
+		{
+			"id": "3bf3f10a-2aa4-4fd7-b25d-08137a21ce81",
+			"name": "Create contractor",
+			"url": "http://172.25.4.90:5000/contractor/create/",
+			"time": 41,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"new contractor pass": true
+			},
+			"testPassFailCounts": {
+				"new contractor pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				41
+			],
+			"allTests": [
+				{
+					"new contractor pass": true
+				}
+			]
+		},
+		{
+			"id": "b705cf0b-03ed-45c3-981c-520e38c019f1",
+			"name": "Update contractor",
+			"url": "http://172.25.4.90:5000/contractor/update/",
+			"time": 49,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"update contractor pass": true
+			},
+			"testPassFailCounts": {
+				"update contractor pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				49
+			],
+			"allTests": [
+				{
+					"update contractor pass": true
+				}
+			]
+		},
+		{
+			"id": "e78252f7-25d5-4e3e-87fd-e16c7ed88565",
+			"name": "Create contractor signatures",
+			"url": "http://172.25.4.90:5000/contract/signature/create/",
+			"time": 44,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"new contractor signature pass": true
+			},
+			"testPassFailCounts": {
+				"new contractor signature pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				44
+			],
+			"allTests": [
+				{
+					"new contractor signature pass": true
+				}
+			]
+		},
+		{
+			"id": "d92aaa1b-0d40-4a6d-975b-02045bb13739",
+			"name": "Create contract term",
+			"url": "http://172.25.4.90:5000/contract/term/create/",
+			"time": 48,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"new contract term pass": true
+			},
+			"testPassFailCounts": {
+				"new contract term pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				48
+			],
+			"allTests": [
+				{
+					"new contract term pass": true
+				}
+			]
+		},
+		{
+			"id": "8b718bbf-b355-4d62-abc7-392ac1c54417",
+			"name": "Update contract term",
+			"url": "http://172.25.4.90:5000/contract/term/update/",
+			"time": 48,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"update contract term pass": true
+			},
+			"testPassFailCounts": {
+				"update contract term pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				48
+			],
+			"allTests": [
+				{
+					"update contract term pass": true
+				}
+			]
+		},
+		{
+			"id": "6cd86310-89d5-454e-9f43-4ee779a4f133",
+			"name": "Create contract obligation",
+			"url": "http://172.25.4.90:5000/obligation/create/",
+			"time": 83,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"new contract obligation pass": true
+			},
+			"testPassFailCounts": {
+				"new contract obligation pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				83
+			],
+			"allTests": [
+				{
+					"new contract obligation pass": true
+				}
+			]
+		},
+		{
+			"id": "f204cb72-23d4-410a-baee-ec55cc52b5ca",
+			"name": "Contract update",
+			"url": "http://172.25.4.90:5000/contract/update/",
+			"time": 72,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Update contract detail pass": true
+			},
+			"testPassFailCounts": {
+				"Update contract detail pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				72
+			],
+			"allTests": [
+				{
+					"Update contract detail pass": true
+				}
+			]
+		},
+		{
+			"id": "56a99d06-784d-4109-b649-9a5850ab6eaf",
+			"name": "List of term types",
+			"url": "http://172.25.4.90:5000/term/types",
+			"time": 11,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get list of term types pass": true
+			},
+			"testPassFailCounts": {
+				"get list of term types pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"get list of term types pass": true
+				}
+			]
+		},
+		{
+			"id": "8aaecf19-6d61-4ce9-b653-1c74a54271c4",
+			"name": "Term type detail by id",
+			"url": "http://172.25.4.90:5000/termType/Term_type_2f273282-eb4d-11ec-9d9e-0b9a78f6c42e/",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get term type by id pass": true
+			},
+			"testPassFailCounts": {
+				"get term type by id pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"get term type by id pass": true
+				}
+			]
+		},
+		{
+			"id": "338004ac-a1e8-444e-bd64-a7b9b9a53e8a",
+			"name": "List of contract terms",
+			"url": "http://172.25.4.90:5000/contract/terms/",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get contract terms pass": true
+			},
+			"testPassFailCounts": {
+				"get contract terms pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"get contract terms pass": true
+				}
+			]
+		},
+		{
+			"id": "6c378c29-735d-45f7-9d61-551eacd81941",
+			"name": "Contract terms by term id",
+			"url": "http://172.25.4.90:5000/contract/term/Term_e085e43e-ebb5-11ec-9d9e-0b9a78f6c42e/",
+			"time": 14,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get contract terms by term id pass": true
+			},
+			"testPassFailCounts": {
+				"get contract terms by term id pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"get contract terms by term id pass": true
+				}
+			]
+		},
+		{
+			"id": "014f4bba-a321-44db-ad07-5bcabf01874d",
+			"name": "List of contract terms by contract id",
+			"url": "http://172.25.4.90:5000/contract/terms/CONTB2C_9ea33bdc-eaf9-11ec-b0a1-a708bb8575ed/",
+			"time": 15,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get contract terms by contract id pass": true
+			},
+			"testPassFailCounts": {
+				"get contract terms by contract id pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"get contract terms by contract id pass": true
+				}
+			]
+		},
+		{
+			"id": "ca70a784-59d2-423b-96e4-1c2ed9c0329d",
+			"name": "List of contractors",
+			"url": "http://172.25.4.90:5000/contractors/",
+			"time": 15,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get list of contractors pass": true
+			},
+			"testPassFailCounts": {
+				"get list of contractors pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"get list of contractors pass": true
+				}
+			]
+		},
+		{
+			"id": "cacaf9cf-85e7-4627-b637-41f63c877012",
+			"name": "List of contractors by contract id",
+			"url": "http://172.25.4.90:5000/contract/contractors/CONTB2C_9ea33bdc-eaf9-11ec-b0a1-a708bb8575ed/",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get list of contractors by contract id pass": true
+			},
+			"testPassFailCounts": {
+				"get list of contractors by contract id pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"get list of contractors by contract id pass": true
+				}
+			]
+		},
+		{
+			"id": "88aa1b5b-1031-422a-914b-82c905703bad",
+			"name": "Contractor detail by id",
+			"url": "http://172.25.4.90:5000/contractor/C_8bc15c10-b9b2-11ec-8fd7-efc66f58363f/",
+			"time": 11,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get data subject by id pass": true
+			},
+			"testPassFailCounts": {
+				"get data subject by id pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"get data subject by id pass": true
+				}
+			]
+		},
+		{
+			"id": "25b76a13-04de-42c3-8519-3f8b38be6bf5",
+			"name": "List of signatures",
+			"url": "http://172.25.4.90:5000/signatures/",
+			"time": 44,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get list of signatures pass": true
+			},
+			"testPassFailCounts": {
+				"get list of signatures pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				44
+			],
+			"allTests": [
+				{
+					"get list of signatures pass": true
+				}
+			]
+		},
+		{
+			"id": "401a177d-fd61-4081-93bd-a8c870cb2290",
+			"name": "Signature by signature id",
+			"url": "http://172.25.4.90:5000/signature/Sig_0ae701e2-eb4b-11ec-9d9e-0b9a78f6c42e/",
+			"time": 15,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get signature by signature id pass": true
+			},
+			"testPassFailCounts": {
+				"get signature by signature id pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"get signature by signature id pass": true
+				}
+			]
+		},
+		{
+			"id": "d9cfb44a-c685-4579-8e8b-738560c5d85c",
+			"name": "List of signatures by contract id",
+			"url": "http://172.25.4.90:5000/contract/signatures/CONTB2C_9ea33bdc-eaf9-11ec-b0a1-a708bb8575ed",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get signatured by contract id pass": true
+			},
+			"testPassFailCounts": {
+				"get signatured by contract id pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"get signatured by contract id pass": true
+				}
+			]
+		},
+		{
+			"id": "fd937abb-3556-4a51-8865-882f7508a60d",
+			"name": "List of obligations",
+			"url": "http://172.25.4.90:5000/obligations/",
+			"time": 80,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get list of obligations pass": true
+			},
+			"testPassFailCounts": {
+				"get list of obligations pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				80
+			],
+			"allTests": [
+				{
+					"get list of obligations pass": true
+				}
+			]
+		},
+		{
+			"id": "b14d078d-2873-4c7a-90a6-9654be4a0fe8",
+			"name": "Obligation detail by obligation id",
+			"url": "http://172.25.4.90:5000/obligation/OB_08c61c82-ebb8-11ec-9d9e-0b9a78f6c42e/",
+			"time": 16,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get obligation detail by obligation id pass": true
+			},
+			"testPassFailCounts": {
+				"get obligation detail by obligation id pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"get obligation detail by obligation id pass": true
+				}
+			]
+		},
+		{
+			"id": "be482c53-3de0-46fe-a938-f25aae72286c",
+			"name": "Contract obligations by contract id",
+			"url": "http://172.25.4.90:5000/contract/obligations/CONTB2C_9ea33bdc-eaf9-11ec-b0a1-a708bb8575ed/",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get contract obligations by contract id pass": true
+			},
+			"testPassFailCounts": {
+				"get contract obligations by contract id pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"get contract obligations by contract id pass": true
+				}
+			]
+		},
+		{
+			"id": "62078af8-3ddf-47ba-860b-71b979a5f61c",
+			"name": "Contract obligation identifier by obligation id",
+			"url": "http://172.25.4.90:5000/contract/obligation/identifier/OB_08c61c82-ebb8-11ec-9d9e-0b9a78f6c42e/",
+			"time": 9,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get contract obligations identifier by obligation id pass": true
+			},
+			"testPassFailCounts": {
+				"get contract obligations identifier by obligation id pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				9
+			],
+			"allTests": [
+				{
+					"get contract obligations identifier by obligation id pass": true
+				}
+			]
+		},
+		{
+			"id": "a665bd09-1637-4cdb-9c89-4a2c33891db5",
+			"name": "List of Contracts",
+			"url": "http://172.25.4.90:5000/contract/list_of_contracts/",
+			"time": 423,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get list of contracts pass": true
+			},
+			"testPassFailCounts": {
+				"get list of contracts pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				423
+			],
+			"allTests": [
+				{
+					"get list of contracts pass": true
+				}
+			]
+		},
+		{
+			"id": "9e5662b8-fcd7-45c1-b7a2-ba5d5b24d459",
+			"name": "Contract details by contract id",
+			"url": "http://172.25.4.90:5000/contract/byContract/CONTB2C_9ea33bdc-eaf9-11ec-b0a1-a708bb8575ed/",
+			"time": 34,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get contract detail pass": true
+			},
+			"testPassFailCounts": {
+				"get contract detail pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				34
+			],
+			"allTests": [
+				{
+					"get contract detail pass": true
+				}
+			]
+		},
+		{
+			"id": "59ff6fc2-f95b-417b-8091-8a1b6190282c",
+			"name": "Contract detail by data controller",
+			"url": "http://172.25.4.90:5000/contract/byContractor/C_028da1e8-c3a7-11ec-bb8b-1b75cc609c1a/",
+			"time": 414,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get contract detail by data controller pass": true
+			},
+			"testPassFailCounts": {
+				"get contract detail by data controller pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				414
+			],
+			"allTests": [
+				{
+					"get contract detail by data controller pass": true
+				}
+			]
+		},
+		{
+			"id": "05292896-76c4-45eb-9331-c92e155a1ffe",
+			"name": "Contract detail by data subject",
+			"url": "http://172.25.4.90:5000/contract/byContractor/C_8bc15c10-b9b2-11ec-8fd7-efc66f58363f/",
+			"time": 413,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"get contract detail by data subject pass": true
+			},
+			"testPassFailCounts": {
+				"get contract detail by data subject pass": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				413
+			],
+			"allTests": [
+				{
+					"get contract detail by data subject pass": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 2215,
+	"collection": {
+		"requests": [
+			{
+				"id": "e7371793-8c94-49d5-8c34-10d1eafb3478",
+				"method": "POST"
+			},
+			{
+				"id": "adf25f75-f3f7-4fa1-b939-17845ff357a5",
+				"method": "PUT"
+			},
+			{
+				"id": "5dca1a24-5b7a-496b-9960-2793e1f6a849",
+				"method": "POST"
+			},
+			{
+				"id": "6f0be3f0-7288-4fca-aa62-a2ab1cfef27b",
+				"method": "POST"
+			},
+			{
+				"id": "3bf3f10a-2aa4-4fd7-b25d-08137a21ce81",
+				"method": "POST"
+			},
+			{
+				"id": "b705cf0b-03ed-45c3-981c-520e38c019f1",
+				"method": "PUT"
+			},
+			{
+				"id": "e78252f7-25d5-4e3e-87fd-e16c7ed88565",
+				"method": "POST"
+			},
+			{
+				"id": "d92aaa1b-0d40-4a6d-975b-02045bb13739",
+				"method": "POST"
+			},
+			{
+				"id": "8b718bbf-b355-4d62-abc7-392ac1c54417",
+				"method": "PUT"
+			},
+			{
+				"id": "6cd86310-89d5-454e-9f43-4ee779a4f133",
+				"method": "POST"
+			},
+			{
+				"id": "f204cb72-23d4-410a-baee-ec55cc52b5ca",
+				"method": "PUT"
+			},
+			{
+				"id": "56a99d06-784d-4109-b649-9a5850ab6eaf",
+				"method": "GET"
+			},
+			{
+				"id": "8aaecf19-6d61-4ce9-b653-1c74a54271c4",
+				"method": "GET"
+			},
+			{
+				"id": "338004ac-a1e8-444e-bd64-a7b9b9a53e8a",
+				"method": "GET"
+			},
+			{
+				"id": "6c378c29-735d-45f7-9d61-551eacd81941",
+				"method": "GET"
+			},
+			{
+				"id": "014f4bba-a321-44db-ad07-5bcabf01874d",
+				"method": "GET"
+			},
+			{
+				"id": "ca70a784-59d2-423b-96e4-1c2ed9c0329d",
+				"method": "GET"
+			},
+			{
+				"id": "cacaf9cf-85e7-4627-b637-41f63c877012",
+				"method": "GET"
+			},
+			{
+				"id": "88aa1b5b-1031-422a-914b-82c905703bad",
+				"method": "GET"
+			},
+			{
+				"id": "25b76a13-04de-42c3-8519-3f8b38be6bf5",
+				"method": "GET"
+			},
+			{
+				"id": "401a177d-fd61-4081-93bd-a8c870cb2290",
+				"method": "GET"
+			},
+			{
+				"id": "d9cfb44a-c685-4579-8e8b-738560c5d85c",
+				"method": "GET"
+			},
+			{
+				"id": "fd937abb-3556-4a51-8865-882f7508a60d",
+				"method": "GET"
+			},
+			{
+				"id": "b14d078d-2873-4c7a-90a6-9654be4a0fe8",
+				"method": "GET"
+			},
+			{
+				"id": "be482c53-3de0-46fe-a938-f25aae72286c",
+				"method": "GET"
+			},
+			{
+				"id": "62078af8-3ddf-47ba-860b-71b979a5f61c",
+				"method": "GET"
+			},
+			{
+				"id": "a665bd09-1637-4cdb-9c89-4a2c33891db5",
+				"method": "GET"
+			},
+			{
+				"id": "9e5662b8-fcd7-45c1-b7a2-ba5d5b24d459",
+				"method": "GET"
+			},
+			{
+				"id": "59ff6fc2-f95b-417b-8091-8a1b6190282c",
+				"method": "GET"
+			},
+			{
+				"id": "05292896-76c4-45eb-9331-c92e155a1ffe",
+				"method": "GET"
+			}
+		]
+	}
+}
