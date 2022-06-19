@@ -4,7 +4,7 @@ from resources.schemas import *
 class ContractorUpdate(MethodResource, Resource):
     @doc(description='Contractors', tags=['Contractors'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
     @use_kwargs(ContractorUpdateSchema)
     def put(self, **kwargs):
@@ -30,7 +30,7 @@ class ContractorUpdate(MethodResource, Resource):
 class ContractorById(MethodResource, Resource):
     @doc(description='Contractors', tags=['Contractors'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, contractorID):
         query = QueryEngine()
@@ -55,7 +55,7 @@ class ContractorById(MethodResource, Resource):
 class ContractorCreate(MethodResource, Resource):
     @doc(description='Contractors', tags=['Contractors'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @use_kwargs(ContractorRequestSchema)
     def post(self, **kwargs):
         schema_serializer = ContractorRequestSchema()
@@ -79,7 +79,7 @@ class ContractorCreate(MethodResource, Resource):
 class ContractorDeleteById(MethodResource, Resource):
     @doc(description='Contractors', tags=['Contractors'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     # @use_kwargs(ContractRequestSchema)
     def delete(self, contractorID):
@@ -102,7 +102,7 @@ class ContractorDeleteById(MethodResource, Resource):
 class GetContractors(MethodResource, Resource):
     @doc(description='Contractors', tags=['Contractors'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()

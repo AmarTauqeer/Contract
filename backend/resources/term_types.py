@@ -5,7 +5,7 @@ from resources.schemas import *
 class GetTermTypes(MethodResource, Resource):
     @doc(description='Term Types', tags=['Term Types'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
@@ -29,7 +29,7 @@ class GetTermTypes(MethodResource, Resource):
 class TermTypeById(MethodResource, Resource):
     @doc(description='Term Types', tags=['Term Types'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, termTypeID):
         query = QueryEngine()
@@ -51,7 +51,7 @@ class TermTypeById(MethodResource, Resource):
 class TermTypeDeleteById(MethodResource, Resource):
     @doc(description='Term Types', tags=['Term Types'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     # @use_kwargs(ContractRequestSchema)
     def delete(self, termTypeID):
@@ -75,7 +75,7 @@ class TermTypeDeleteById(MethodResource, Resource):
 class TermTypeCreate(MethodResource, Resource):
     @doc(description='Term Types', tags=['Term Types'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @use_kwargs(TermTypeRequestSchema)
     def post(self, **kwargs):
         schema_serializer = TermTypeRequestSchema()
@@ -98,7 +98,7 @@ class TermTypeCreate(MethodResource, Resource):
 class TermTypeUpdate(MethodResource, Resource):
     @doc(description='Term Types', tags=['Term Types'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
     @use_kwargs(TermTypeUpdateSchema)
     def put(self, **kwargs):

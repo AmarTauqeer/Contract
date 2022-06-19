@@ -17,24 +17,28 @@ class GenerateToken(MethodResource, Resource):
     def check_for_username_password(func):
         @wraps(func)
         def wrapped(*args, **kwargs):
-            username = os.getenv('user_name')
-            password = os.getenv('password')
+
+            username = os.getenv('uname')
+            password = os.getenv('upass')
             secret_key = os.getenv('SECRET_KEY')
 
-            if request.authorization and request.authorization.username and request.authorization.password:
-                if request.authorization.username == username and request.authorization.password == password:
+            print(request.authorization)
+            print(request.headers)
+
+            if request.authorization and request.authorization.Username and request.authorization.Password:
+                if request.authorization.Username == username and request.authorization.Password == password:
                     token = jwt.encode({
                         'username': username,
-                        'exp': datetime.utcnow() + timedelta(days=100)
+                        'exp': datetime.utcnow() + timedelta(minutes=1)
                     }, secret_key)
                     return jsonify({'token': token.decode('UTF-8')})
                 else:
                     return 'username or password is not correct'
-            elif request.headers.get('username') and request.headers.get('password'):
-                if request.headers.get('username') == username and request.headers.get('password') == password:
+            elif request.headers.get('Username') and request.headers.get('Password'):
+                if request.headers.get('Username') == username and request.headers.get('Password') == password:
                     token = jwt.encode({
                         'username': username,
-                        'exp': datetime.utcnow() + timedelta(days=100)
+                        'exp': datetime.utcnow() + timedelta(minutes=1)
                     }, secret_key)
                     return jsonify({'token': token.decode('UTF-8')})
                 else:

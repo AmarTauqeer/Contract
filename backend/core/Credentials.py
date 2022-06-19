@@ -18,13 +18,15 @@ class Credentials():
     def check_for_token(func):
         @wraps(func)
         def wrapped(*args, **kwargs):
+            # token = os.getenv("token")
             token = request.headers.get('Authorization')
-            if not token:
+            if token=='':
                 return jsonify({'message': 'Token is missed'})
             try:
                 # remove bearer keyword and a space
                 bearer_free_token = token[7:]
                 data = jwt.decode(bearer_free_token, os.getenv('SECRET_KEY'))
+                print(data)
             except:
                 return jsonify({'message': 'invalid token'})
             return func(*args, **kwargs)

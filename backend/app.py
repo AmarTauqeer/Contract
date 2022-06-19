@@ -36,6 +36,7 @@ cors = CORS(app, resources={
         "origins": "*"
     }
 }, supports_credentials=True)
+
 # swagger configuration
 app.config.update({
     'APISPEC_SPEC': APISpec(
@@ -44,7 +45,6 @@ app.config.update({
         version='v001',
         plugins=[MarshmallowPlugin()],
         openapi_version='2.0.0',
-
     )
     ,
     'APISPEC_SWAGGER_UI_URL': '/swagger-ui/',
@@ -60,12 +60,21 @@ with app.app_context():
 api = Api(app)
 docs = FlaskApiSpec(app)
 
+
 # token
 # generate token
 api.add_resource(GenerateToken, '/contract/token/')
+# docs.register(GenerateToken)
 
-# api.add_resource(RegisterUser, '/contract/register/')
-# docs.register(RegisterUser)
+api.add_resource(RegisterUser, '/contract/register/')
+docs.register(RegisterUser)
+
+api.add_resource(Login, '/contract/login/')
+docs.register(Login)
+
+# api.add_resource(Logout, '/contract/logout/')
+# docs.register(Logout)
+
 #
 # api.add_resource(DeleteUser, '/contract/delete_user/<string:email>/')
 # docs.register(DeleteUser)
@@ -76,8 +85,7 @@ api.add_resource(GenerateToken, '/contract/token/')
 # api.add_resource(Login, '/contract/login/')
 # docs.register(Login)
 #
-# api.add_resource(Logout, '/contract/logout/')
-# docs.register(Logout)
+
 
 api.add_resource(Contracts, '/contract/list_of_contracts/')
 docs.register(Contracts)

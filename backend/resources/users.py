@@ -1,14 +1,19 @@
 import json
+
+import requests
 from flask_apispec.views import MethodResource
 from flask_apispec import use_kwargs
 from flask import session
 from flask_restful import Resource, request
 from flask.json import jsonify
 from marshmallow import Schema, fields
+from requests.structures import CaseInsensitiveDict
 
 import app
 from core.models import User, db
 from functools import wraps
+from resources.imports import *
+from resources.schemas import *
 
 
 def check_for_session(func):
@@ -34,6 +39,7 @@ class LoginRequestSchema(Schema):
 
 
 class RegisterUser(MethodResource, Resource):
+    @doc(description='Users', tags=['Users'])
     @use_kwargs(UserRequestSchema)
     def post(self, **kwargs):
         data = request.get_json(force=True)
@@ -56,6 +62,7 @@ class RegisterUser(MethodResource, Resource):
 
 
 class Login(MethodResource, Resource):
+    @doc(description='Users', tags=['Users'])
     @use_kwargs(LoginRequestSchema)
     def post(self, **kwargs):
         data = request.get_json(force=True)
@@ -73,17 +80,34 @@ class Login(MethodResource, Resource):
 
         session["user_id"] = user.id
 
+        # get token
+        headers = CaseInsensitiveDict()
+        headers["Accept"] = "application/json"
+
+
+        token = ""
+        # Set environment variables
+        os.environ['uname'] = decoded_data["Name"]
+        os.environ['upass'] = decoded_data["Password"]
+
+        headers["Username"] = os.environ['uname']
+        headers["Password"] = os.environ['upass']
+        url_get_login = "http://172.16.47.223:5000/contract/token/"
+        resp1 = requests.get(url_get_login, headers=headers)
+        token=resp1.json()['token']
+        os.environ['token'] = token
         return jsonify(
             {
                 "id": user.id,
                 "name": user.name,
                 "email": user.email,
-
+                'token':token
             }
         )
 
 
 class Logout(MethodResource, Resource):
+    @doc(description='Users', tags=['Users'])
     #@check_for_session
     def get(self):
         session.pop("user_id")
@@ -91,6 +115,7 @@ class Logout(MethodResource, Resource):
 
 
 class DeleteUser(MethodResource, Resource):
+    @doc(description='Users', tags=['Users'])
     #@check_for_session
     def get(self,email):
         user = User.query.filter_by(email=email).first()
@@ -100,6 +125,7 @@ class DeleteUser(MethodResource, Resource):
 
 
 class AllUsers(MethodResource, Resource):
+    @doc(description='Users', tags=['Users'])
     #@check_for_session
     def get(self, **kwargs):
         users_data=[]
