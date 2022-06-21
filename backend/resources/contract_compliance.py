@@ -10,12 +10,13 @@ from resources.contracts import ContractByContractId, ContractStatusUpdateById, 
     ContractByContractor
 from resources.imports import *
 from resources.schemas import *
+from mailer import Mailer
 
 
 class GetContractCompliance(MethodResource, Resource):
     @doc(description='Contract Compliance', tags=['Contract Compliance'])
     # @check_for_session
-    @Credentials.check_for_token
+    # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
@@ -26,8 +27,8 @@ class GetContractCompliance(MethodResource, Resource):
         print('scheduler')
         # self.get_consent_state("test")
         obligatons = response["results"]['bindings']
-        # current_data = date(2022, 4, 5)
-        current_data = date.today()
+        current_data = date(2024, 4, 5)
+        # current_data = date.today()
         for x in obligatons:
             obligation_id = x["Obligation"]["value"][45:]
             edate = x["end_date"]["value"][45:]
@@ -52,7 +53,7 @@ class GetContractCompliance(MethodResource, Resource):
 
             b2c_data = ContractByContractId.get(self, b2c)
             b2c_data = b2c_data.json
-            if b2c_data!='No data found for this ID':
+            if b2c_data != 'No data found for this ID':
                 b2c_contract_status = b2c_data["ContractStatus"]
                 b2c_contract_id = b2c_data["Contract"]
 
@@ -112,7 +113,7 @@ class GetContractCompliance(MethodResource, Resource):
         b2c_all_contracts_data = Contracts.get(self)
         b2c_all_contracts_data = b2c_all_contracts_data.json
 
-        if b2c_all_contracts_data!='No record is found':
+        if b2c_all_contracts_data != 'No record is found':
 
             for b in b2c_all_contracts_data:
 
@@ -137,11 +138,11 @@ class GetContractCompliance(MethodResource, Resource):
 
                                 if consent_id != '':
                                     consent_state = self.get_consent_state(consent_id)
-                                    if consent_state == 'Invalid' and contract_status not in ['hasExpired', 'hasTerminated']:
+                                    if consent_state == 'Invalid' and contract_status not in ['hasExpired',
+                                                                                              'hasTerminated']:
 
                                         contractors = GetContractContractors.get(self, a)
                                         contractors = contractors.json
-
                                         for con in contractors:
                                             contractor = ContractorById.get(self, con['contractorID'])
                                             contractor = contractor.json
@@ -149,12 +150,12 @@ class GetContractCompliance(MethodResource, Resource):
                                             message = 'The consent = ' + str(
                                                 consent_id) + ' ' + 'has been expired/invalid but the contract =' \
                                                       + contract + ' is still running based on this consent '
-                                            from_email = 'act.contract.notification@gmail.com'
-                                            server = smtplib.SMTP("smtp.gmail.com", 587)
-                                            server.starttls()
-                                            server.login(os.environ.get('MAIL_USERNAME'), os.environ.get('MAIL_PASSWORD'))
-                                            server.sendmail(from_email, email, message)
 
+                                            mail = Mailer(email=os.environ.get('MAIL_USERNAME'),
+                                                          password=os.environ.get('MAIL_PASSWORD'))
+                                            mail.settings(provider=mail.MICROSOFT)
+                                            mail.send(receiver=email, subject='Violation/Expiration of Obligation',
+                                                      message=message)
         return 'Success'
 
     def send_email(self, type, contract_id, obl_desc, obligation_id):
@@ -169,18 +170,17 @@ class GetContractCompliance(MethodResource, Resource):
         message = 'In contract id = ' + str(
             contract_id) + ' ' + obl_desc + ' with obligation id ' + obligation_id + \
                   ' ' + message_violation_expiration
-        from_email = 'act.contract.notification@gmail.com'
         # get contract contractors
         res = GetContractContractors.get(self, contract_id)
         contractors = res.json
-        if contractors!='No record found for this ID':
+        if contractors != 'No record found for this ID':
             for c in contractors:
                 email = c['email']
-                server = smtplib.SMTP("smtp.gmail.com", 587)
-                server.starttls()
-                server.login(os.environ.get('MAIL_USERNAME'), os.environ.get('MAIL_PASSWORD'))
-                server.sendmail(from_email, email, message)
-    def get_consent_state(self,consentid):
+                mail = Mailer(email=os.environ.get('MAIL_USERNAME'), password=os.environ.get('MAIL_PASSWORD'))
+                mail.settings(provider=mail.MICROSOFT)
+                mail.send(receiver=email, subject='Violation/Expiration of Obligation', message=message)
+
+    def get_consent_state(self, consentid):
         # need credential for extracting information of consents
         headers = CaseInsensitiveDict()
         headers["Accept"] = "application/json"
@@ -189,34 +189,33 @@ class GetContractCompliance(MethodResource, Resource):
         consent_id = consentid
         # consent_id = "ASFASDF23421"
         # for test
-        data={
-            'username':os.getenv("username"),
+        data = {
+            'username': os.getenv("username"),
             'password': os.getenv("pass"),
         }
 
         url_get_login = "http://138.232.18.138:5003/jwt/login/"
         resp1 = requests.post(url_get_login, headers=headers, json=data)
-        token=resp1.json()['access_token']
+        token = resp1.json()['access_token']
 
         url_get_consent_data = "http://138.232.18.138:5003/query/{0}/consent".format(consent_id)
-        headers["Authorization"] = "Bearer "+ token
+        headers["Authorization"] = "Bearer " + token
 
         resp = requests.get(url_get_consent_data, headers=headers)
-        result= resp.json()
-        a=result["message"]
-        a=eval(a)
-        consent_data=a['consent_data']
+        result = resp.json()
+        a = result["message"]
+        a = eval(a)
+        consent_data = a['consent_data']
         if consent_data:
             # print(consent_data)
-            data_provider=consent_data[consent_id][0]['DataProvider']
-            data_controller=consent_data[consent_id][1]['DataProcessorController']
+            data_provider = consent_data[consent_id][0]['DataProvider']
+            data_controller = consent_data[consent_id][1]['DataProcessorController']
             status = consent_data[consent_id][2]['status']
 
             # status=a.rfind('GRANTED')
-            if status =='GRANTED':
-                consent_state='Valid'
+            if status == 'GRANTED':
+                consent_state = 'Valid'
             else:
                 consent_state = 'Invalid'
             # print(consent_state)
             return consent_state
-

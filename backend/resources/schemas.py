@@ -78,23 +78,48 @@ class ObligationUpdateSchema(Schema):
 
 class ContractorRequestSchema(Schema):
     Name = fields.String(required=True, description="Name")
-    Email = fields.String(required=False, description="Email")
-    Phone = fields.String(required=False, description="Phone Number")
+    Email = fields.String(required=True, description="Email")
+    Phone = fields.String(required=True, description="Phone Number")
     Address = fields.String(required=True, description="Street Address")
     Territory = fields.String(required=False, description="Territory")
     Country = fields.String(required=False, description="Country")
-    Role = fields.String(required=False, description="Role")
+    Role = fields.String(required=True, description="Role")
+    Vat = fields.String(required=False, description="Vat")
+    CompanyId = fields.String(required=False, description="Company ID")
 
 
 class ContractorUpdateSchema(Schema):
     ContractorId = fields.String(required=True, description="Contractor ID")
     Name = fields.String(required=True, description="Name")
-    Email = fields.String(required=False, description="Email")
-    Phone = fields.String(required=False, description="Phone Number")
+    Email = fields.String(required=True, description="Email")
+    Phone = fields.String(required=True, description="Phone Number")
     Address = fields.String(required=True, description="Street Address")
     Territory = fields.String(required=False, description="Territory")
     Country = fields.String(required=False, description="Country")
-    Role = fields.String(required=False, description="Role")
+    Role = fields.String(required=True, description="Role")
+    Vat = fields.String(required=False, description="Vat")
+    CompanyId = fields.String(required=False, description="Company ID")
+
+
+class CompanyRequestSchema(Schema):
+    Name = fields.String(required=True, description="Name")
+    Email = fields.String(required=True, description="Email")
+    Phone = fields.String(required=True, description="Phone Number")
+    Address = fields.String(required=True, description="Street Address")
+    Territory = fields.String(required=False, description="Territory")
+    Country = fields.String(required=False, description="Country")
+    Vat = fields.String(required=False, description="VAT")
+
+
+class CompanyUpdateSchema(Schema):
+    CompanyId = fields.String(required=True, description="Company ID")
+    Name = fields.String(required=True, description="Name")
+    Email = fields.String(required=True, description="Email")
+    Phone = fields.String(required=True, description="Phone Number")
+    Address = fields.String(required=True, description="Street Address")
+    Territory = fields.String(required=False, description="Territory")
+    Country = fields.String(required=False, description="Country")
+    Vat = fields.String(required=False, description="VAT")
 
 
 class TermTypeUpdateSchema(Schema):
@@ -152,7 +177,7 @@ class ContractUpdateSchema(Schema):
     Obligations = fields.List(fields.String(),
                               required=False, description="Contract Obligations")
     Signatures = fields.List(fields.String(),
-                              required=False, description="Contractor Signatures")
+                             required=False, description="Contractor Signatures")
 
 
 class ContractRequestSchema(Schema):
@@ -186,13 +211,15 @@ class ContractRequestSchema(Schema):
     Obligations = fields.List(fields.String(),
                               required=False, description="Contract Obligations")
     Signatures = fields.List(fields.String(),
-                              required=False, description="Contractor Signatures")
+                             required=False, description="Contractor Signatures")
+
 
 class ContractorSignaturesRequestSchema(Schema):
     ContractId = fields.String(required=True, description="Contract ID")
     ContractorId = fields.String(required=True, description="Contractor ID")
     CreateDate = fields.Date(required=False, description="Create Date")
     Signature = fields.String(required=True, description="Signature")
+
 
 class ContractorSignaturesUpdateSchema(Schema):
     SignatureId = fields.String(required=True, description="Signature ID")

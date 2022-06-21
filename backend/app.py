@@ -7,6 +7,7 @@ from apispec.ext.marshmallow import MarshmallowPlugin
 from resources.contracts import *
 from resources.users import RegisterUser, Login, Logout, DeleteUser, AllUsers
 from resources.contractors import *
+from resources.company import *
 from resources.contract_terms import *
 from resources.contract_obligation import *
 from resources.term_types import *
@@ -102,6 +103,10 @@ api.add_resource(ContractorById,
                  '/contractor/<string:contractorID>/')
 docs.register(ContractorById)
 
+api.add_resource(CompanyById,
+                 '/company/<string:companyID>/')
+docs.register(CompanyById)
+
 api.add_resource(ContractDeleteById,
                  '/contract/delete/<string:contractID>/')
 docs.register(ContractDeleteById)
@@ -110,11 +115,18 @@ api.add_resource(ContractorDeleteById,
                  '/contractor/delete/<string:contractorID>/')
 docs.register(ContractorDeleteById)
 
+api.add_resource(CompanyDeleteById,
+                 '/company/delete/<string:companyID>/')
+docs.register(CompanyDeleteById)
+
 api.add_resource(ContractCreate, '/contract/create/')
 docs.register(ContractCreate)
 
 api.add_resource(ContractorCreate, '/contractor/create/')
 docs.register(ContractorCreate)
+
+api.add_resource(CompanyCreate, '/company/create/')
+docs.register(CompanyCreate)
 
 api.add_resource(ContractUpdate, '/contract/update/')
 docs.register(ContractUpdate)
@@ -122,8 +134,14 @@ docs.register(ContractUpdate)
 api.add_resource(ContractorUpdate, '/contractor/update/')
 docs.register(ContractorUpdate)
 
+api.add_resource(CompanyUpdate, '/company/update/')
+docs.register(CompanyUpdate)
+
 api.add_resource(GetContractors, '/contractors/')
 docs.register(GetContractors)
+
+api.add_resource(GetCompany, '/companies/')
+docs.register(GetCompany)
 
 api.add_resource(GetTermTypes, '/term/types')
 docs.register(GetTermTypes)
@@ -238,6 +256,6 @@ def compliance():
 
 if __name__ == '__main__':
     scheduler.add_job(id='Contract compliance task', func=compliance, trigger='interval', minutes=1440)
-    if current_date == date(2022, 4, 26):
+    if current_date >= date(2022, 4, 26):
         scheduler.start()
     app.run(debug=True, host='0.0.0.0')

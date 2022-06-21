@@ -19,6 +19,7 @@ from datetime import datetime, timedelta
 from core.query_processor.QueryProcessor import QueryEngine
 from core.contract_validation.ContractValidation import ContractValidation
 from core.contractor_validation.ContractorValidation import ContractorValidation
+from core.company_validation.CompanyValidation import CompanyValidation
 from core.term_validation.term_validation import TermValidation
 from core.obligation_validation.obligation_validation import ObligationValidation
 from core.term_type_validation.term_type_validation import TermTypeValidation

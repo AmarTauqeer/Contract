@@ -19,6 +19,8 @@ class ContractorValidation(QueryEngine):
         Territory = validated_data["Territory"]
         Country = validated_data["Country"]
         Role = validated_data["Role"]
+        Vat = validated_data["Vat"]
+        CompanyId = validated_data["CompanyId"]
 
         if type == "insert":
             ContractorId = contractor_id
@@ -31,6 +33,8 @@ class ContractorValidation(QueryEngine):
                                                                     Territory=Territory,
                                                                     Country=Country,
                                                                     Role=Role,
+                                                                    Vat=Vat,
+                                                                    CompanyId=CompanyId
                                                                     )
 
                                        )
@@ -44,14 +48,16 @@ class ContractorValidation(QueryEngine):
                 # insert into kg
                 respone = self.post_sparql(self.get_username(), self.get_password(),
                                            self.insert_query_contractor(ContractorId=ContractorId,
-                                                                   Name=Name,
-                                                                   Email=Email,
-                                                                   Phone=Phone,
-                                                                   Address=Address,
-                                                                   Territory=Territory,
-                                                                   Country=Country,
-                                                                   Role=Role,
-                                                                   )
+                                                                        Name=Name,
+                                                                        Email=Email,
+                                                                        Phone=Phone,
+                                                                        Address=Address,
+                                                                        Territory=Territory,
+                                                                        Country=Country,
+                                                                        Role=Role,
+                                                                        Vat=Vat,
+                                                                        CompanyId=CompanyId
+                                                                        )
 
                                            )
         return respone

@@ -1,25 +1,23 @@
 from resources.imports import *
 from resources.schemas import *
 
-
-class ContractorUpdate(MethodResource, Resource):
-    @doc(description='Contractors', tags=['Contractors'])
+class CompanyUpdate(MethodResource, Resource):
+    @doc(description='Company', tags=['Company'])
     # @check_for_session
     # @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
-    @use_kwargs(ContractorUpdateSchema)
+    @use_kwargs(CompanyUpdateSchema)
     def put(self, **kwargs):
-        schema_serializer = ContractorUpdateSchema()
+        schema_serializer = CompanyUpdateSchema()
         data = request.get_json(force=True)
-        contractor_id = data['ContractorId']
-        # get contract status from db
-        result = ContractorById.get(self, contractor_id)
+        company_id = data['CompanyId']
+        result = CompanyById.get(self, company_id)
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
         if len(decoded_data) > 0:
             validated_data = schema_serializer.load(data)
-            av = ContractorValidation()
-            response = av.post_data(validated_data, type="update", contractor_id=None)
+            av = CompanyValidation()
+            response = av.post_data(validated_data, type="update", company_id=None)
             if (response):
                 return response
             else:
@@ -28,20 +26,20 @@ class ContractorUpdate(MethodResource, Resource):
             return jsonify({'Error': "Record doesn't exist ."})
 
 
-class ContractorById(MethodResource, Resource):
-    @doc(description='Contractors', tags=['Contractors'])
+class CompanyById(MethodResource, Resource):
+    @doc(description='Company', tags=['Company'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
-    def get(self, contractorID):
+    def get(self, companyID):
         query = QueryEngine()
         response = json.loads(
-            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractorID", contractID=None,
-                                   contractRequester=None, contractProvider=None, contractorID=contractorID))
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="companyID", contractID=None,
+                                   contractRequester=None, contractProvider=None, companyID=companyID))
         res = response["results"]['bindings']
         if len(res) > 0:
             data = {
-                'ContractorID': res[0]['Contractor']['value'][45:],
+                'CompanyID': res[0]['Company']['value'][45:],
                 'name': res[0]['name']['value'],
                 'phone': res[0]['phone']['value'],
                 'email': res[0]['email']['value'],
@@ -49,52 +47,51 @@ class ContractorById(MethodResource, Resource):
                 'territory': res[0]['territory']['value'],
                 'address': res[0]['address']['value'],
                 'vat': res[0]['vat']['value'],
-                'CompanyId': res[0]['company']['value'][45:],
             }
             return data
         return "No record is found for this ID"
 
 
-class ContractorCreate(MethodResource, Resource):
-    @doc(description='Contractors', tags=['Contractors'])
+class CompanyCreate(MethodResource, Resource):
+    @doc(description='Company', tags=['Company'])
     # @check_for_session
     # @Credentials.check_for_token
-    @use_kwargs(ContractorRequestSchema)
+    @use_kwargs(CompanyRequestSchema)
     def post(self, **kwargs):
-        schema_serializer = ContractorRequestSchema()
+        schema_serializer = CompanyRequestSchema()
         data = request.get_json(force=True)
         uuidOne = uuid.uuid1()
-        contractor_id = "C_" + str(uuidOne)
+        company_id = "CM_" + str(uuidOne)
 
         validated_data = schema_serializer.load(data)
-        av = ContractorValidation()
+        av = CompanyValidation()
 
-        response = av.post_data(validated_data, type="insert", contractor_id=contractor_id)
+        response = av.post_data(validated_data, type="insert", company_id=company_id)
 
         if response == 'Success':
-            contract_obj = ContractorById.get(self, contractor_id)
-            contract_obj = contract_obj.json
-            return contract_obj
+            company_obj = CompanyById.get(self, company_id)
+            company_obj = company_obj.json
+            return company_obj
         else:
             return jsonify({'Error': "Record not inserted due to some errors."})
 
 
-class ContractorDeleteById(MethodResource, Resource):
-    @doc(description='Contractors', tags=['Contractors'])
+class CompanyDeleteById(MethodResource, Resource):
+    @doc(description='Company', tags=['Company'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     # @use_kwargs(ContractRequestSchema)
-    def delete(self, contractorID):
+    def delete(self, companyID):
         # get contract status from db
-        result = ContractorById.get(self, contractorID)
+        result = CompanyById.get(self, companyID)
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
 
         if decoded_data != 'No record is found for this ID':
-            if decoded_data['ContractorID'] == contractorID:
-                av = ContractorValidation()
-                response = av.delete_contractor(contractorID)
+            if decoded_data['CompanyID'] == companyID:
+                av = CompanyValidation()
+                response = av.delete_company(companyID)
                 if (response):
                     return jsonify({'Success': "Record deleted successfully."})
                 else:
@@ -102,22 +99,22 @@ class ContractorDeleteById(MethodResource, Resource):
         return "No record is found to be deleted."
 
 
-class GetContractors(MethodResource, Resource):
-    @doc(description='Contractors', tags=['Contractors'])
+class GetCompany(MethodResource, Resource):
+    @doc(description='Company', tags=['Company'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
         response = json.loads(
-            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="contractors", contractorID=None,
+            query.select_query_gdb(purpose=None, dataRequester=None, additionalData="companies", companyID=None,
                                    contractRequester=None, contractProvider=None, ))
         response = response["results"]['bindings']
         data_array = []
         if len(response) >= 1:
             for r in response:
                 data = {
-                    'ContractorID': r['Contractor']['value'][45:],
+                    'CompanyID': r['Company']['value'][45:],
                     'name': r['name']['value'],
                     'phone': r['phone']['value'],
                     'email': r['email']['value'],
@@ -125,8 +122,6 @@ class GetContractors(MethodResource, Resource):
                     'territory': r['territory']['value'],
                     'address': r['address']['value'],
                     'vat': r['vat']['value'],
-                    'CompanyId': r['company']['value'][45:],
-
                 }
                 data_array.append(data)
             return data_array
