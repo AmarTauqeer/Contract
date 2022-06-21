@@ -27,11 +27,11 @@ python -m flask run
 ```
 
 ## Contracts System Architecture
-![](backend/images/semantic-contract-architecture)
+![](/backend/images/semantic-contract-architecture.png)
 
 ## Contracts REST APIs Endpoints
-![](backend/images/contract-api-first-part)
-![](backend/images/contract-api-second-part)
+![](/backend/images/contract-api-first-part.png)
+![](/backend/images/contract-api-second-part.png)
 
 ## Contributors
 
