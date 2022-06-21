@@ -26,6 +26,13 @@ python -m flask run
 
 ```
 
+## Contracts System Architecture
+![](backend/images/semantic-contract-architecture)
+
+## Contracts REST APIs Endpoints
+![](backend/images/contract-api-first-part)
+![](backend/images/contract-api-second-part)
+
 ## Contributors
 
 - Amar Tauqeer
