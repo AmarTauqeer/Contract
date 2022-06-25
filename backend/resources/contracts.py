@@ -25,8 +25,7 @@ class Contracts(MethodResource, Resource):
                 obligation_array = []
                 signature_array = []
 
-                contid = d['Contract']['value']
-                contid = contid[45:]
+                contid = d['contractId']['value']
                 # print(contid)
 
                 # get contractors
@@ -34,7 +33,7 @@ class Contracts(MethodResource, Resource):
                 contractors = contractors.json
                 if contractors != 'No record found for this ID':
                     for c in contractors:
-                        cid = c['contractorID']
+                        cid = c['contractorId']
                         contractor_array.append(cid)
 
                 # get terms
@@ -42,7 +41,7 @@ class Contracts(MethodResource, Resource):
                 terms = terms.json
                 if terms != 'No record found for this ID':
                     for t in terms:
-                        tid = t['termID']
+                        tid = t['termId']
                         term_array.append(tid)
 
                 # get obligation
@@ -50,16 +49,15 @@ class Contracts(MethodResource, Resource):
                 obl = obl.json
                 if obl != 'No record found for this ID':
                     for o in obl:
-                        oid = o['obligationID']
+                        oid = o['obligationId']
                         obligation_array.append(oid)
 
                 # get signatures
                 sig = GetContractSignatures.get(self, contid)
                 sig = sig.json
-                # print(sig)
                 if sig != 'No record found for this ID':
                     for s in sig:
-                        sid = s['signatureID']
+                        sid = s['signatureId']
                         signature_array.append(sid)
 
                 obj = {
@@ -69,22 +67,23 @@ class Contracts(MethodResource, Resource):
                     'signatures': signature_array
                 }
 
-                ConsentId = d['Consent']['value'][45:]
-                category_data = d['ContractCategory']['value'][45:]
-                if category_data != 'hasBusinessToConsumer':
-                    category_data = 'hasBusinessToBusiness'
-                    ConsentId = ''
+                consentId = d['consentId']['value']
+
+                category_data = d['contractCategory']['value'][45:]
+                if category_data != 'categoryBusinessToConsumer':
+                    category_data = 'categoryBusinessToBusiness'
+                    consentId = ''
                 new_data = {
-                    'Contract': d['Contract']['value'][45:],
-                    'ContractStatus': d['ContractStatus']['value'][45:],
-                    'ContractCategory': category_data,
-                    'ConsentId': ConsentId,
-                    'Purpose': d['Purpose']['value'],
-                    'ContractType': d['ContractType']['value'][45:],
-                    'EffectiveDate': d['EffectiveDate']['value'][45:],
-                    'ExecutionDate': d['ExecutionDate']['value'][45:],
-                    'EndDate': d['EndDate']['value'][45:],
-                    'Medium': d['Medium']['value'],
+                    'contractId': d['contractId']['value'],
+                    'contractStatus': d['contractStatus']['value'][45:],
+                    'contractCategory': category_data,
+                    'consentId': consentId,
+                    'purpose': d['purpose']['value'],
+                    'contractType': d['contractType']['value'][45:],
+                    'effectiveDate': d['effectiveDate']['value'],
+                    'executionDate': d['executionDate']['value'],
+                    'endDate': d['endDate']['value'],
+                    'medium': d['medium']['value'],
                     'consideration': d['consideration']['value'],
                     'value': d['value']['value'],
                     'identifiers': obj
@@ -146,7 +145,6 @@ class ContractByContractId(MethodResource, Resource):
                                    contractRequester=None, contractProvider=None, contractorID=None))
 
         data = response["results"]['bindings']
-        # print(data)
         if len(data) != 0:
             contractor_array = []
             term_array = []
@@ -160,7 +158,7 @@ class ContractByContractId(MethodResource, Resource):
                 contractors = contractors.json
                 if contractors != 'No record found for this ID':
                     for c in contractors:
-                        cid = c['contractorID']
+                        cid = c['contractorId']
                         contractor_array.append(cid)
 
                 # get terms
@@ -168,7 +166,7 @@ class ContractByContractId(MethodResource, Resource):
                 terms = terms.json
                 if terms != 'No record found for this ID':
                     for t in terms:
-                        tid = t['termID']
+                        tid = t['termId']
                         term_array.append(tid)
 
                 # get obligation
@@ -177,7 +175,7 @@ class ContractByContractId(MethodResource, Resource):
 
                 if obl != 'No record found for this ID':
                     for o in obl:
-                        oid = o['obligationID']
+                        oid = o['obligationId']
                         obligation_array.append(oid)
 
                 # get signatures
@@ -187,7 +185,7 @@ class ContractByContractId(MethodResource, Resource):
                 if sig != 'No record found for this ID':
                     for s in sig:
                         # print(s)
-                        sid = s['signatureID']
+                        sid = s['signatureId']
                         signature_array.append(sid)
 
 
@@ -197,23 +195,24 @@ class ContractByContractId(MethodResource, Resource):
                 'obligations': obligation_array,
                 'signatures': signature_array
             }
-            ConsentId = d['Consent']['value'][45:]
-            category_data = d['ContractCategory']['value'][45:]
-            if category_data != 'hasBusinessToConsumer':
-                category_data = 'hasBusinessToBusiness'
-                ConsentId = ''
 
+            consentId = d['consentId']['value']
+
+            category_data = d['contractCategory']['value'][45:]
+            if category_data != 'categoryBusinessToConsumer':
+                category_data = 'categoryBusinessToBusiness'
+                consentId = ''
             new_data = {
-                'Contract': d['Contract']['value'][45:],
-                'ContractStatus': d['ContractStatus']['value'][45:],
-                'ContractCategory': category_data,
-                'ConsentId': ConsentId,
-                'Purpose': d['Purpose']['value'],
-                'ContractType': d['ContractType']['value'][45:],
-                'EffectiveDate': d['EffectiveDate']['value'][45:],
-                'ExecutionDate': d['ExecutionDate']['value'][45:],
-                'EndDate': d['EndDate']['value'][45:],
-                'Medium': d['Medium']['value'],
+                'contractId': d['contractId']['value'],
+                'contractStatus': d['contractStatus']['value'][45:],
+                'contractCategory': category_data,
+                'consentId': consentId,
+                'purpose': d['purpose']['value'],
+                'contractType': d['contractType']['value'][45:],
+                'effectiveDate': d['effectiveDate']['value'],
+                'executionDate': d['executionDate']['value'],
+                'endDate': d['endDate']['value'],
+                'medium': d['medium']['value'],
                 'consideration': d['consideration']['value'],
                 'value': d['value']['value'],
                 'identifiers': obj
@@ -240,8 +239,8 @@ class ContractUpdate(MethodResource, Resource):
         decoded_data = json.loads(my_json)
         # print(decoded_data)
         if decoded_data != 'No data found for this ID':
-            if decoded_data['Contract'] == contract_id:
-                status_value = decoded_data['ContractStatus']
+            if decoded_data['contractId'] == contract_id:
+                status_value = decoded_data['contractStatus']
                 signed = re.findall(r"Signed", status_value)
                 if len(signed) == 0:
                     validated_data = schema_serializer.load(data)
@@ -267,15 +266,16 @@ class ContractCreate(MethodResource, Resource):
         data = request.get_json(force=True)
         contract_category = data["ContractCategory"]
         uuidOne = uuid.uuid1()
-        if contract_category == 'hasBusinessToBusiness':
-            contract_id = "CONTB2B_" + str(uuidOne)
+        if contract_category == 'categoryBusinessToBusiness':
+            contract_id = "contb2b_" + str(uuidOne)
         else:
-            contract_id = "CONTB2C_" + str(uuidOne)
+            contract_id = "contb2c_" + str(uuidOne)
         validated_data = schema_serializer.load(data)
         cv = ContractValidation()
         response = cv.post_data(validated_data, type="insert", contract_id=contract_id)
         if response=='Success':
             contract_obj=ContractByContractId.get(self,contract_id)
+            # print(contract_obj.json)
             contract_obj=contract_obj.json
             return contract_obj
         else:
@@ -293,9 +293,9 @@ class ContractDeleteById(MethodResource, Resource):
         result = ContractByContractId.get(self, contractID)
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
-        print(decoded_data)
-        if decoded_data != 'No data found for this ID' and decoded_data['Contract'] == contractID:
-            status_value = decoded_data['ContractStatus']
+        # print(decoded_data)
+        if decoded_data != 'No data found for this ID' and decoded_data['contractId'] == contractID:
+            status_value = decoded_data['contractStatus']
             signed = re.findall(r"Signed", status_value)
             if len(signed) == 0:
                 # delete obligation
@@ -305,7 +305,7 @@ class ContractDeleteById(MethodResource, Resource):
                 if decoded_data != 'No record found for this ID':
                     obl_data = decoded_data
                     for o in obl_data:
-                        obligation_id = o['obligationID'];
+                        obligation_id = o['obligationId'];
                         ObligationDeleteById.delete(self, obligation_id)
 
                 # delete term
@@ -315,7 +315,7 @@ class ContractDeleteById(MethodResource, Resource):
                 if decoded_data != 'No record found for this ID':
                     term_data = decoded_data
                     for t in term_data:
-                        term_id = t['termID'];
+                        term_id = t['termId'];
                         TermDeleteById.delete(self, term_id)
 
                 # delete signature
@@ -325,7 +325,7 @@ class ContractDeleteById(MethodResource, Resource):
                 if decoded_data != 'No record found for this ID':
                     sig_data = decoded_data
                     for s in sig_data:
-                        sig_id = s['signatureID'];
+                        sig_id = s['signatureId'];
                         SignatureDeleteById.delete(self, sig_id)
 
                 cv = ContractValidation()
@@ -358,13 +358,13 @@ class GetContractContractors(MethodResource, Resource):
         if len(data) != 0:
             contractor_array = []
             for d in data:
-                contractor = d['contractor']['value']
-                contractor = contractor[45:]
-                new_data = {'contractorID': contractor,
+                contractorId = d['contractorId']['value']
+                new_data = {'contractorId': contractorId,
                             'name': d['name']['value'],
                             'email': d['email']['value'],
                             'country': d['country']['value'],
-                            'territory': d['territory']['value']
+                            'territory': d['territory']['value'],
+                            'createDate': d['createDate']['value']
                             }
                 contractor_array.append(new_data)
             return contractor_array
@@ -381,27 +381,34 @@ class ContractStatusUpdateById(MethodResource, Resource):
         userid = os.getenv("user_name")
         password = os.getenv("password")
 
-        violation_date = date.today()
+        violation_date = datetime.now()
         sparql = SPARQLWrapper(hostname)
         sparql.setHTTPAuth(BASIC)
         sparql.setCredentials(userid, password)
         query = textwrap.dedent("""
          PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
-         PREFIX dct: <http://purl.org/dc/terms/>
-            DELETE {{?ContractId :hasContractStatus :hasCreated.
-                    ?ContractId :hasContractStatus :hasRenewed.
-                    ?ContractId :hasContractStatus :hasPending.
-                    ?ContractId :hasContractStatus :hasViolated.
-                    ?ContractId :hasContractStatus :hasExpired.
-                    ?ContractId :hasContractStatus :hasSigned.
-                    ?ContractId :hasContractStatus :hasUpdated.
-                    ?ContractId :hasContractStatus :hasTerminated.}}
-            INSERT {{?ContractId :hasContractStatus :{2}.
-            ?ContractId :RevokedAtTime {0}.
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            PREFIX dc: <http://purl.org/dc/elements/1.1/>
+            PREFIX dpv: <http://www.w3.org/ns/dpv#>
+            PREFIX prov: <http://www.w3.org/ns/prov#>
+            PREFIX dcat: <http://www.w3.org/ns/dcat#>
+            PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
+            PREFIX dct: <http://purl.org/dc/terms/>
+            DELETE {{?contractId :hasContractStatus :statusCreated.
+                    ?contractId :hasContractStatus :statusRenewed.
+                    ?contractId :hasContractStatus :statusPending.
+                    ?contractId :hasContractStatus :statusViolated.
+                    ?contractId :hasContractStatus :statusExpired.
+                    ?contractId :hasContractStatus :statusSigned.
+                    ?contractId :hasContractStatus :statusUpdated.
+                    ?contractId :hasContractStatus :statusTerminated.}}
+            INSERT {{?contractId :hasContractStatus :{2}.
+            ?contractId :RevokedAtTime {0}.
             }}
              WHERE {{
-             ?ContractId a <http://ontologies.atb-bremen.de/smashHitCore#contractID>.
-              FILTER(?ContractId = :{1})
+             ?Contract rdf:type fibo-fnd-agr-ctr:Contract;
+                        :contractID ?contractId;
+              FILTER(?contractId = "{1}")
              }}""").format('\'{}^^xsd:dateTime\''.format(violation_date), contractID, status)
 
         # print(query)

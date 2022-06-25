@@ -32,7 +32,7 @@ class ContractValidation(QueryEngine):
         ContractStatus = validated_data["ContractStatus"]
         ContractCategory = validated_data["ContractCategory"]
         ConsentId = validated_data["ConsentId"]
-        if ContractCategory!='hasBusinessToConsumer':
+        if ContractCategory!='categoryBusinessToConsumer':
             ConsentId=''
         ConsiderationDescription = validated_data["ConsiderationDescription"]
         ConsiderationValue = validated_data["ConsiderationValue"]

@@ -11,6 +11,7 @@ class CompanyUpdate(MethodResource, Resource):
         schema_serializer = CompanyUpdateSchema()
         data = request.get_json(force=True)
         company_id = data['CompanyId']
+
         result = CompanyById.get(self, company_id)
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
@@ -39,7 +40,7 @@ class CompanyById(MethodResource, Resource):
         res = response["results"]['bindings']
         if len(res) > 0:
             data = {
-                'CompanyID': res[0]['Company']['value'][45:],
+                'companyId': res[0]['companyId']['value'],
                 'name': res[0]['name']['value'],
                 'phone': res[0]['phone']['value'],
                 'email': res[0]['email']['value'],
@@ -47,6 +48,7 @@ class CompanyById(MethodResource, Resource):
                 'territory': res[0]['territory']['value'],
                 'address': res[0]['address']['value'],
                 'vat': res[0]['vat']['value'],
+                'createDate': res[0]['createDate']['value'],
             }
             return data
         return "No record is found for this ID"
@@ -61,7 +63,7 @@ class CompanyCreate(MethodResource, Resource):
         schema_serializer = CompanyRequestSchema()
         data = request.get_json(force=True)
         uuidOne = uuid.uuid1()
-        company_id = "CM_" + str(uuidOne)
+        company_id = "cm_" + str(uuidOne)
 
         validated_data = schema_serializer.load(data)
         av = CompanyValidation()
@@ -89,7 +91,7 @@ class CompanyDeleteById(MethodResource, Resource):
         decoded_data = json.loads(my_json)
 
         if decoded_data != 'No record is found for this ID':
-            if decoded_data['CompanyID'] == companyID:
+            if decoded_data['companyId'] == companyID:
                 av = CompanyValidation()
                 response = av.delete_company(companyID)
                 if (response):
@@ -114,7 +116,7 @@ class GetCompany(MethodResource, Resource):
         if len(response) >= 1:
             for r in response:
                 data = {
-                    'CompanyID': r['Company']['value'][45:],
+                    'companyId': r['companyId']['value'],
                     'name': r['name']['value'],
                     'phone': r['phone']['value'],
                     'email': r['email']['value'],
@@ -122,6 +124,7 @@ class GetCompany(MethodResource, Resource):
                     'territory': r['territory']['value'],
                     'address': r['address']['value'],
                     'vat': r['vat']['value'],
+                    'createDate': r['createDate']['value'],
                 }
                 data_array.append(data)
             return data_array

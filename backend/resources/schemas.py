@@ -60,8 +60,8 @@ class ObligationRequestSchema(Schema):
     ContractId = fields.String(required=True, description="Contract ID")
     ContractIdB2C = fields.String(required=False, description="Contract ID B2C")
     State = fields.String(required=False, description="Obligation State")
-    ExecutionDate = fields.Date(required=False, description="Execution Date")
-    EndDate = fields.Date(required=False, description="End Date")
+    ExecutionDate = fields.DateTime(required=False, description="Execution Date")
+    EndDate = fields.DateTime(required=False, description="End Date")
 
 
 class ObligationUpdateSchema(Schema):
@@ -72,8 +72,8 @@ class ObligationUpdateSchema(Schema):
     ContractId = fields.String(required=True, description="Contract ID")
     ContractIdB2C = fields.String(required=False, description="Contract ID B2C")
     State = fields.String(required=False, description="Obligation State")
-    ExecutionDate = fields.Date(required=False, description="Execution Date")
-    EndDate = fields.Date(required=False, description="End Date")
+    ExecutionDate = fields.DateTime(required=False, description="Execution Date")
+    EndDate = fields.DateTime(required=False, description="End Date")
 
 
 class ContractorRequestSchema(Schema):
@@ -86,6 +86,7 @@ class ContractorRequestSchema(Schema):
     Role = fields.String(required=True, description="Role")
     Vat = fields.String(required=False, description="Vat")
     CompanyId = fields.String(required=False, description="Company ID")
+    CreateDate = fields.DateTime(required=False, description="Create Date")
 
 
 class ContractorUpdateSchema(Schema):
@@ -99,6 +100,7 @@ class ContractorUpdateSchema(Schema):
     Role = fields.String(required=True, description="Role")
     Vat = fields.String(required=False, description="Vat")
     CompanyId = fields.String(required=False, description="Company ID")
+    CreateDate = fields.DateTime(required=False, description="Create Date")
 
 
 class CompanyRequestSchema(Schema):
@@ -109,6 +111,7 @@ class CompanyRequestSchema(Schema):
     Territory = fields.String(required=False, description="Territory")
     Country = fields.String(required=False, description="Country")
     Vat = fields.String(required=False, description="VAT")
+    CreateDate = fields.DateTime(required=False, description="Create Date")
 
 
 class CompanyUpdateSchema(Schema):
@@ -120,17 +123,20 @@ class CompanyUpdateSchema(Schema):
     Territory = fields.String(required=False, description="Territory")
     Country = fields.String(required=False, description="Country")
     Vat = fields.String(required=False, description="VAT")
+    CreateDate = fields.DateTime(required=False, description="Create Date")
 
 
 class TermTypeUpdateSchema(Schema):
     TermTypeId = fields.String(required=True, description="TermId")
     Name = fields.String(required=False, description="Name")
     Description = fields.String(required=False, description="Description")
+    CreateDate = fields.DateTime(required=False, description="Create Date")
 
 
 class TermTypeRequestSchema(Schema):
     Name = fields.String(required=False, description="Name")
     Description = fields.String(required=False, description="Description")
+    CreateDate = fields.DateTime(required=False, description="Create Date")
 
 
 class TermUpdateSchema(Schema):
@@ -138,12 +144,14 @@ class TermUpdateSchema(Schema):
     TermTypeId = fields.String(required=True, description="TermTypeId")
     ContractId = fields.String(required=True, description="Contract ID")
     Description = fields.String(required=False, description="Description")
+    CreateDate = fields.DateTime(required=False, description="Create Date")
 
 
 class TermRequestSchema(Schema):
     TermTypeId = fields.String(required=True, description="TermTypeId")
     ContractId = fields.String(required=True, description="Contract ID")
     Description = fields.String(required=False, description="Description")
+    CreateDate = fields.DateTime(required=False, description="Create Date")
 
 
 class ContractUpdateSchema(Schema):
@@ -153,12 +161,12 @@ class ContractUpdateSchema(Schema):
                                  description="Contract Type")
     Purpose = fields.String(required=True, description="For What Purpose")
 
-    ExecutionDate = fields.Date(required=False,
-                                description="Execution Date")
-    EffectiveDate = fields.Date(required=False,
-                                description="Effective Date")
-    EndDate = fields.Date(required=False,
-                          description="Expire Date")
+    ExecutionDate = fields.DateTime(required=False,
+                                    description="Execution Date")
+    EffectiveDate = fields.DateTime(required=False,
+                                    description="Effective Date")
+    EndDate = fields.DateTime(required=False,
+                              description="Expire Date")
     Medium = fields.String(required=False, description="Medium")
 
     ContractStatus = fields.String(
@@ -186,12 +194,12 @@ class ContractRequestSchema(Schema):
                                  description="Contract Type")
     Purpose = fields.String(required=True, description="For What Purpose")
 
-    ExecutionDate = fields.Date(required=False,
-                                description="Execution Date")
-    EffectiveDate = fields.Date(required=False,
-                                description="Effective Date")
-    EndDate = fields.Date(required=False,
-                          description="Expire Date")
+    ExecutionDate = fields.DateTime(required=False,
+                                    description="Execution Date")
+    EffectiveDate = fields.DateTime(required=False,
+                                    description="Effective Date")
+    EndDate = fields.DateTime(required=False,
+                              description="Expire Date")
     Medium = fields.String(required=False, description="Medium")
 
     ContractStatus = fields.String(
@@ -225,7 +233,7 @@ class ContractorSignaturesUpdateSchema(Schema):
     SignatureId = fields.String(required=True, description="Signature ID")
     ContractId = fields.String(required=True, description="Contract ID")
     ContractorId = fields.String(required=True, description="Contractor ID")
-    CreateDate = fields.Date(required=False, description="Create Date")
+    CreateDate = fields.DateTime(required=False, description="Create Date")
     Signature = fields.String(required=True, description="Signature")
 
 

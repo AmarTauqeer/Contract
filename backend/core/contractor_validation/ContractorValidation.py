@@ -21,6 +21,7 @@ class ContractorValidation(QueryEngine):
         Role = validated_data["Role"]
         Vat = validated_data["Vat"]
         CompanyId = validated_data["CompanyId"]
+        CreateDate = validated_data["CreateDate"]
 
         if type == "insert":
             ContractorId = contractor_id
@@ -34,7 +35,8 @@ class ContractorValidation(QueryEngine):
                                                                     Country=Country,
                                                                     Role=Role,
                                                                     Vat=Vat,
-                                                                    CompanyId=CompanyId
+                                                                    CompanyId=CompanyId,
+                                                                    CreateDate=CreateDate
                                                                     )
 
                                        )
@@ -56,7 +58,8 @@ class ContractorValidation(QueryEngine):
                                                                         Country=Country,
                                                                         Role=Role,
                                                                         Vat=Vat,
-                                                                        CompanyId=CompanyId
+                                                                        CompanyId=CompanyId,
+                                                                        CreateDate=CreateDate
                                                                         )
 
                                            )

@@ -14,11 +14,14 @@ class TermTypeValidation(QueryEngine):
     def post_data(self, validated_data, type, term_type_id):
         Name = validated_data["Name"]
         Description = validated_data["Description"]
+        CreateDate = validated_data["CreateDate"]
 
         if type == "insert":
             TermTypeId = term_type_id
             respone = self.post_sparql(self.get_username(), self.get_password(),
-                                       self.insert_query_term_type(TermTypeId=TermTypeId, Name=Name, Description=Description))
+                                       self.insert_query_term_type(TermTypeId=TermTypeId, Name=Name,
+                                                                   Description=Description,
+                                                                   CreateDate=CreateDate))
         else:
             TermTypeId = validated_data["TermTypeId"]
             Description = validated_data["Description"]
@@ -30,5 +33,6 @@ class TermTypeValidation(QueryEngine):
                 # insert into kg
                 respone = self.post_sparql(self.get_username(), self.get_password(),
                                            self.insert_query_term_type(TermTypeId=TermTypeId,
-                                                                  Name=Name, Description=Description))
+                                                                       Name=Name, Description=Description,
+                                                                       CreateDate=CreateDate))
         return respone

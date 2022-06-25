@@ -12,6 +12,7 @@ from resources.imports import *
 from resources.schemas import *
 from mailer import Mailer
 
+from datetime import datetime,date
 
 class GetContractCompliance(MethodResource, Resource):
     @doc(description='Contract Compliance', tags=['Contract Compliance'])
@@ -27,13 +28,13 @@ class GetContractCompliance(MethodResource, Resource):
         print('scheduler')
         # self.get_consent_state("test")
         obligatons = response["results"]['bindings']
-        current_data = date(2024, 4, 5)
-        # current_data = date.today()
+        # current_data = date(2024, 4, 5)
+        current_data = date.today()
         for x in obligatons:
-            obligation_id = x["Obligation"]["value"][45:]
-            edate = x["end_date"]["value"][45:]
+            obligation_id = x["obligationId"]["value"]
+            edate = x["endDate"]["value"][:10]
             obl_state = x["state"]["value"][45:]
-            obl_desc = x["obl_desc"]["value"]
+            obl_desc = x["obligationDescription"]["value"]
 
             ob = GetObligationIdentifierById.get(self, obligation_id)
             identifier_data = ob.json
@@ -43,9 +44,9 @@ class GetContractCompliance(MethodResource, Resource):
             # get contract status
             for i in identifier_data:
                 # print(i)
-                if 'CONTB2C_' in i:
+                if 'contb2c_' in i:
                     b2c = i
-                if 'CONTB2B_' in i:
+                if 'contb2b_' in i:
                     b2b = i
 
             date_time_str = edate
@@ -54,56 +55,59 @@ class GetContractCompliance(MethodResource, Resource):
             b2c_data = ContractByContractId.get(self, b2c)
             b2c_data = b2c_data.json
             if b2c_data != 'No data found for this ID':
-                b2c_contract_status = b2c_data["ContractStatus"]
-                b2c_contract_id = b2c_data["Contract"]
+                b2c_contract_status = b2c_data["contractStatus"]
+                b2c_contract_id = b2c_data["contractId"]
 
             if b2c != "" and b2b != "":
 
                 b2b_data = ContractByContractId.get(self, b2b)
                 b2b_data = b2b_data.json
-                b2b_contract_status = b2b_data["ContractStatus"]
-                b2b_contract_id = b2b_data["Contract"]
+                b2b_contract_status = b2b_data["contractStatus"]
+                b2b_contract_id = b2b_data["contractId"]
 
                 # print(b2c_data)
-                consent_id = b2c_data["ConsentId"]
+                consent_id = b2c_data["consentId"]
 
                 consent_state = self.get_consent_state(consent_id)
                 # consent based status
                 if consent_state in ['Invalid', 'Expired'] and b2b_contract_status \
-                        not in ('hasViolated', 'hasTerminated', 'hasExpired'):
+                        not in ('statusViolated', 'statusTerminated', 'statusExpired'):
                     print('if')
                     # update b2b contract status
-                    ContractStatusUpdateById.get(self, b2b_contract_id, 'hasExpired')
+                    ContractStatusUpdateById.get(self, b2b_contract_id, 'statusExpired')
                     # update b2b obligation
-                    ObligationStatusUpdateById.get(self, obligation_id, 'hasExpired')
+                    ObligationStatusUpdateById.get(self, obligation_id, 'stateInvalid')
                     self.send_email('expire', b2b_contract_id, obl_desc, obligation_id)
                 else:
                     # current_data = date(2023, 4, 24)
-                    if current_data >= date_time_obj and obl_state == 'hasPendingState' \
+                    if current_data >= date_time_obj and obl_state == 'statePending' \
                             and b2b_contract_status not in (
-                            'hasViolated', 'hasTerminated', 'hasExpired'):
+                            'statusViolated', 'statusTerminated', 'statusExpired'):
                         # print('violation')
-                        ContractStatusUpdateById.get(self, b2b_contract_id, 'hasViolated')
-                        ObligationStatusUpdateById.get(self, obligation_id, 'hasViolated')
+                        ContractStatusUpdateById.get(self, b2b_contract_id, 'statusViolated')
+                        ObligationStatusUpdateById.get(self, obligation_id, 'stateViolated')
                         self.send_email('violation', b2b_contract_id, obl_desc, obligation_id)
 
             elif b2c != "":
 
-                consent_state = 'Invalid'
+                # print(b2c_data)
+                consent_id = b2c_data["consentId"]
+                consent_state = self.get_consent_state(consent_id)
+
                 if consent_state in ['Invalid', 'Expired'] and b2c_contract_status \
-                        not in ('hasViolated', 'hasTerminated', 'hasExpired'):
+                        not in ('statusViolated', 'statusTerminated', 'statusExpired'):
                     # update contract status
-                    ContractStatusUpdateById.get(self, b2c_contract_id, 'hasExpired')
+                    ContractStatusUpdateById.get(self, b2c_contract_id, 'statusExpired')
                     # update b2b obligation
-                    ObligationStatusUpdateById.get(self, obligation_id, 'hasExpired')
+                    ObligationStatusUpdateById.get(self, obligation_id, 'stateInvalid')
                     self.send_email('expire', b2c, obl_desc, obligation_id)
                 else:
                     # current_data = date(2023, 4, 24)
-                    if current_data >= date_time_obj and obl_state == 'hasPendingState' \
+                    if current_data >= date_time_obj and obl_state == 'statePending' \
                             and b2c_contract_status not in (
-                            'hasViolated', 'hasTerminated', 'hasExpired'):
-                        ContractStatusUpdateById.get(self, b2c_contract_id, 'hasViolated')
-                        ObligationStatusUpdateById.get(self, id, 'hasViolated')
+                            'statusViolated', 'statusTerminated', 'statusExpired'):
+                        ContractStatusUpdateById.get(self, b2c_contract_id, 'statusViolated')
+                        ObligationStatusUpdateById.get(self, id, 'stateViolated')
                         self.send_email('violation', b2c, obl_desc, obligation_id)
 
         """
@@ -117,11 +121,11 @@ class GetContractCompliance(MethodResource, Resource):
 
             for b in b2c_all_contracts_data:
 
-                contract = b['Contract']
-                if 'CONTB2B_' in contract:
+                contract = b['contractId']
+                if 'contb2b_' in contract:
                     c_obj = ContractByContractId.get(self, contract)
                     c_obj = c_obj.json
-                    contract_status = c_obj['ContractStatus']
+                    contract_status = c_obj['contractStatus']
                     b_obligation = c_obj['identifiers']['obligations']
 
                     for o in b_obligation:
@@ -131,20 +135,20 @@ class GetContractCompliance(MethodResource, Resource):
 
                         for a in o_identifier:
 
-                            if 'CONTB2C_' in a:
+                            if 'contb2c_' in a:
                                 c_obj1 = ContractByContractId.get(self, a)
                                 c_obj1 = c_obj1.json
-                                consent_id = c_obj1['ConsentId']
+                                consent_id = c_obj1['consentId']
 
                                 if consent_id != '':
                                     consent_state = self.get_consent_state(consent_id)
-                                    if consent_state == 'Invalid' and contract_status not in ['hasExpired',
-                                                                                              'hasTerminated']:
+                                    if consent_state == 'Invalid' and contract_status not in ['statusExpired',
+                                                                                              'statusTerminated']:
 
                                         contractors = GetContractContractors.get(self, a)
                                         contractors = contractors.json
                                         for con in contractors:
-                                            contractor = ContractorById.get(self, con['contractorID'])
+                                            contractor = ContractorById.get(self, con['contractorId'])
                                             contractor = contractor.json
                                             email = contractor['email']
                                             message = 'The consent = ' + str(

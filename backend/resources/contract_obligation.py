@@ -19,18 +19,18 @@ class GetObligations(MethodResource, Resource):
             obligation_sub_array = []
             for d in data:
                 # print(d)
-                obligation_id = d['Obligation']['value'][45:]
+                obligation_id = d['obligationId']['value']
 
                 # get contract id, term id and contractor id
                 obl = ObligationById.get(self, obligation_id)
                 obl_data = obl.json
                 # print(obl_data)
                 new_data = {
-                    'obligationID': obligation_id,
+                    'obligationId': obligation_id,
                     'state': obl_data[0]['state'],
-                    'description': obl_data[0]['description'],
-                    'exection_date': obl_data[0]['execution_date'],
-                    'end_date': obl_data[0]['end_date'],
+                    'obligationDescription': obl_data[0]['obligationDescription'],
+                    'exectionDate': obl_data[0]['executionDate'],
+                    'endDate': obl_data[0]['endDate'],
                     'identifier': obl_data[0]['identifier'],
                 }
                 obligation_sub_array.append(new_data)
@@ -55,13 +55,12 @@ class GetObligationByContractId(MethodResource, Resource):
         if len(data) != 0:
             obligation_array = []
             for d in data:
-                obligation_id = d['obl']['value']
-                obligation_id = obligation_id[45:]
-                new_data = {'obligationID': obligation_id,
+                obligation_id = d['obligationId']['value']
+                new_data = {'obligationId': obligation_id,
                             'state': d['state']['value'][45:],
-                            'description': d['obl_desc']['value'],
-                            'exection_date': d['exe_date']['value'][45:],
-                            'end_date': d['end_date']['value'][45:],
+                            'obligationDescription': d['obligationDescription']['value'],
+                            'exectionDate': d['executionDate']['value'],
+                            'endDate': d['endDate']['value'],
                             }
                 obligation_array.append(new_data)
             return obligation_array
@@ -89,11 +88,11 @@ class ObligationById(MethodResource, Resource):
                 id = id.json
                 for i in id:
                     identifier_array.append(i)
-                new_data = {'obligationID': obligationID,
+                new_data = {'obligationId': obligationID,
                             'state': d['state']['value'][45:],
-                            'description': d['description']['value'],
-                            'execution_date': d['executiondate']['value'][45:],
-                            'end_date': d['enddate']['value'][45:],
+                            'obligationDescription': d['obligationDescription']['value'],
+                            'executionDate': d['executionDate']['value'],
+                            'endDate': d['endDate']['value'],
                             'identifier': identifier_array
                             }
                 obligation_array.append(new_data)
@@ -135,10 +134,10 @@ class ObligationCreate(MethodResource, Resource):
         from resources.contracts import ContractByContractId
         contract_data = ContractByContractId.get(self, ContractId)
         contract_data = contract_data.json
-        ContractCategory = contract_data["ContractCategory"]
+        ContractCategory = contract_data["contractCategory"]
         # print(ContractCategory)
         uuidOne = uuid.uuid1()
-        obligation_id = "OB_" + str(uuidOne)
+        obligation_id = "ob_" + str(uuidOne)
         validated_data = schema_serializer.load(data)
         av = ObligationValidation()
         response = av.post_data(validated_data, type="insert", obligation_id=obligation_id,
@@ -214,29 +213,33 @@ class ObligationStatusUpdateByObligationId(MethodResource, Resource):
         query = textwrap.dedent("""
          PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
          PREFIX dct: <http://purl.org/dc/terms/>
-            DELETE {{?Obligation :hasStates :hasPendingState.
-                    ?Obligation :hasStates :hasViolated.
-                    ?Obligation :hasStates :hasFulfilled.
-                    ?Obligation :hasStates :hasInvalid.
-                    ?Obligation :hasStates :hasExpired.}}
+         PREFIX prov: <http://www.w3.org/ns/prov#>
+            DELETE {{?Obligation :hasStates :statePending.
+                    ?Obligation :hasStates :stateViolated.
+                    ?Obligation :hasStates :stateFulfilled.
+                    ?Obligation :hasStates :stateInvalid.
+                    ?Obligation :hasStates :stateExpired.}}
             INSERT {{?Obligation :hasStates :{3}.}}
             where {{
-                     ?Obligation a <http://ontologies.atb-bremen.de/smashHitCore#obligationID>;
+                     ?Obligation rdf:type :Obligation;
                                  :hasStates ?state;
-                     FILTER(?Obligation = :{0}) .
+                                 :obligationID ?obligationId .
+                     FILTER(?obligationId = "{0}") .
                     {{
                     select ?Contract
                     where{{
-                    ?Contract a :contractID;
-                              filter(?Contract=:{1}) .
+                    ?Contract rdf:type fibo-fnd-agr-ctr:Contract;
+                    :contractID ?contractId;
+                    filter(?contractId="{1}") .
 
                     }}
                     }}
                      {{
                     select ?Contractor
                     where{{
-                    ?Contractor a :contractorID;
-                                filter(?Contractor=:{2})
+                    ?Contractor rdf:type prov:Agent;
+                        :contractorID ?contractorId .
+                    filter(?contractorId="{2}")
                     }}
                     }}
     }}""").format(obligationID, contractID, contractorID, state)
@@ -268,17 +271,19 @@ class ObligationStatusUpdateById(MethodResource, Resource):
         query = textwrap.dedent("""
          PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
          PREFIX dct: <http://purl.org/dc/terms/>
-            DELETE {{?ObligationId :hasStates :hasValid.
-                    ?ObligationId :hasStates :hasPendingState.
-                    ?ObligationId :hasStates :hasViolated.
-                    ?ObligationId :hasStates :hasFulfilled.
+         PREFIX prov: <http://www.w3.org/ns/prov#>
+            DELETE {{?Obligation :hasStates :stateValid.
+                    ?Obligation :hasStates :statePending.
+                    ?Obligation :hasStates :stateViolated.
+                    ?Obligation :hasStates :stateFulfilled.
                     }}
-            INSERT {{?ObligationId :hasStates :{2}.
-            ?ObligationId :RevokedAtTime {0}.
+            INSERT {{?Obligation :hasStates :{2}.
+            ?obligationId :RevokedAtTime {0}.
             }}
              WHERE {{
-             ?ObligationId a <http://ontologies.atb-bremen.de/smashHitCore#obligationID>.
-              FILTER(?ObligationId = :{1})
+             ?Obligation rdf:type :Obligation;
+             :obligationID ?obligationId .
+              FILTER(?obligationId = "{1}")
              }}""").format('\'{}^^xsd:dateTime\''.format(violation_date), obligationID, state)
 
         # print(query)

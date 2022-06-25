@@ -18,7 +18,7 @@ class ObligationValidation(QueryEngine):
         ContractId = validated_data["ContractId"]
         ContractIdB2C = ''
         # print(ContractId)
-        if contract_category == 'hasBusinessToBusiness':
+        if contract_category == 'categoryBusinessToBusiness':
             ContractIdB2C = validated_data["ContractIdB2C"]
             # print(ContractIdB2C)
         State = validated_data["State"]

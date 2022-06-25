@@ -41,7 +41,7 @@ class ContractorById(MethodResource, Resource):
         res = response["results"]['bindings']
         if len(res) > 0:
             data = {
-                'ContractorID': res[0]['Contractor']['value'][45:],
+                'contractorId': res[0]['contractorId']['value'],
                 'name': res[0]['name']['value'],
                 'phone': res[0]['phone']['value'],
                 'email': res[0]['email']['value'],
@@ -49,7 +49,9 @@ class ContractorById(MethodResource, Resource):
                 'territory': res[0]['territory']['value'],
                 'address': res[0]['address']['value'],
                 'vat': res[0]['vat']['value'],
-                'CompanyId': res[0]['company']['value'][45:],
+                'companyId': res[0]['companyId']['value'][45:],
+                'createDate': res[0]['createDate']['value'],
+                'role': res[0]['role']['value'][45:],
             }
             return data
         return "No record is found for this ID"
@@ -64,7 +66,7 @@ class ContractorCreate(MethodResource, Resource):
         schema_serializer = ContractorRequestSchema()
         data = request.get_json(force=True)
         uuidOne = uuid.uuid1()
-        contractor_id = "C_" + str(uuidOne)
+        contractor_id = "c_" + str(uuidOne)
 
         validated_data = schema_serializer.load(data)
         av = ContractorValidation()
@@ -92,7 +94,7 @@ class ContractorDeleteById(MethodResource, Resource):
         decoded_data = json.loads(my_json)
 
         if decoded_data != 'No record is found for this ID':
-            if decoded_data['ContractorID'] == contractorID:
+            if decoded_data['contractorId'] == contractorID:
                 av = ContractorValidation()
                 response = av.delete_contractor(contractorID)
                 if (response):
@@ -117,7 +119,7 @@ class GetContractors(MethodResource, Resource):
         if len(response) >= 1:
             for r in response:
                 data = {
-                    'ContractorID': r['Contractor']['value'][45:],
+                    'contractorId': r['contractorId']['value'],
                     'name': r['name']['value'],
                     'phone': r['phone']['value'],
                     'email': r['email']['value'],
@@ -125,7 +127,9 @@ class GetContractors(MethodResource, Resource):
                     'territory': r['territory']['value'],
                     'address': r['address']['value'],
                     'vat': r['vat']['value'],
-                    'CompanyId': r['company']['value'][45:],
+                    'companyId': r['companyId']['value'][45:],
+                    'createDate': r['createDate']['value'],
+                    'role': r['role']['value'][45:],
 
                 }
                 data_array.append(data)

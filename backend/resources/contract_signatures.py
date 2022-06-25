@@ -18,17 +18,17 @@ class GetSignatures(MethodResource, Resource):
         if len(response) != 0:
             signature_arry = []
             for d in response:
-                signature = d['Signature']['value'][45:]
+                signatureId = d['signatureId']['value']
                 # print(signature)
                 # get contract and contractor
-                sig = SignatureById.get(self, signature)
+                sig = SignatureById.get(self, signatureId)
                 sig_data = sig.json
                 identifier = sig_data[0]['identifier']
-                create_date = sig_data[0]['create_date']
-                signature_text = sig_data[0]['signature']
+                create_date = sig_data[0]['createDate']
+                signature_text = sig_data[0]['signatureText']
 
-                new_data = {'signatureID': signature, 'identifier': identifier,
-                            'create_date': create_date, 'signature': signature_text}
+                new_data = {'signatureId': signatureId, 'identifier': identifier,
+                            'createDate': create_date, 'signatureText': signature_text}
                 signature_arry.append(new_data)
             if len(signature_arry)!=0:
                 return signature_arry
@@ -50,20 +50,20 @@ class SignatureById(MethodResource, Resource):
         # print(res)
         if len(res) != 0:
             identifier_array = []
-            obligation_array = []
+            signature_array = []
             for d in res:
                 id = GetSignatureIdentifierById.get(self, signatureID)
                 id = id.json
                 for i in id:
                     identifier_array.append(i)
-                new_data = {'signatureID': signatureID,
-                            'create_date': d['create_date']['value'][45:],
-                            'signature': d['signature_text']['value'],
+                new_data = {'signatureId': signatureID,
+                            'createDate': d['createDate']['value'],
+                            'signatureText': d['signatureText']['value'],
                             'identifier': identifier_array
                             }
-                obligation_array.append(new_data)
-            if len(obligation_array) != 0:
-                return obligation_array
+                signature_array.append(new_data)
+            if len(signature_array) != 0:
+                return signature_array
         return 'No recrod found for this ID'
 
 
@@ -80,7 +80,7 @@ class SignatureDeleteById(MethodResource, Resource):
         decoded_data = json.loads(my_json)
 
         if decoded_data != 'No record available for this term id':
-            if decoded_data[0]['signatureID'] == signatureID:
+            if decoded_data[0]['signatureId'] == signatureID:
                 av = ContractSignatureValidation()
                 response = av.delete_contract_signature(signatureID)
                 if (response):
@@ -100,7 +100,7 @@ class ContractSignatureCreate(MethodResource, Resource):
         schema_serializer = ContractorSignaturesRequestSchema()
         data = request.get_json(force=True)
         uuidOne = uuid.uuid1()
-        signature_id = "Sig_" + str(uuidOne)
+        signature_id = "sig_" + str(uuidOne)
 
         validated_data = schema_serializer.load(data)
         # print(validated_data)
@@ -129,7 +129,7 @@ class ContractSignatureUpdate(MethodResource, Resource):
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
         if decoded_data != 'No record available for this signature id':
-            if decoded_data[0]['signatureID'] == signature_id:
+            if decoded_data[0]['signatureId'] == signature_id:
                 validated_data = schema_serializer.load(data)
                 av = ContractSignatureValidation()
                 response = av.post_data(validated_data, type="update", signature_id=None)
@@ -158,17 +158,18 @@ class GetContractSignatures(MethodResource, Resource):
             identifier_array = []
             signature_array = []
             for d in data:
-                signature_id = d['signature']['value'][45:]
+                signature_id = d['signatureId']['value']
 
                 id = GetSignatureIdentifierById.get(self, signature_id)
                 id = id.json
+                # print(id)
                 for i in id:
-                    if 'CONTB2C_' not in i and 'CONTB2B_' not in i:
+                    if 'contb2c_' not in i and 'contb2b_' not in i:
                         identifier_array.append(i)
-                        new_data = {'signatureID': signature_id,
-                                    'signature_text': d['signature_text']['value'],
-                                    'create_date': d['create_date']['value'][45:],
-                                    'contractor': i
+                        new_data = {'signatureId': signature_id,
+                                    'signatureText': d['signatureText']['value'],
+                                    'createDate': d['createDate']['value'],
+                                    'contractorId': i
                                     }
                         signature_array.append(new_data)
             if len(signature_array) != 0:
@@ -177,7 +178,7 @@ class GetContractSignatures(MethodResource, Resource):
 
 
 class GetSignatureIdentifierById(MethodResource, Resource):
-    @doc(description='Contract Obligations', tags=['Contract Obligations'])
+    @doc(description='Contract Signatures', tags=['Contract Signatures'])
     # @check_for_session
     # @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)

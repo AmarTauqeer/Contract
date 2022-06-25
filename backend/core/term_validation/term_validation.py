@@ -15,16 +15,17 @@ class TermValidation(QueryEngine):
         TermTypeId = validated_data["TermTypeId"]
         ContractId = validated_data["ContractId"]
         Description = validated_data["Description"]
-
+        CreateDate = validated_data["CreateDate"]
 
         if type == "insert":
             TermId = term_id
             respone = self.post_sparql(self.get_username(), self.get_password(),
                                        self.insert_query_term(TermId=TermId,
-                                                                    TermTypeId=TermTypeId,
-                                                                    ContractId=ContractId,
-                                                                    Description=Description,
-                                                                    )
+                                                              TermTypeId=TermTypeId,
+                                                              ContractId=ContractId,
+                                                              Description=Description,
+                                                              CreateDate=CreateDate,
+                                                              )
 
                                        )
         else:
@@ -37,10 +38,11 @@ class TermValidation(QueryEngine):
                 # insert into kg
                 respone = self.post_sparql(self.get_username(), self.get_password(),
                                            self.insert_query_term(TermId=TermId,
-                                                                    TermTypeId=TermTypeId,
-                                                                    ContractId=ContractId,
-                                                                    Description=Description,
-                                                                   )
+                                                                  TermTypeId=TermTypeId,
+                                                                  ContractId=ContractId,
+                                                                  Description=Description,
+                                                                  CreateDate=CreateDate,
+                                                                  )
 
                                            )
         return respone

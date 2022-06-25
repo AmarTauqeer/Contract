@@ -17,10 +17,11 @@ class GetTerms(MethodResource, Resource):
             term_array = []
             for r in response:
                 data = {
-                    'TermId': r['Term']['value'][45:],
-                    'TermTypeId': r['type']['value'][45:],
-                    'ContractId': r['contract']['value'][45:],
-                    'description': r['description']['value']
+                    'termId': r['termId']['value'],
+                    'termTypeId': r['termTypeId']['value'][45:],
+                    'contractId': r['contractId']['value'][45:],
+                    'description': r['description']['value'],
+                    'createDate': r['createDate']['value']
                 }
                 term_array.append(data)
             return term_array
@@ -41,10 +42,12 @@ class TermById(MethodResource, Resource):
         if len(res) > 0:
             res = res[0]
             data = {
-                'TermId': res['Term']['value'][45:],
-                'TermTypeId': res['type']['value'][45:],
-                'ContractId': res['contract']['value'][45:],
-                'description': res['description']['value']
+                'termId': res['termId']['value'],
+                'termTypeId': res['termTypeId']['value'][45:],
+                'contractId': res['contractId']['value'][45:],
+                'description': res['description']['value'],
+                'createDate': res['createDate']['value']
+
             }
             return data
         return "No record available for this term id"
@@ -63,7 +66,7 @@ class TermDeleteById(MethodResource, Resource):
         decoded_data = json.loads(my_json)
 
         if decoded_data != 'No record available for this term id':
-            if decoded_data['TermId'] == termID:
+            if decoded_data['termId'] == termID:
                 av = TermValidation()
                 response = av.delete_term(termID)
                 if (response):
@@ -83,13 +86,13 @@ class TermCreate(MethodResource, Resource):
         schema_serializer = TermRequestSchema()
         data = request.get_json(force=True)
         uuidOne = uuid.uuid1()
-        term_id = "Term_" + str(uuidOne)
+        term_id = "term_" + str(uuidOne)
 
         validated_data = schema_serializer.load(data)
         # print(validated_data)
         av = TermValidation()
         response = av.post_data(validated_data, type="insert", term_id=term_id)
-        if response=='Success':
+        if response == 'Success':
             contract_obj = TermById.get(self, term_id)
             contract_obj = contract_obj.json
             return contract_obj
@@ -112,7 +115,7 @@ class TermUpdate(MethodResource, Resource):
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
         if decoded_data != 'No record available for this term id':
-            if decoded_data['TermId'] == term_id:
+            if decoded_data['termId'] == term_id:
                 validated_data = schema_serializer.load(data)
                 av = TermValidation()
                 response = av.post_data(validated_data, type="update", term_id=None)
@@ -122,6 +125,7 @@ class TermUpdate(MethodResource, Resource):
                     return jsonify({'Error': "Record not updated due to some errors."})
             else:
                 return jsonify({'Error': "Record doesn't exist ."})
+
 
 class GetContractTerms(MethodResource, Resource):
     @doc(description='Contract Terms', tags=['Contract Terms'])
@@ -136,12 +140,12 @@ class GetContractTerms(MethodResource, Resource):
                                    contractRequester=None, contractProvider=None, contractorID=None, termID=None
                                    ))
         data = response["results"]["bindings"]
+        # print(data)
         if len(data) != 0:
             term_arry = []
             for d in data:
-                term = d['term']['value']
-                term = term[45:]
-                new_data = {'termID': term, 'description': d['description']['value']}
+                termId = d['termId']['value']
+                new_data = {'termId': termId, 'description': d['description']['value']}
                 term_arry.append(new_data)
             return term_arry
         return 'No record found for this ID'

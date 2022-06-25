@@ -19,6 +19,7 @@ class CompanyValidation(QueryEngine):
         Territory = validated_data["Territory"]
         Country = validated_data["Country"]
         Vat = validated_data["Vat"]
+        CreateDate = validated_data["CreateDate"]
 
         if type == "insert":
             CompanyId = company_id
@@ -31,11 +32,14 @@ class CompanyValidation(QueryEngine):
                                                                  Territory=Territory,
                                                                  Country=Country,
                                                                  Vat=Vat,
+                                                                 CreateDate=CreateDate,
+
                                                                  )
 
                                        )
         else:
             CompanyId = validated_data["CompanyId"]
+
             if CompanyId != "":
                 # delete from knowledge graph
                 response = self.post_sparql(self.get_username(), self.get_password(),
@@ -51,6 +55,7 @@ class CompanyValidation(QueryEngine):
                                                                      Territory=Territory,
                                                                      Country=Country,
                                                                      Vat=Vat,
+                                                                     CreateDate=CreateDate,
                                                                      )
 
                                            )

@@ -17,9 +17,10 @@ class GetTermTypes(MethodResource, Resource):
             term_array = []
             for r in response:
                 data = {
-                    'TermTypeId': r['TermType']['value'][45:],
+                    'termTypeId': r['termTypeId']['value'],
                     'name': r['name']['value'],
                     'description': r['description']['value'],
+                    'createDate': r['createDate']['value'],
                 }
                 term_array.append(data)
             return term_array
@@ -40,9 +41,10 @@ class TermTypeById(MethodResource, Resource):
         if len(res) > 0:
             res = res[0]
             data = {
-                'TermTypeId': res['TermType']['value'][45:],
+                'termTypeId': res['termTypeId']['value'],
                 'name': res['name']['value'],
                 'description': res['description']['value'],
+                'createDate': res['createDate']['value'],
             }
             return data
         return "No record available for this term type id"
@@ -61,7 +63,7 @@ class TermTypeDeleteById(MethodResource, Resource):
         decoded_data = json.loads(my_json)
 
         if decoded_data != 'No record available for this term type id':
-            if decoded_data['TermTypeId'] == termTypeID:
+            if decoded_data['termTypeId'] == termTypeID:
                 av = TermTypeValidation()
                 response = av.delete_term_type(termTypeID)
                 if (response):
@@ -81,7 +83,7 @@ class TermTypeCreate(MethodResource, Resource):
         schema_serializer = TermTypeRequestSchema()
         data = request.get_json(force=True)
         uuidOne = uuid.uuid1()
-        term_type_id = "Term_type_" + str(uuidOne)
+        term_type_id = "term_type_" + str(uuidOne)
 
         validated_data = schema_serializer.load(data)
         # print(validated_data)
@@ -110,7 +112,7 @@ class TermTypeUpdate(MethodResource, Resource):
         my_json = result.data.decode('utf8')
         decoded_data = json.loads(my_json)
         if decoded_data != 'No record available for this term type id':
-            if decoded_data['TermTypeId'] == term_type_id:
+            if decoded_data['termTypeId'] == term_type_id:
                 validated_data = schema_serializer.load(data)
                 av = TermTypeValidation()
                 response = av.post_data(validated_data, type="update", term_type_id=None)

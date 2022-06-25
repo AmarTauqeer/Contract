@@ -26,6 +26,23 @@ python -m flask run
 
 ```
 
+## Important Note For Testing REST Endpoints
+- For hasContractStatus choose from the list (statusCreated, statusUpdate)
+- For hasStates choose from the list (statePending, stateInvalid, stateValid)
+- For hasRole choose from the list (DataSubject, DataController, DataProcessor)
+- For hasContractCategory choose from the list (categoryBusinessToConsumer, categoryBusinessToBusiness)
+
+## Steps to create/update a contract
+
+- Create term types and companies.
+- Create contractors (need company id).
+- Create a contract with basic information except contract terms, contract obligations, and contract signatures.
+- Use the contract id from the previous step and create contract terms, contract obligations and contract signatures.
+- Update the contract with terms, obligations, and signatures.
+
+
+
+
 ## Contracts System Architecture
 ![](/backend/images/semantic-contract-architecture.png)
 
