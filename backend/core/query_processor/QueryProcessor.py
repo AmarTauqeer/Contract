@@ -49,9 +49,17 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                 SELECT ?Contract   
                     WHERE {{ 
                      ?Contract rdf:type fibo-fnd-agr-ctr:Contract;
-                        :contractId ?contractId;
-                        :hasContractors ?contractors .
-                    filter(?contractors=:{1})
+                        :contractID ?contractId;
+                        :hasContractors ?contractor.
+                ?contractor :hasName ?name .
+                ?contractor :contractorID ?contractorId .
+                ?contractor :hasPostalAddress ?address .
+                ?contractor :hasEmail ?email .
+                ?contractor :hasTelephone ?phone .
+                ?contractor :hasCountry ?country .
+                ?contractor :hasTerritory ?territory .
+                ?contractor :hasCreationDate ?createDate .
+                    filter(?contractorId="{1}")
                 }}""").format(self.prefix(), name)
         return query
 
