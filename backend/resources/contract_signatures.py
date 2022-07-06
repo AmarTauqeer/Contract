@@ -1,5 +1,5 @@
-from core.contract_signatures_validation import ContractSignatureValidation
-from resources.imports import *
+from core.security.RsaAesDecryption import RsaAesDecrypt
+from core.signature_validation.contract_signatures_validation import ContractSignatureValidation
 from resources.schemas import *
 
 
@@ -30,7 +30,7 @@ class GetSignatures(MethodResource, Resource):
                 new_data = {'signatureId': signatureId, 'identifier': identifier,
                             'createDate': create_date, 'signatureText': signature_text}
                 signature_arry.append(new_data)
-            if len(signature_arry)!=0:
+            if len(signature_arry) != 0:
                 return signature_arry
         return 'No record found for this ID'
 
@@ -56,9 +56,15 @@ class SignatureById(MethodResource, Resource):
                 id = id.json
                 for i in id:
                     identifier_array.append(i)
+                obj_dec = RsaAesDecrypt()
+                data = {'signature_id': signatureID, 'signature': d['signatureText']['value'],
+                        }
+                decrypted_result = obj_dec.rsa_aes_decrypt(data)
+                signature = decrypted_result[0]['signature']
+
                 new_data = {'signatureId': signatureID,
                             'createDate': d['createDate']['value'],
-                            'signatureText': d['signatureText']['value'],
+                            'signatureText':  signature,#d['signatureText']['value'],
                             'identifier': identifier_array
                             }
                 signature_array.append(new_data)
@@ -106,7 +112,7 @@ class ContractSignatureCreate(MethodResource, Resource):
         # print(validated_data)
         av = ContractSignatureValidation()
         response = av.post_data(validated_data, type="insert", signature_id=signature_id)
-        if response=='Success':
+        if response == 'Success':
             contract_obj = SignatureById.get(self, signature_id)
             contract_obj = contract_obj.json
             return contract_obj
@@ -162,12 +168,17 @@ class GetContractSignatures(MethodResource, Resource):
 
                 id = GetSignatureIdentifierById.get(self, signature_id)
                 id = id.json
-                # print(id)
                 for i in id:
                     if 'contb2c_' not in i and 'contb2b_' not in i:
                         identifier_array.append(i)
+                        obj_dec = RsaAesDecrypt()
+                        data = {'signature_id': signature_id, 'signature': d['signatureText']['value'],
+                                }
+                        decrypted_result = obj_dec.rsa_aes_decrypt(data)
+                        signature = decrypted_result[0]['signature']
+
                         new_data = {'signatureId': signature_id,
-                                    'signatureText': d['signatureText']['value'],
+                                    'signatureText': signature,#d['signatureText']['value'],
                                     'createDate': d['createDate']['value'],
                                     'contractorId': i
                                     }

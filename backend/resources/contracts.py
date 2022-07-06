@@ -1,3 +1,4 @@
+from core.security.RsaAesDecryption import RsaAesDecrypt
 from resources.contract_obligation import GetObligationByContractId, ObligationDeleteById
 from resources.contract_signatures import GetContractSignatures, SignatureDeleteById
 from resources.contract_terms import GetContractTerms, TermDeleteById
@@ -359,11 +360,31 @@ class GetContractContractors(MethodResource, Resource):
             contractor_array = []
             for d in data:
                 contractorId = d['contractorId']['value']
+                obj_dec = RsaAesDecrypt()
+                data = {'contractor_id': d['contractorId']['value'], 'name': d['name']['value'],
+                        'email': d['email']['value'],
+                        'phone': d['phone']['value'],
+                        'address': d['address']['value'],
+                        'country': d['country']['value'],
+                        'vat': d['vat']['value'],
+                        'territory': d['territory']['value']}
+                decrypted_result = obj_dec.rsa_aes_decrypt(data)
+                name = decrypted_result[0]['name']
+                email = decrypted_result[1]['email']
+                phone = decrypted_result[2]['phone']
+                address = decrypted_result[3]['address']
+                country = decrypted_result[4]['country']
+                vat = decrypted_result[5]['vat']
+                territory = decrypted_result[6]['territory']
+
                 new_data = {'contractorId': contractorId,
-                            'name': d['name']['value'],
-                            'email': d['email']['value'],
-                            'country': d['country']['value'],
-                            'territory': d['territory']['value'],
+                            'name': name,  #d['name']['value'],
+                            'email': email,  #d['email']['value'],
+                            'phone': phone,  # d['email']['value'],
+                            'address': address,  # d['email']['value'],
+                            'country': country,  #d['country']['value'],
+                            'territory': territory,  #d['territory']['value'],
+                            'vat': vat,  # d['email']['value'],
                             'createDate': d['createDate']['value']
                             }
                 contractor_array.append(new_data)
@@ -394,15 +415,15 @@ class ContractStatusUpdateById(MethodResource, Resource):
             PREFIX dcat: <http://www.w3.org/ns/dcat#>
             PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
             PREFIX dct: <http://purl.org/dc/terms/>
-            DELETE {{?contractId :hasContractStatus :statusCreated.
-                    ?contractId :hasContractStatus :statusRenewed.
-                    ?contractId :hasContractStatus :statusPending.
-                    ?contractId :hasContractStatus :statusViolated.
-                    ?contractId :hasContractStatus :statusExpired.
-                    ?contractId :hasContractStatus :statusSigned.
-                    ?contractId :hasContractStatus :statusUpdated.
-                    ?contractId :hasContractStatus :statusTerminated.}}
-            INSERT {{?contractId :hasContractStatus :{2}.
+            DELETE {{?Contract :hasContractStatus :statusCreated.
+                    ?Contract :hasContractStatus :statusRenewed.
+                    ?Contract :hasContractStatus :statusPending.
+                    ?Contract :hasContractStatus :statusViolated.
+                    ?Contract :hasContractStatus :statusExpired.
+                    ?Contract :hasContractStatus :statusSigned.
+                    ?Contract :hasContractStatus :statusUpdated.
+                    ?Contract :hasContractStatus :statusTerminated.}}
+            INSERT {{?Contract :hasContractStatus :{2}.
             ?contractId :RevokedAtTime {0}.
             }}
              WHERE {{

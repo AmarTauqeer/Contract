@@ -59,6 +59,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                 ?contractor :hasCountry ?country .
                 ?contractor :hasTerritory ?territory .
                 ?contractor :hasCreationDate ?createDate .
+                ?contractor :hasVATIN ?vat .
                     filter(?contractorId="{1}")
                 }}""").format(self.prefix(), name)
         return query
@@ -384,6 +385,7 @@ class QueryEngine(Credentials, SPARQL, HelperContract):
                 ?contractor :hasCountry ?country .
                 ?contractor :hasTerritory ?territory .
                 ?contractor :hasCreationDate ?createDate .
+                ?contractor :hasVATIN ?vat .
                 filter(?contractId="{1}") .
             }}""").format(self.prefix(), id)
         return query

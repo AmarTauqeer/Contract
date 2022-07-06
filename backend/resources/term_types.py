@@ -1,5 +1,7 @@
 from resources.imports import *
 from resources.schemas import *
+from core.security.RsaAesDecryption import RsaAesDecrypt
+from core.security.RsaAesEncryption import RsaAesEncrypt
 
 
 class GetTermTypes(MethodResource, Resource):
@@ -14,12 +16,18 @@ class GetTermTypes(MethodResource, Resource):
                                    contractRequester=None, contractProvider=None, ))
         response = response["results"]['bindings']
         if len(response) != 0:
+            obj_dec = RsaAesDecrypt()
             term_array = []
             for r in response:
+                data = {'type_id': r['termTypeId']['value'], 'name': r['name']['value'],
+                        'description': r['description']['value']}
+                decrypted_result = obj_dec.rsa_aes_decrypt(data)
+                name = decrypted_result[0]['name']
+                description = decrypted_result[1]['description']
                 data = {
                     'termTypeId': r['termTypeId']['value'],
-                    'name': r['name']['value'],
-                    'description': r['description']['value'],
+                    'name': name,#r['name']['value'],
+                    'description': description,#r['description']['value'],
                     'createDate': r['createDate']['value'],
                 }
                 term_array.append(data)
@@ -40,10 +48,16 @@ class TermTypeById(MethodResource, Resource):
         res = response["results"]['bindings']
         if len(res) > 0:
             res = res[0]
+            obj_dec = RsaAesDecrypt()
+            data = {'type_id': res['termTypeId']['value'], 'name': res['name']['value'],
+                    'description': res['description']['value']}
+            decrypted_result = obj_dec.rsa_aes_decrypt(data)
+            name = decrypted_result[0]['name']
+            description = decrypted_result[1]['description']
             data = {
                 'termTypeId': res['termTypeId']['value'],
-                'name': res['name']['value'],
-                'description': res['description']['value'],
+                'name': name,#res['name']['value'],
+                'description': description,#res['description']['value'],
                 'createDate': res['createDate']['value'],
             }
             return data

@@ -1,3 +1,4 @@
+from core.security.RsaAesDecryption import RsaAesDecrypt
 from resources.imports import *
 from resources.schemas import *
 
@@ -40,15 +41,32 @@ class ContractorById(MethodResource, Resource):
                                    contractRequester=None, contractProvider=None, contractorID=contractorID))
         res = response["results"]['bindings']
         if len(res) > 0:
+            obj_dec = RsaAesDecrypt()
+            data = {'contractor_id': res[0]['contractorId']['value'], 'name': res[0]['name']['value'],
+                    'email': res[0]['email']['value'],
+                    'phone': res[0]['phone']['value'],
+                    'address': res[0]['address']['value'],
+                    'country': res[0]['country']['value'],
+                    'vat': res[0]['vat']['value'],
+                    'territory': res[0]['territory']['value']}
+            decrypted_result = obj_dec.rsa_aes_decrypt(data)
+            name = decrypted_result[0]['name']
+            email = decrypted_result[1]['email']
+            phone = decrypted_result[2]['phone']
+            address = decrypted_result[3]['address']
+            country = decrypted_result[4]['country']
+            vat = decrypted_result[5]['vat']
+            territory = decrypted_result[6]['territory']
+
             data = {
                 'contractorId': res[0]['contractorId']['value'],
-                'name': res[0]['name']['value'],
-                'phone': res[0]['phone']['value'],
-                'email': res[0]['email']['value'],
-                'country': res[0]['country']['value'],
-                'territory': res[0]['territory']['value'],
-                'address': res[0]['address']['value'],
-                'vat': res[0]['vat']['value'],
+                'name': name,#res[0]['name']['value'],
+                'phone': phone,#res[0]['phone']['value'],
+                'email': email,#res[0]['email']['value'],
+                'country': country,#res[0]['country']['value'],
+                'territory': territory,#res[0]['territory']['value'],
+                'address': address,#res[0]['address']['value'],
+                'vat': vat,#res[0]['vat']['value'],
                 'companyId': res[0]['companyId']['value'][45:],
                 'createDate': res[0]['createDate']['value'],
                 'role': res[0]['role']['value'][45:],
@@ -118,15 +136,32 @@ class GetContractors(MethodResource, Resource):
         data_array = []
         if len(response) >= 1:
             for r in response:
+                obj_dec = RsaAesDecrypt()
+                data = {'contractor_id': r['contractorId']['value'], 'name': r['name']['value'],
+                        'email': r['email']['value'],
+                        'phone': r['phone']['value'],
+                        'address': r['address']['value'],
+                        'country': r['country']['value'],
+                        'vat': r['vat']['value'],
+                        'territory': r['territory']['value']}
+                decrypted_result = obj_dec.rsa_aes_decrypt(data)
+                name = decrypted_result[0]['name']
+                email = decrypted_result[1]['email']
+                phone = decrypted_result[2]['phone']
+                address = decrypted_result[3]['address']
+                country = decrypted_result[4]['country']
+                vat = decrypted_result[5]['vat']
+                territory = decrypted_result[6]['territory']
+
                 data = {
                     'contractorId': r['contractorId']['value'],
-                    'name': r['name']['value'],
-                    'phone': r['phone']['value'],
-                    'email': r['email']['value'],
-                    'country': r['country']['value'],
-                    'territory': r['territory']['value'],
-                    'address': r['address']['value'],
-                    'vat': r['vat']['value'],
+                    'name': name,#r['name']['value'],
+                    'phone': phone,#r['phone']['value'],
+                    'email': email,#r['email']['value'],
+                    'country': country,#r['country']['value'],
+                    'territory': territory,#r['territory']['value'],
+                    'address': address,#r['address']['value'],
+                    'vat': vat,#r['vat']['value'],
                     'companyId': r['companyId']['value'][45:],
                     'createDate': r['createDate']['value'],
                     'role': r['role']['value'][45:],

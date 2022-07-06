@@ -1,4 +1,5 @@
 # from resources.contracts import ContractByContractId
+from core.security.RsaAesDecryption import RsaAesDecrypt
 from resources.imports import *
 from resources.schemas import *
 
@@ -88,9 +89,17 @@ class ObligationById(MethodResource, Resource):
                 id = id.json
                 for i in id:
                     identifier_array.append(i)
+                obj_dec = RsaAesDecrypt()
+                data = {'obligation_id': obligationID,
+                        'description': d['obligationDescription']['value'],
+                        # 'contractor_id': d['obligationDescription']['value'],
+                        }
+                decrypted_result = obj_dec.rsa_aes_decrypt(data)
+                description = decrypted_result[0]['description']
+
                 new_data = {'obligationId': obligationID,
                             'state': d['state']['value'][45:],
-                            'obligationDescription': d['obligationDescription']['value'],
+                            'obligationDescription': description,#d['obligationDescription']['value'],
                             'executionDate': d['executionDate']['value'],
                             'endDate': d['endDate']['value'],
                             'identifier': identifier_array
