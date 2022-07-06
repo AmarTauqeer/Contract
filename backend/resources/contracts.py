@@ -150,7 +150,7 @@ class ContractByContractId(MethodResource, Resource):
             contractor_array = []
             term_array = []
             obligation_array = []
-            signature_array =[]
+            signature_array = []
 
             for d in data:
 
@@ -188,7 +188,6 @@ class ContractByContractId(MethodResource, Resource):
                         # print(s)
                         sid = s['signatureId']
                         signature_array.append(sid)
-
 
             obj = {
                 'contractors': contractor_array,
@@ -274,10 +273,10 @@ class ContractCreate(MethodResource, Resource):
         validated_data = schema_serializer.load(data)
         cv = ContractValidation()
         response = cv.post_data(validated_data, type="insert", contract_id=contract_id)
-        if response=='Success':
-            contract_obj=ContractByContractId.get(self,contract_id)
+        if response == 'Success':
+            contract_obj = ContractByContractId.get(self, contract_id)
             # print(contract_obj.json)
-            contract_obj=contract_obj.json
+            contract_obj = contract_obj.json
             return contract_obj
         else:
             return jsonify({'Error': "Record not inserted due to some errors."})
@@ -378,12 +377,12 @@ class GetContractContractors(MethodResource, Resource):
                 territory = decrypted_result[6]['territory']
 
                 new_data = {'contractorId': contractorId,
-                            'name': name,  #d['name']['value'],
-                            'email': email,  #d['email']['value'],
+                            'name': name,  # d['name']['value'],
+                            'email': email,  # d['email']['value'],
                             'phone': phone,  # d['email']['value'],
                             'address': address,  # d['email']['value'],
-                            'country': country,  #d['country']['value'],
-                            'territory': territory,  #d['territory']['value'],
+                            'country': country,  # d['country']['value'],
+                            'territory': territory,  # d['territory']['value'],
                             'vat': vat,  # d['email']['value'],
                             'createDate': d['createDate']['value']
                             }

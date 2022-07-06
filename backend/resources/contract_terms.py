@@ -147,5 +147,6 @@ class GetContractTerms(MethodResource, Resource):
                 termId = d['termId']['value']
                 new_data = {'termId': termId, 'description': d['description']['value']}
                 term_arry.append(new_data)
+            # print(f'term = {term_arry}')
             return term_arry
         return 'No record found for this ID'

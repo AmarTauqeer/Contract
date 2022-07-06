@@ -223,6 +223,7 @@ class ObligationStatusUpdateByObligationId(MethodResource, Resource):
          PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
          PREFIX dct: <http://purl.org/dc/terms/>
          PREFIX prov: <http://www.w3.org/ns/prov#>
+         PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
             DELETE {{?Obligation :hasStates :statePending.
                     ?Obligation :hasStates :stateViolated.
                     ?Obligation :hasStates :stateFulfilled.
@@ -252,6 +253,7 @@ class ObligationStatusUpdateByObligationId(MethodResource, Resource):
                     }}
                     }}
     }}""").format(obligationID, contractID, contractorID, state)
+
         sparql.setQuery(query)
         sparql.method = "POST"
         sparql.queryType = "INSERT"
@@ -281,6 +283,8 @@ class ObligationStatusUpdateById(MethodResource, Resource):
          PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
          PREFIX dct: <http://purl.org/dc/terms/>
          PREFIX prov: <http://www.w3.org/ns/prov#>
+         PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
+         
             DELETE {{?Obligation :hasStates :stateValid.
                     ?Obligation :hasStates :statePending.
                     ?Obligation :hasStates :stateViolated.
@@ -295,12 +299,12 @@ class ObligationStatusUpdateById(MethodResource, Resource):
               FILTER(?obligationId = "{1}")
              }}""").format('\'{}^^xsd:dateTime\''.format(violation_date), obligationID, state)
 
-        # print(query)
         sparql.setQuery(query)
         sparql.method = "POST"
         sparql.queryType = "INSERT"
         sparql.setReturnFormat('json')
         result = sparql.query()
+
         if str(result.response.read().decode("utf-8")) == "":
             return "Success"
         else:

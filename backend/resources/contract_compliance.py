@@ -12,7 +12,8 @@ from resources.imports import *
 from resources.schemas import *
 from mailer import Mailer
 
-from datetime import datetime,date
+from datetime import datetime, date
+
 
 class GetContractCompliance(MethodResource, Resource):
     @doc(description='Contract Compliance', tags=['Contract Compliance'])
@@ -35,6 +36,7 @@ class GetContractCompliance(MethodResource, Resource):
             edate = x["endDate"]["value"][:10]
             obl_state = x["state"]["value"][45:]
             obl_desc = x["obligationDescription"]["value"]
+            print(f'obligationid = {obligation_id}')
 
             ob = GetObligationIdentifierById.get(self, obligation_id)
             identifier_data = ob.json
@@ -49,16 +51,48 @@ class GetContractCompliance(MethodResource, Resource):
                 if 'contb2b_' in i:
                     b2b = i
 
+            consent = "empty"
             date_time_str = edate
             date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%d').date()
 
             b2c_data = ContractByContractId.get(self, b2c)
             b2c_data = b2c_data.json
+
+            if b2c_data != 'No data found for this ID':
+                consent = b2c_data['consentId']
+
+            b2b_data = ContractByContractId.get(self, b2b)
+            b2b_data = b2b_data.json
+
+            if b2b_data != 'No data found for this ID':
+                consent = b2b_data['consentId']
+
+            if consent == "string" or consent == "":
+                consent = "empty"
+
+            # handle single business to business contract
+            if b2b != "" and consent == "empty":
+                print(f'b2b without consent')
+
+                b2b_data = ContractByContractId.get(self, b2b)
+                b2b_data = b2b_data.json
+                b2b_contract_status = b2b_data["contractStatus"]
+                b2b_contract_id = b2b_data["contractId"]
+                # print(b2c_data)
+                if current_data >= date_time_obj and obl_state == 'statePending' \
+                        and b2b_contract_status not in (
+                        'statusViolated', 'statusTerminated', 'statusExpired'):
+                    ContractStatusUpdateById.get(self, b2b_contract_id, 'statusViolated')
+                    ObligationStatusUpdateById.get(self, id, 'stateViolated')
+                    self.send_email('violation', b2b, obl_desc, obligation_id)
+
             if b2c_data != 'No data found for this ID':
                 b2c_contract_status = b2c_data["contractStatus"]
                 b2c_contract_id = b2c_data["contractId"]
 
-            if b2c != "" and b2b != "":
+            # handle business to consumer and business to business contract based on consent
+            if b2c != "" and b2b != "" and consent != "empty":
+                print(f'b2c, b2b  with consent')
 
                 b2b_data = ContractByContractId.get(self, b2b)
                 b2b_data = b2b_data.json
@@ -88,7 +122,9 @@ class GetContractCompliance(MethodResource, Resource):
                         ObligationStatusUpdateById.get(self, obligation_id, 'stateViolated')
                         self.send_email('violation', b2b_contract_id, obl_desc, obligation_id)
 
-            elif b2c != "":
+            # handle single business to consumer contract based on consent
+            elif b2c != "" and consent != "empty":
+                print(f'b2c single with consent')
 
                 # print(b2c_data)
                 consent_id = b2c_data["consentId"]
@@ -109,6 +145,17 @@ class GetContractCompliance(MethodResource, Resource):
                         ContractStatusUpdateById.get(self, b2c_contract_id, 'statusViolated')
                         ObligationStatusUpdateById.get(self, id, 'stateViolated')
                         self.send_email('violation', b2c, obl_desc, obligation_id)
+
+            # handle single business to consumer contract
+            elif b2c != "" and consent == "empty":
+                print(f'b2c without consent')
+                # print(b2c_data)
+                if current_data >= date_time_obj and obl_state == 'statePending' \
+                        and b2c_contract_status not in (
+                        'statusViolated', 'statusTerminated', 'statusExpired'):
+                    ContractStatusUpdateById.get(self, b2c_contract_id, 'statusViolated')
+                    ObligationStatusUpdateById.get(self, id, 'stateViolated')
+                    self.send_email('violation', b2c, obl_desc, obligation_id)
 
         """
             if the consent expires and data controller still use that cosent
