@@ -213,7 +213,7 @@ api.add_resource(GetContractContractors,
 docs.register(GetContractContractors)
 
 api.add_resource(ObligationById,
-                 '/obligation/<string:obligationID>/')
+                 '/contract/obligation/<string:obligationID>/')
 docs.register(ObligationById)
 
 api.add_resource(ObligationCreate, '/obligation/create/')
