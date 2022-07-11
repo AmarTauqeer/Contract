@@ -100,11 +100,11 @@ api.add_resource(ContractByContractId,
 docs.register(ContractByContractId)
 
 api.add_resource(ContractorById,
-                 '/contractor/<string:contractorID>/')
+                 '/contract/contractor/<string:contractorID>/')
 docs.register(ContractorById)
 
 api.add_resource(CompanyById,
-                 '/company/<string:companyID>/')
+                 '/contract/company/<string:companyID>/')
 docs.register(CompanyById)
 
 api.add_resource(ContractDeleteById,
@@ -112,38 +112,38 @@ api.add_resource(ContractDeleteById,
 docs.register(ContractDeleteById)
 
 api.add_resource(ContractorDeleteById,
-                 '/contractor/delete/<string:contractorID>/')
+                 '/contract/contractor/delete/<string:contractorID>/')
 docs.register(ContractorDeleteById)
 
 api.add_resource(CompanyDeleteById,
-                 '/company/delete/<string:companyID>/')
+                 '/contract/company/delete/<string:companyID>/')
 docs.register(CompanyDeleteById)
 
 api.add_resource(ContractCreate, '/contract/create/')
 docs.register(ContractCreate)
 
-api.add_resource(ContractorCreate, '/contractor/create/')
+api.add_resource(ContractorCreate, '/contract/contractor/create/')
 docs.register(ContractorCreate)
 
-api.add_resource(CompanyCreate, '/company/create/')
+api.add_resource(CompanyCreate, '/contract/company/create/')
 docs.register(CompanyCreate)
 
 api.add_resource(ContractUpdate, '/contract/update/')
 docs.register(ContractUpdate)
 
-api.add_resource(ContractorUpdate, '/contractor/update/')
+api.add_resource(ContractorUpdate, '/contract/contractor/update/')
 docs.register(ContractorUpdate)
 
-api.add_resource(CompanyUpdate, '/company/update/')
+api.add_resource(CompanyUpdate, '/contract/company/update/')
 docs.register(CompanyUpdate)
 
-api.add_resource(GetContractors, '/contractors/')
+api.add_resource(GetContractors, '/contract/contractors/')
 docs.register(GetContractors)
 
-api.add_resource(GetCompany, '/companies/')
+api.add_resource(GetCompany, '/contract/companies/')
 docs.register(GetCompany)
 
-api.add_resource(GetTermTypes, '/term/types')
+api.add_resource(GetTermTypes, '/contract/term/types')
 docs.register(GetTermTypes)
 
 api.add_resource(GetTerms, '/contract/terms/')
@@ -152,10 +152,10 @@ docs.register(GetTerms)
 api.add_resource(GetContractSignatures, '/contract/signatures/<string:contractID>')
 docs.register(GetContractSignatures)
 
-api.add_resource(GetSignatures, '/signatures/')
+api.add_resource(GetSignatures, '/contract/signatures/')
 docs.register(GetSignatures)
 
-api.add_resource(GetObligations, '/obligations/')
+api.add_resource(GetObligations, '/contract/obligations/')
 docs.register(GetObligations)
 
 api.add_resource(TermUpdate, '/contract/term/update/')
@@ -171,17 +171,17 @@ api.add_resource(ContractSignatureUpdate, '/contract/signature/update/')
 docs.register(ContractSignatureUpdate)
 
 api.add_resource(SignatureById,
-                 '/signature/<string:signatureID>/')
+                 '/contract/signature/<string:signatureID>/')
 docs.register(SignatureById)
 
 api.add_resource(SignatureDeleteById,
-                 '/signature/delete/<string:signatureID>/')
+                 '/contract/signature/delete/<string:signatureID>/')
 docs.register(SignatureDeleteById)
 
-api.add_resource(TermTypeUpdate, '/term/type/update/')
+api.add_resource(TermTypeUpdate, '/contract/term/type/update/')
 docs.register(TermTypeUpdate)
 
-api.add_resource(TermTypeCreate, '/term/type/create/')
+api.add_resource(TermTypeCreate, '/contract/term/type/create/')
 docs.register(TermTypeCreate)
 
 api.add_resource(TermDeleteById,
@@ -189,11 +189,11 @@ api.add_resource(TermDeleteById,
 docs.register(TermDeleteById)
 
 api.add_resource(TermTypeDeleteById,
-                 '/term/type/delete/<string:termTypeID>/')
+                 '/contract/term/type/delete/<string:termTypeID>/')
 docs.register(TermTypeDeleteById)
 
 api.add_resource(TermTypeById,
-                 '/termType/<string:termTypeID>/')
+                 '/contract/termType/<string:termTypeID>/')
 docs.register(TermTypeById)
 
 api.add_resource(TermById,
@@ -216,11 +216,11 @@ api.add_resource(ObligationById,
                  '/contract/obligation/<string:obligationID>/')
 docs.register(ObligationById)
 
-api.add_resource(ObligationCreate, '/obligation/create/')
+api.add_resource(ObligationCreate, '/contract/obligation/create/')
 docs.register(ObligationCreate)
 
 api.add_resource(ObligationDeleteById,
-                 '/obligation/delete/<string:obligationID>/')
+                 '/contract/obligation/delete/<string:obligationID>/')
 docs.register(ObligationDeleteById)
 
 api.add_resource(GetObligationIdentifierById,
@@ -228,7 +228,7 @@ api.add_resource(GetObligationIdentifierById,
 docs.register(GetObligationIdentifierById)
 
 api.add_resource(ObligationStatusUpdateByObligationId,
-                 '/obligation/status/<string:obligationID>/<string:contractID>/<string:contractorID>/<string:state>/')
+                 '/contract/obligation/status/<string:obligationID>/<string:contractID>/<string:contractorID>/<string:state>/')
 docs.register(ObligationStatusUpdateByObligationId)
 
 api.add_resource(ContractStatusUpdateById,
