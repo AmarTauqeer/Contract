@@ -1,0 +1,261 @@
+============================
+{
+  "ConsentId": "const_001",
+  "ConsiderationDescription": "data sharing",
+  "ConsiderationValue": "1000",
+  "ContractCategory": "categoryBusinessToConsumer",
+  "ContractStatus": "statusCreated",
+  "ContractType": "wirtten",
+  "Contractors": [
+    "string"
+  ],
+  "EffectiveDate": "2022-07-13T10:32:16.088Z",
+  "EndDate": "2023-07-13T10:32:16.088Z",
+  "ExecutionDate": "2022-07-13T10:32:16.089Z",
+  "Medium": "string",
+  "Obligations": [
+    "string"
+  ],
+  "Purpose": "string",
+  "Signatures": [
+    "string"
+  ],
+  "Terms": [
+    "string"
+  ]
+}
+===============================
+{
+  "ConsentId": "const_001",
+  "ConsiderationDescription": "data sharing",
+  "ConsiderationValue": "2000",
+  "ContractCategory": "categoryBusinessToConsumer",
+  "ContractStatus": "statusCreated",
+  "ContractType": "wirtten",
+  "Contractors": [
+    "string"
+  ],
+  "EffectiveDate": "2022-07-13T10:32:16.088Z",
+  "EndDate": "2023-07-13T10:32:16.088Z",
+  "ExecutionDate": "2022-07-13T10:32:16.089Z",
+  "Medium": "online",
+  "Obligations": [
+    "string"
+  ],
+  "Purpose": "string",
+  "Signatures": [
+    "string"
+  ],
+  "Terms": [
+    "term_type_001"
+  ]
+}
+===============================
+{
+  "ConsentId": "const_001",
+  "ConsiderationDescription": "data sharing",
+  "ConsiderationValue": "2000",
+  "ContractCategory": "categoryBusinessToConsumer",
+  "ContractStatus": "statusCreated",
+  "ContractType": "wirtten",
+  "Contractors": [
+    "c_001","c_002"
+  ],
+  "EffectiveDate": "2022-07-13T10:32:16.088Z",
+  "EndDate": "2023-07-13T10:32:16.088Z",
+  "ExecutionDate": "2022-07-13T10:32:16.089Z",
+  "Medium": "online",
+  "Obligations": [
+    "string"
+  ],
+  "Purpose": "string",
+  "Signatures": [
+    "string"
+  ],
+  "Terms": [
+    "term_type_001"
+  ]
+}
+===============================
+{
+  "ConsentId": "const_001",
+  "ConsiderationDescription": "data sharing",
+  "ConsiderationValue": "2000",
+  "ContractCategory": "categoryBusinessToConsumer",
+  "ContractStatus": "statusCreated",
+  "ContractType": "wirtten",
+  "Contractors": [
+    "c_001","c_002"
+  ],
+  "EffectiveDate": "2022-07-13T10:32:16.088Z",
+  "EndDate": "2023-07-13T10:32:16.088Z",
+  "ExecutionDate": "2022-07-13T10:32:16.089Z",
+  "Medium": "online",
+  "Obligations": [
+    "string"
+  ],
+  "Purpose": "data selling",
+  "Signatures": [
+    "string"
+  ],
+  "Terms": [
+    "term_type_001"
+  ]
+}
+===============================
+{
+  "ConsentId": "const_001",
+  "ConsiderationDescription": "data sharing",
+  "ConsiderationValue": "2000",
+  "ContractCategory": "categoryBusinessToConsumer",
+  "ContractStatus": "statusCreated",
+  "ContractType": "wirtten",
+  "Contractors": [
+    "c_001","c_002","c_003"
+  ],
+  "EffectiveDate": "2022-07-13T10:32:16.088Z",
+  "EndDate": "2023-07-13T10:32:16.088Z",
+  "ExecutionDate": "2022-07-13T10:32:16.089Z",
+  "Medium": "online",
+  "Obligations": [
+    "string"
+  ],
+  "Purpose": "data selling",
+  "Signatures": [
+    "string"
+  ],
+  "Terms": [
+    "term_type_001"
+  ]
+}
+===============================
+{
+  "ConsentId": "const_001",
+  "ConsiderationDescription": "data sharing",
+  "ConsiderationValue": "2000",
+  "ContractCategory": "categoryBusinessToConsumer",
+  "ContractStatus": "statusCreated",
+  "ContractType": "wirtten",
+  "Contractors": [
+    "c_001","c_002"
+  ],
+  "EffectiveDate": "2022-07-13T10:32:16.088Z",
+  "EndDate": "2023-07-13T10:32:16.088Z",
+  "ExecutionDate": "2022-07-13T10:32:16.089Z",
+  "Medium": "online",
+  "Obligations": [
+    "ob_001","ob_002"
+  ],
+  "Purpose": "data selling",
+  "Signatures": [
+    "string"
+  ],
+  "Terms": [
+    "term_type_001"
+  ]
+}
+===============================
+{
+  "ConsentId": "const_001",
+  "ConsiderationDescription": "data sharing",
+  "ConsiderationValue": "2000",
+  "ContractCategory": "categoryBusinessToConsumer",
+  "ContractStatus": "statusCreated",
+  "ContractType": "wirtten",
+  "Contractors": [
+    "c_001","c_002"
+  ],
+  "EffectiveDate": "2022-07-13T10:32:16.088Z",
+  "EndDate": "2023-07-13T10:32:16.088Z",
+  "ExecutionDate": "2022-07-13T10:32:16.089Z",
+  "Medium": "online",
+  "Obligations": [
+    "ob_001","ob_002"
+  ],
+  "Purpose": "data selling",
+  "Signatures": [
+    "s_001","s_002"
+  ],
+  "Terms": [
+    "term_type_001"
+  ]
+}
+===============================
+{
+  "ConsentId": "const_001",
+  "ConsiderationDescription": "data sharing",
+  "ConsiderationValue": "2000",
+  "ContractCategory": "categoryBusinessToConsumer",
+  "ContractStatus": "statusCreated",
+  "ContractType": "wirtten",
+  "Contractors": [
+    "c_003","c_004"
+  ],
+  "EffectiveDate": "2022-07-13T10:32:16.088Z",
+  "EndDate": "2023-07-13T10:32:16.088Z",
+  "ExecutionDate": "2022-07-13T10:32:16.089Z",
+  "Medium": "online",
+  "Obligations": [
+    "ob_003","ob_004"
+  ],
+  "Purpose": "data selling",
+  "Signatures": [
+    "s_003","s_004"
+  ],
+  "Terms": [
+    "term_type_001"
+  ]
+}
+===============================
+{
+  "ConsentId": "const_001",
+  "ConsiderationDescription": "data sharing",
+  "ConsiderationValue": "2000",
+  "ContractCategory": "categoryBusinessToConsumer",
+  "ContractStatus": "statusCreated",
+  "ContractType": "wirtten",
+  "Contractors": [
+    "c_004","c_005"
+  ],
+  "EffectiveDate": "2022-07-13T10:32:16.088Z",
+  "EndDate": "2023-07-13T10:32:16.088Z",
+  "ExecutionDate": "2022-07-13T10:32:16.089Z",
+  "Medium": "online",
+  "Obligations": [
+    "ob_004"
+  ],
+  "Purpose": "data selling",
+  "Signatures": [
+    "s_004","s_005"
+  ],
+  "Terms": [
+    "term_type_001"
+  ]
+}
+===============================
+{
+  "ConsentId": "const_001",
+  "ConsiderationDescription": "data sharing",
+  "ConsiderationValue": "2000",
+  "ContractCategory": "categoryBusinessToConsumer",
+  "ContractStatus": "statusCreated",
+  "ContractType": "wirtten",
+  "Contractors": [
+    "c_007","c_008"
+  ],
+  "EffectiveDate": "2022-07-13T10:32:16.088Z",
+  "EndDate": "2023-07-13T10:32:16.088Z",
+  "ExecutionDate": "2022-07-13T10:32:16.089Z",
+  "Medium": "online",
+  "Obligations": [
+    "ob_001","ob_002"
+  ],
+  "Purpose": "data selling",
+  "Signatures": [
+    "s_001","s_002"
+  ],
+  "Terms": [
+    "term_type_002"
+  ]
+}
+===============================
