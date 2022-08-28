@@ -1,0 +1,1048 @@
+{
+	"info": {
+		"_postman_id": "9cf780cb-8aaf-4541-98a8-7baf402c87d5",
+		"name": "smashHit Contract APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create new term type",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('new new term type pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"Description\": \"term type 1\",\n  \"Name\": \"Term type 1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}term/type/create/",
+					"host": [
+						"{{base_url}}term"
+					],
+					"path": [
+						"type",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update term type",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Update term type pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"TermTypeId\": \"Term_type_2f273282-eb4d-11ec-9d9e-0b9a78f6c42e\",\n  \"Description\": \"term type 1 updated\",\n  \"Name\": \"Term type 1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}term/type/update/",
+					"host": [
+						"{{base_url}}term"
+					],
+					"path": [
+						"type",
+						"update",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New business to business contract",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('new business to business contract pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ConsentId\": \"\",\n  \"ConsiderationDescription\": \"purpose of the contract\",\n  \"ConsiderationValue\": \"200\",\n  \"ContractCategory\": \"hasBusinessToBusiness\",\n  \"ContractStatus\": \"hasCreated\",\n  \"ContractType\": \"Written\",\n  \"Contractors\": [\n    \"string\"\n  ],\n  \"EffectiveDate\": \"2022-06-13\",\n  \"EndDate\": \"2023-06-13\",\n  \"ExecutionDate\": \"2022-06-13\",\n  \"Medium\": \"Online\",\n  \"Obligations\": [\n    \"string\"\n  ],\n  \"Purpose\": \"data sharing\",\n  \"Signatures\": [\n    \"string\"\n  ],\n  \"Terms\": [\n    \"string\"\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}contract/create/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New business to consumer contract",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('new business to consumer contract pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ConsentId\": \"CONS003\",\n  \"ConsiderationDescription\": \"purpose of the contract\",\n  \"ConsiderationValue\": \"200\",\n  \"ContractCategory\": \"hasBusinessToConsumer\",\n  \"ContractStatus\": \"hasCreated\",\n  \"ContractType\": \"Written\",\n  \"Contractors\": [\n    \"string\"\n  ],\n  \"EffectiveDate\": \"2022-06-13\",\n  \"EndDate\": \"2023-06-13\",\n  \"ExecutionDate\": \"2022-06-13\",\n  \"Medium\": \"Online\",\n  \"Obligations\": [\n    \"string\"\n  ],\n  \"Purpose\": \"data sharing\",\n  \"Signatures\": [\n    \"string\"\n  ],\n  \"Terms\": [\n    \"string\"\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}contract/create/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create contractor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('new contractor pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"Address\": \"Wagramer strasse 101 1022 Vienna\",\n  \"Country\": \"Austria\",\n  \"Email\": \"amar.tauqeer@hotmail.com\",\n  \"Name\": \"Aslam\",\n  \"Phone\": \"004368864133062\",\n  \"Role\": \"hasDataSubject\",\n  \"Territory\": \"Vienna\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}contractor/create/",
+					"host": [
+						"{{base_url}}contractor"
+					],
+					"path": [
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update contractor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('update contractor pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ContractorId\": \"C_77171c9e-ebb4-11ec-9d9e-0b9a78f6c42e\",  \n  \"Address\": \"Wagramer strasse 101 1022 Vienna\",\n  \"Country\": \"Austria\",\n  \"Email\": \"amar.tauqeer@hotmail.com\",\n  \"Name\": \"Aslam Shaheen\",\n  \"Phone\": \"004368864133062\",\n  \"Role\": \"hasDataSubject\",\n  \"Territory\": \"Vienna\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}contractor/update/",
+					"host": [
+						"{{base_url}}contractor"
+					],
+					"path": [
+						"update",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create contractor signatures",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('new contractor signature pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ContractId\": \"CONTB2C_a07c375c-eb48-11ec-9d9e-0b9a78f6c42e\",\n  \"ContractorId\": \"C_a848d832-b9b1-11ec-8fd7-efc66f58363f\",\n  \"CreateDate\": \"2022-06-13\",\n  \"Signature\": \"Tauqeer\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}contract/signature/create/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"signature",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create contract term",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('new contract term pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ContractId\": \"CONTB2C_05a42902-eb4c-11ec-9d9e-0b9a78f6c42e\",\n  \"Description\": \"Amendment related term\",\n  \"TermTypeId\": \"Term_type_f2b747f6-b9b0-11ec-8fd7-efc66f58363f\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}contract/term/create/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"term",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update contract term",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('update contract term pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"TermId\":\"Term_e085e43e-ebb5-11ec-9d9e-0b9a78f6c42e\",\n  \"ContractId\": \"CONTB2C_05a42902-eb4c-11ec-9d9e-0b9a78f6c42e\",\n  \"Description\": \"Amendment related term updated\",\n  \"TermTypeId\": \"Term_type_f2b747f6-b9b0-11ec-8fd7-efc66f58363f\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}contract/term/update/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"term",
+						"update",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create contract obligation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('new contract obligation pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ContractId\": \"CONTB2C_05a42902-eb4c-11ec-9d9e-0b9a78f6c42e\",\n  \"ContractIdB2C\": \"string\",\n  \"ContractorId\": \"C_875de824-b9b1-11ec-8fd7-efc66f58363f\",\n  \"Description\": \"data should be used for 10 months\",\n  \"EndDate\": \"2022-06-14\",\n  \"ExecutionDate\": \"2023-04-14\",\n  \"State\": \"hasPendingState\",\n  \"TermId\": \"Term_e085e43e-ebb5-11ec-9d9e-0b9a78f6c42e\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}obligation/create/",
+					"host": [
+						"{{base_url}}obligation"
+					],
+					"path": [
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contract update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Update contract detail pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ConsentId\": \"CONS003\",\n  \"ConsiderationDescription\": \"purpose of the contract\",\n  \"ConsiderationValue\": \"300\",\n  \"ContractCategory\": \"hasBusinessToConsumer\",\n  \"ContractId\": \"CONTB2C_05a42902-eb4c-11ec-9d9e-0b9a78f6c42e\",\n  \"ContractStatus\": \"hasUpdated\",\n  \"ContractType\": \"Written\",\n  \"Contractors\": [\n    \"C_875de824-b9b1-11ec-8fd7-efc66f58363f\",\"C_a848d832-b9b1-11ec-8fd7-efc66f58363f\"\n  ],\n  \"EffectiveDate\": \"2022-06-13\",\n  \"EndDate\": \"2023-06-13\",\n  \"ExecutionDate\": \"2022-06-13\",\n  \"Medium\": \"Online\",\n  \"Obligations\": [\n    \"OB_08c61c82-ebb8-11ec-9d9e-0b9a78f6c42e\"\n  ],\n  \"Purpose\": \"Data sharing\",\n  \"Signatures\": [\n    \"Sig_f6fe8a92-eb4a-11ec-9d9e-0b9a78f6c42e\",\"Sig_0ae701e2-eb4b-11ec-9d9e-0b9a78f6c42e\"\n  ],\n  \"Terms\": [\n    \"Term_e085e43e-ebb5-11ec-9d9e-0b9a78f6c42e\"\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}contract/update/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"update",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of term types",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get list of term types pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}term/types",
+					"host": [
+						"{{base_url}}term"
+					],
+					"path": [
+						"types"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Term type detail by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get term type by id pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}termType/{{term_type_id}}/",
+					"host": [
+						"{{base_url}}termType"
+					],
+					"path": [
+						"{{term_type_id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of contract terms",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get contract terms pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}contract/terms/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"terms",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contract terms by term id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get contract terms by term id pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}contract/term/{{term_id}}/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"term",
+						"{{term_id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of contract terms by contract id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get contract terms by contract id pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}contract/terms/{{contract_id}}/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"terms",
+						"{{contract_id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of contractors",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get list of contractors pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}contractors/",
+					"host": [
+						"{{base_url}}contractors"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of contractors by contract id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get list of contractors by contract id pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}contract/contractors/{{contract_id}}/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"contractors",
+						"{{contract_id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contractor detail by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get data subject by id pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}contractor/{{data_subject}}/",
+					"host": [
+						"{{base_url}}contractor"
+					],
+					"path": [
+						"{{data_subject}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of signatures",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get list of signatures pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}signatures/",
+					"host": [
+						"{{base_url}}signatures"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signature by signature id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get signature by signature id pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}signature/{{signature_id}}/",
+					"host": [
+						"{{base_url}}signature"
+					],
+					"path": [
+						"{{signature_id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of signatures by contract id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get signatured by contract id pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}contract/signatures/{{contract_id}}",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"signatures",
+						"{{contract_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of obligations",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get list of obligations pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}obligations/",
+					"host": [
+						"{{base_url}}obligations"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obligation detail by obligation id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get obligation detail by obligation id pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}obligation/{{obligation_id}}/",
+					"host": [
+						"{{base_url}}obligation"
+					],
+					"path": [
+						"{{obligation_id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contract obligations by contract id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get contract obligations by contract id pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}contract/obligations/{{contract_id}}/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"obligations",
+						"{{contract_id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contract obligation identifier by obligation id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get contract obligations identifier by obligation id pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}contract/obligation/identifier/{{obligation_id}}/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"obligation",
+						"identifier",
+						"{{obligation_id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of Contracts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get list of contracts pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}contract/list_of_contracts/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"list_of_contracts",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contract details by contract id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get contract detail pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}contract/byContract/{{contract_id}}/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"byContract",
+						"{{contract_id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contract detail by data controller",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get contract detail by data controller pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}contract/byContractor/{{data_controller}}/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"byContractor",
+						"{{data_controller}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contract detail by data subject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('get contract detail by data subject pass',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}contract/byContractor/{{data_subject}}/",
+					"host": [
+						"{{base_url}}contract"
+					],
+					"path": [
+						"byContractor",
+						"{{data_subject}}",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

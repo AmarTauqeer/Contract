@@ -1,0 +1,478 @@
+=========================== Insert data into knowledge graph=============================
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX fibo-fnd-plc-adr: <https://spec.edmcouncil.org/fibo/ontology/FND/Places/Addresses/>
+insert data{
+   :05\/05\/2021 rdf:type fibo-fnd-agr-ctr:hasEffectiveDate .
+   :05\/05\/2021 rdf:type fibo-fnd-agr-ctr:hasExecutionDate .
+   :05\/05\/2021 rdf:type dcat:startDate .
+   :05\/05\/2024 rdf:type dcat:endDate .
+   :ID_244562  dct:identifier :kg244562 .
+   :ID_244563  dct:identifier :kg244563 .
+   :ID_244563  dct:identifier :kg244564 .
+   :ID_244563  dct:identifier :kg244565 .
+   :WrittenContract rdf:type fibo-fnd-agr-ctr:WrittenContract .
+    
+   :Techniker_Strasse_7 rdf:type :hasAddress  .
+   :Hansuntermuhler_Strasse_10 rdf:type :hasAddress  .
+   :Westbhan_Strasse_2 rdf:type :hasAddress  .
+   :Leopold_Strasse_15 rdf:type :hasAddress .
+   
+   :06759988813065 rdf:type :hasTelephone .
+   :06759988813078 rdf:type :hasTelephone .
+   :06759988813080 rdf:type :hasTelephone .
+   :06759988813085 rdf:type :hasTelephone .
+   
+   :companyABC\@gmail.com rdf:type :hasEmail .
+   :companyDEF\@hotmail.com rdf:type :hasEmail .
+   :brade\@hotmail.com rdf:type :hasEmail .
+   :george\@hotmail.com rdf:type :hasEmail .
+    
+   :Brade rdf:type prov:Agent .
+   :Brade :hasStreetAddress :Techniker_Strasse_7 .
+   :Brade :hasTelephone :06759988813065 .
+   :Brade :hasEmail :brade\@hotmail.com .
+    
+   :George rdf:type prov:Agent .
+   :George :hasStreetAddress :Leopold_Strasse_15 .
+   :George :hasTelephone :06759988813085 .
+   :George :hasEmail :george\@hotmail.com .
+    
+   :CompanyABC rdf:type prov:Organization . 
+   :CompanyABC :hasStreetAddress :Hansuntermuhler_Strasse_10 .
+   :CompanyABC :hasTelephone :06759988813078 .
+   :CompanyABC :hasEmail :companABC\@gmail.com .
+   
+   :CompanyDEF rdf:type prov:Organization . 
+   :CompanyDEF :hasStreetAddress :Westbhan_Strasse_2 .
+   :CompanyDEF :hasTelephone :06759988813080 .
+   :CompanyDEF :hasEmail :companyDEF\@hotmail.com .
+   
+   :Valid rdf:type :hasContractStatus .
+   :InValid rdf:type :hasContractStatus .
+   :1_year rdf:type :hasMinimumDuration .
+   :6_month rdf:type :hasMinimumDuration .
+   
+}
+============================ Insert multiple instance of a contract=============================
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+insert data{
+    :kg244562 dcat:startDate :05-05-2021 .
+    :kg244562 dcat:endDate :05-05-2022 .
+    :kg244562 :contractType :WrittenContract .
+    :kg244562 fibo-fnd-agr-ctr:hasEffectiveDate :05-05-2021 .
+    :kg244562 fibo-fnd-agr-ctr:hasExecutionDate :05-05-2021 .
+    :kg244562 :forPurpose "Creation of Contract for Vehicle data" .
+    :kg244562 :inMedium :MobileApp123 .
+    
+    :kg244562 :ContractRequester :CompanyABC .
+    :kg244562 :ContractProvider :Brade .
+    
+    :kg244562 :hasWaiver :hasWaiver .
+    :kg244562 :hasAmendment :hasAmendment .
+    :kg244562 :hasConfidentialityObligation :hasConfidentialityObligation .
+    :kg244562 :hasDataProtection :hasDataProtection .
+    :kg244562 :hasLimitationOnUse :hasLimitationOnUse .
+    :kg244562 :hasMethodOfNotice :hasMethodOfNotice .
+    :kg244562 :hasNoThirdPartyBeneficiaries :hasNoThirdPartyBeneficiaries .
+    :kg244562 :hasPermittedDisclosure :hasPermittedDisclosure .
+    :kg244562 :hasReceiptOfNotice :hasReceiptOfNotice .
+    :kg244562 :hasSeverability :hasSeverability .
+    :kg244562 :hasTerminationForInsolvency :hasTerminationForInsolvency .
+    :kg244562 :hasTerminationForMaterialBreach :hasTerminationForMaterialBreach .
+    :kg244562 :hasTerminationOnNotice :hasTerminationOnNotice .
+    :kg244562 :hasContractStatus :Valid .
+    :kg244562 :hasMinimumDuration :1_year .
+    
+    :kg244562 dct:identifier :ID_244562 .
+    :kg244562 rdf:type :ContractId .
+    
+#    second instance of contract with two contract requester and a conract provider
+    :kg244563 dcat:startDate :05-05-2021 .
+    :kg244563 dcat:endDate :05-05-2022 .
+    :kg244563 :contractType :WrittenContract .
+    :kg244563 fibo-fnd-agr-ctr:hasEffectiveDate :05-05-2021 .
+    :kg244563 fibo-fnd-agr-ctr:hasExecutionDate :05-05-2021 .
+    :kg244563 :forPurpose "Creation of Contract for Vehicle data" .
+    :kg244563 :inMedium :MobileApp123 .
+    
+    :kg244563 :ContractRequester :CompanyABC .
+    :kg244563 :ContractRequester :CompanyDEF .
+    :kg244563 :ContractProvider :Brade .
+    
+    :kg244563 :hasWaiver :hasWaiver .
+    :kg244563 :hasAmendment :hasAmendment .
+    :kg244563 :hasConfidentialityObligation :hasConfidentialityObligation .
+    :kg244563 :hasDataProtection :hasDataProtection .
+    :kg244563 :hasLimitationOnUse :hasLimitationOnUse .
+    :kg244563 :hasMethodOfNotice :hasMethodOfNotice .
+    :kg244563 :hasNoThirdPartyBeneficiaries :hasNoThirdPartyBeneficiaries .
+    :kg244563 :hasPermittedDisclosure :hasPermittedDisclosure .
+    :kg244563 :hasReceiptOfNotice :hasReceiptOfNotice .
+    :kg244563 :hasSeverability :hasSeverability .
+    :kg244563 :hasTerminationForInsolvency :hasTerminationForInsolvency .
+    :kg244563 :hasTerminationForMaterialBreach :hasTerminationForMaterialBreach .
+    :kg244563 :hasTerminationOnNotice :hasTerminationOnNotice .
+    :kg244563 :hasContractStatus :Valid .
+    :kg244563 :hasMinimumDuration :1_year .
+    
+    :kg244563 dct:identifier :ID_244563 .
+    :kg244563 rdf:type :ContractId .
+    
+#    third instance of contract with two contract requester and a conract provider
+    :kg244564 dcat:startDate :05-05-2021 .
+    :kg244564 dcat:endDate :05-05-2022 .
+    :kg244564 :contractType :WrittenContract .
+    :kg244564 fibo-fnd-agr-ctr:hasEffectiveDate :05-05-2021 .
+    :kg244564 fibo-fnd-agr-ctr:hasExecutionDate :05-05-2021 .
+    :kg244564 :forPurpose "Creation of Contract for Vehicle data" .
+    :kg244564 :inMedium :MobileApp123 .
+    
+    :kg244564 :ContractRequester :CompanyABC .
+    :kg244564 :ContractProvider :Brade .
+    :kg244564 :ContractProvider :George .
+   
+    :kg244564 :hasWaiver :hasWaiver .
+    :kg244564 :hasAmendment :hasAmendment .
+    :kg244564 :hasConfidentialityObligation :hasConfidentialityObligation .
+    :kg244564 :hasDataProtection :hasDataProtection .
+    :kg244564 :hasLimitationOnUse :hasLimitationOnUse .
+    :kg244564 :hasMethodOfNotice :hasMethodOfNotice .
+    :kg244564 :hasNoThirdPartyBeneficiaries :hasNoThirdPartyBeneficiaries .
+    :kg244564 :hasPermittedDisclosure :hasPermittedDisclosure .
+    :kg244564 :hasReceiptOfNotice :hasReceiptOfNotice .
+    :kg244564 :hasSeverability :hasSeverability .
+    :kg244564 :hasTerminationForInsolvency :hasTerminationForInsolvency .
+    :kg244564 :hasTerminationForMaterialBreach :hasTerminationForMaterialBreach .
+    :kg244564 :hasTerminationOnNotice :hasTerminationOnNotice .
+    :kg244564 :hasContractStatus :Valid .
+    :kg244564 :hasMinimumDuration :1_year .
+   
+    :kg244564 dct:identifier :ID_244564 .
+    :kg244564 rdf:type :ContractId .
+#    fourth instance of contract with two contract requester and a conract provider
+    :kg244565 dcat:startDate :05-05-2021 .
+    :kg244565 dcat:endDate :05-05-2022 .
+    :kg244565 :contractType :WrittenContract .
+    :kg244565 fibo-fnd-agr-ctr:hasEffectiveDate :05-05-2021 .
+    :kg244565 fibo-fnd-agr-ctr:hasExecutionDate :05-05-2021 .
+    :kg244565 :forPurpose "Creation of Contract for Vehicle data" .
+    :kg244565 :inMedium :MobileApp123 .
+    
+    :kg244565 :ContractRequester :CompanyABC .
+    :kg244565 :ContractRequester :CompanyDEF .
+    :kg244565 :ContractProvider :Brade .
+    :kg244565 :ContractProvider :George .
+   
+    :kg244565 :hasWaiver :hasWaiver .
+    :kg244565 :hasAmendment :hasAmendment .
+    :kg244565 :hasConfidentialityObligation :hasConfidentialityObligation .
+    :kg244565 :hasDataProtection :hasDataProtection .
+    :kg244565 :hasLimitationOnUse :hasLimitationOnUse .
+    :kg244565 :hasMethodOfNotice :hasMethodOfNotice .
+    :kg244565 :hasNoThirdPartyBeneficiaries :hasNoThirdPartyBeneficiaries .
+    :kg244565 :hasPermittedDisclosure :hasPermittedDisclosure .
+    :kg244565 :hasReceiptOfNotice :hasReceiptOfNotice .
+    :kg244565 :hasSeverability :hasSeverability .
+    :kg244565 :hasTerminationForInsolvency :hasTerminationForInsolvency .
+    :kg244565 :hasTerminationForMaterialBreach :hasTerminationForMaterialBreach .
+    :kg244565 :hasTerminationOnNotice :hasTerminationOnNotice .
+    :kg244565 :hasContractStatus :Valid .
+    :kg244565 :hasMinimumDuration :1_year .
+   
+    :kg244565 dct:identifier :ID_244565 .
+    :kg244565 rdf:type :ContractId .
+    
+}
+============================ Simple insert=============================
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX fibo-fnd-plc-adr: <https://spec.edmcouncil.org/fibo/ontology/FND/Places/Addresses/>
+insert data{
+      
+      :hasDataController rdfs:domain :contract .
+    	:CXAM rdf:type prov:Organization .
+    	:CXAM :hasAssociation :kg244562 .
+    	:CXAM :hasAssociation :kg244563 .
+    	:CXAM :hasAssociation :kg244564 .
+    	:CXAM :hasAssociation :kg244565 .
+	:Data_Controller rdf:type :DataController .
+     	:CXAM :hasRole :Data_Controller .
+        :1_Year :hasAssociation :kg244562 .
+        :6_month :hasAssociation :kg244563 .
+    	:6_month :hasAssociation :kg244564 .	
+    	:1_year :hasAssociation :kg244565 .
+        :kg244562 :hasExpiry :1_Year .
+        :kg244563 :hasExpiry :6_month .
+    	:kg244564 :hasExpiry :6_month .
+    	:kg244565 :hasExpiry :1_Year .
+    	:kg244562 :hasDataController :CXAM .
+    	:kg244563 :hasDataController :CXAM .
+    	:kg244564 :hasDataController :CXAM .
+    	:kg244565 :hasDataController :CXAM .
+   
+}
+===================== Delete data from knowledge graph=============================
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+delete data{
+        :kg244562 :hasExpiry :1_Year .
+        :kg244563 :hasExpiry :6_month .
+    	:kg244564 :hasExpiry :6_month .
+    	:kg244565 :hasExpiry :1_Year .
+}
+========================= Select an instances of contracts=============================
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+select * 
+where{
+
+    ?Contract a :ContractId;
+               :hasContractStatus ?ContractStatus;
+		:forPurpose ?Purpose;
+		:contractType ?ContractType;
+		:hasDataController ?DataController;
+		:ContractRequester ?ContractRequester;
+		:ContractProvider ?ContractProvider;
+		dcat:startDate ?StartDate;
+		dcat:endDate ?EndingDate;
+		fibo-fnd-agr-ctr:hasEffectiveDate ?EffectiveDate;
+		fibo-fnd-agr-ctr:hasExecutionDate ?ExecutionDate;
+		:inMedium ?Medium;
+		:hasWaiver ?Waiver;
+		:hasAmendment ?Amendment;
+		:hasConfidentialityObligation ?ConfidentialityObligation;
+		:hasDataProtection ?DataProtection;
+		:hasLimitationOnUse ?LimitationOnUse;
+		:hasMethodOfNotice ?MethodOfNotice;
+		:hasNoThirdPartyBeneficiaries ?NoThirdPartyBeneficiaries;
+		:hasPermittedDisclosure ?PermittedDisclosure;
+		:hasReceiptOfNotice ?ReceiptOfNotice;
+		:hasSeverability ?Severability;
+		:hasTerminationForInsolvency ?TerminationForInsolvency;
+		:hasTerminationForMaterialBreach ?TerminationForMaterialBreach;
+		:hasTerminationOnNotice ?TerminationOnNotice .
+              
+}
+==================== List of contract by contract requester=============================
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+SELECT ?Contract   
+WHERE {{ 
+?Contract a :ContractId;
+    :ContractRequester :CompanyABC.
+}}
+==================== List of contract by contract provider=============================
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+SELECT ?Contract   
+WHERE {{ 
+?Contract a :ContractId;
+    :ContractProvider :Brade.
+}}
+==================== List of contract by contract id=============================
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+SELECT ?Contract   
+WHERE {{ 
+?Contract a :ContractId;
+    filter(?Contract=:kg244565) .
+}}
+================== Access blank nodes GraphValidation project============================================
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+PREFIX cc: <http://creativecommons.org/ns#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+SELECT *
+WHERE
+{
+  	<https://dalicc.net/license-library/CreativeCommonsAttribution20Australia> odrl:permission ?per .
+    	?per odrl:action ?actions .
+    	?per odrl:assigner ?assigner .
+    	?assigner dc:publisher ?publisher .
+    	?per odrl:target ?target .
+    <https://dalicc.net/license-library/CreativeCommonsAttribution20Australia> odrl:prohibition ?perhibition .
+    ?perhibition odrl:action ?perhibitionactions .
+  	<https://dalicc.net/license-library/CreativeCommonsAttribution20Australia> cc:jurisdiction ?jur .
+	<https://dalicc.net/license-library/CreativeCommonsAttribution20Australia> cc:legalcode ?legalcode .
+    <https://dalicc.net/license-library/CreativeCommonsAttribution20Australia> foaf:img ?img .
+    <https://dalicc.net/license-library/CreativeCommonsAttribution20Australia> foaf:logo ?logo .
+    <https://dalicc.net/license-library/CreativeCommonsAttribution20Australia> dalicc:validityType ?validityType .
+     
+} 
+============================= Named graph example using dbpedia============================================
+PREFIX so: <http://schema.org/>
+select ?person ?personName (substr(?birthDate,1,4) as ?year)
+from named <http://dbpedia.org/>
+where { 
+    GRAPH ?g {
+		?person a so:Person;
+         so:name ?personName;
+        so:birthDate ?birthDate .
+        filter(regex(?personName,"A.N.M. Ehsanul Hoque Milan"))
+    	filter(substr(?birthDate,1,4)="1957")
+	}
+}
+=================== Delete data from named graph==============================================================
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+DELETE DATA
+{
+GRAPH <http://example> {
+    <http://example/book1> dc:title "A new book" ;
+                           dc:creator "A.N.Other" .
+    }
+}
+============================== Insert a license into local knowledge graph===================================
+prefix cc:      <http://creativecommons.org/ns#> 
+prefix dct:     <http://purl.org/dc/terms/> 
+prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> 
+prefix odrl:    <http://www.w3.org/ns/odrl/2/> 
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX ns0: <https://dalicc.poolparty.biz/DALICC/>
+PREFIX dalicc: <https://dalicc.poolparty.biz/DALICC/>
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+insert data{
+:L100 rdf:type :LicenseId .    
+:L100
+  a odrl:AssetCollection ;
+  odrl:target <https://dalicc.poolparty.biz/DALICC/CreativeWork> ;
+  dc:title "Creative Commons Attribution 2.0 Australia"@en ;
+  dc:alternative "Attribution 2.0 Australia", "Attribution 2.0", "CC BY 2.0", "CC-BY 2.0", "CC-BY-2.0", "CC-BY-2.0 AU", "CC BY 2.0 AU", "Creative Commons BY 2.0", "Creative Commons BY 2.0 AU" .
+
+odrl:assigner
+  a odrl:Party ;
+  dc:publisher "Creative Commons" .
+:L100 :permission <https://dalicc.net/license-library/CreativeCommonsAttribution20Australia>.
+<https://dalicc.net/license-library/CreativeCommonsAttribution20Australia>
+  a odrl:Set ;
+  foaf:logo <https://licensebuttons.net/l/by/2.0/au/88x31.png> ;
+  foaf:img <https://creativecommons.org/images/international/au.png> ;
+  cc:legalcode <https://creativecommons.org/licenses/by/2.0/au/legalcode> ;
+  ns0:validityType ns0:perpetual ;
+  cc:jurisdiction <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Australia> ;
+  ns0:WarrantyDisclaimer """EXCEPT AS EXPRESSLY STATED IN THIS LICENCE OR OTHERWISE MUTUALLY AGREED TO BY THE PARTIES IN WRITING, AND TO THE FULL EXTENT PERMITTED BY APPLICABLE LAW, LICENSOR OFFERS THE WORK "AS-IS" AND MAKES NO REPRESENTATIONS, WARRANTIES OR CONDITIONS OF ANY KIND CONCERNING THE WORK, EXPRESS, IMPLIED, STATUTORY OR OTHERWISE, INCLUDING, WITHOUT LIMITATION, ANY REPRESENTATIONS, WARRANTIES OR CONDITIONS REGARDING THE CONTENTS OR ACCURACY OF THE WORK, OR OF TITLE, MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NONINFRINGEMENT, THE ABSENCE OF LATENT OR OTHER DEFECTS, OR THE PRESENCE OR ABSENCE OF ERRORS, WHETHER OR NOT DISCOVERABLE.
+""" ;
+  ns0:LiabilityLimitation """TO THE FULL EXTENT PERMITTED BY APPLICABLE LAW, AND EXCEPT FOR ANY LIABILITY ARISING FROM CONTRARY MUTUAL AGREEMENT AS REFERRED TO IN SECTION 5, IN NO EVENT WILL LICENSOR BE LIABLE TO YOU ON ANY LEGAL THEORY (INCLUDING, WITHOUT LIMITATION, NEGLIGENCE) FOR ANY LOSS OR DAMAGE WHATSOEVER, INCLUDING (WITHOUT LIMITATION) LOSS OF PRODUCTION OR OPERATION TIME, LOSS, DAMAGE OR CORRUPTION OF DATA OR RECORDS; OR LOSS OF ANTICIPATED SAVINGS, OPPORTUNITY, REVENUE, PROFIT OR GOODWILL, OR OTHER ECONOMIC LOSS; OR ANY SPECIAL, INCIDENTAL, CONSEQUENTIAL, PUNITIVE OR EXEMPLARY DAMAGES ARISING OUT OF OR IN CONNECTION WITH THIS LICENCE OR THE USE OF THE WORK, EVEN IF LICENSOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+""" ;
+  odrl:permission [
+    a odrl:Permission ;
+    odrl:target :L100 ;
+    odrl:assigner odrl:assigner ;
+    odrl:action odrl:reproduce, odrl:display, odrl:present, ns0:ModifiedWorks, cc:DerivativeWorks, <https://creativecommons.org/ns#CommercialUse>, ns0:chargeDistributionFee
+  ], [
+    a odrl:Permission ;
+    odrl:target :L100 ;
+    odrl:assigner odrl:assigner ;
+    odrl:action odrl:distribute ;
+    odrl:duty [
+      a odrl:Duty ;
+      odrl:action cc:Attribution, cc:Notice
+    ]
+  ], [
+    a odrl:Permission ;
+    odrl:target :L100 ;
+    odrl:assigner odrl:assigner ;
+    odrl:action odrl:modify ;
+    odrl:duty [
+      a odrl:Duty ;
+      odrl:action cc:Attribution, ns0:modificationNotice, cc:Notice
+    ]
+  ], [
+    a odrl:Permission ;
+    odrl:target :L100 ;
+    odrl:assigner odrl:assigner ;
+    odrl:action odrl:derive ;
+    odrl:duty [
+      a odrl:Duty ;
+      odrl:action cc:Attribution, ns0:modificationNotice, cc:Notice
+    ]
+  ] ;
+  odrl:prohibition [
+    a odrl:Prohibition ;
+    odrl:target :L100 ;
+    odrl:assigner odrl:assigner ;
+    odrl:action ns0:promote, ns0:ChangeLicense
+  ] .
+}
+======================================= Delete a license ==============================================================
+prefix cc:      <http://creativecommons.org/ns#> 
+prefix dct:     <http://purl.org/dc/terms/> 
+prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> 
+prefix odrl:    <http://www.w3.org/ns/odrl/2/> 
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX ns0: <https://dalicc.poolparty.biz/DALICC/>
+PREFIX dalicc: <https://dalicc.poolparty.biz/DALICC/>
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+delete data{
+<urn:dalicc:target:bd61aab0-4a5f-11e9-8646-d663bd873d93>
+  a odrl:AssetCollection ;
+  odrl:target <https://dalicc.poolparty.biz/DALICC/CreativeWork> ;
+  dc:title "Creative Commons Attribution 2.0 Austria"@en ;
+  dc:alternative "Attribution 2.0 Austria", "Attribution 2.0", "CC BY 2.0", "CC-BY 2.0", "CC-BY-2.0", "CC-BY-2.0 AT", "CC BY 2.0 AT", "Creative Commons BY 2.0", "Creative Commons BY 2.0 AT" .
+
+<urn:dalicc:assigner:bd61aab0-4a5f-11e9-8646-d663bd873d93>
+  a odrl:Party ;
+  dc:publisher "Creative Commons" .
+
+<https://dalicc.net/license-library/CreativeCommonsAttribution20Austria>
+  a odrl:Set ;
+  foaf:logo <https://licensebuttons.net/l/by/2.0/at/88x31.png> ;
+  foaf:img <https://creativecommons.org/images/international/at.png> ;
+  cc:legalcode <https://creativecommons.org/licenses/by/2.0/at/legalcode> ;
+  ns0:validityType ns0:perpetual ;
+  cc:jurisdiction <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Austria> ;
+  ns0:WarrantyDisclaimer """Sofern dies von den Vertragsparteien nicht schriftlich anders vereinbart wurde, bietet der Lizenzgeber keine Gewährleistung für die in diesem Lizenzvertrag erteilte Nutzungsbewilligung. Für Mängel anderer Art, insbesondere bei der mangelhaften Lieferung von Verkörperungen des Schutzgegenstandes, richtet sich die Gewährleistung nach der Regelung, die die Person, die Ihnen den Schutzgegenstand zur Verfügung stellt, mit Ihnen außerhalb der Lizenz vereinbart, oder - wenn eine solche Regelung nicht getroffen wurde - nach den gesetzlichen Vorschriften.
+""" ;
+  ns0:LiabilityLimitation """Über die in Ziffer 5 genannte Gewährleistung hinaus haftet Ihnen der Lizenzgeber bezüglich Schäden, die in Verbindung mit der Erteilung der Nutzungsbewilligung entstehen, nur für Vorsatz. Für Geschäfte zwischen Unternehmern und Verbrauchern im Sinne des österreichischen Konsumentenschutzgesetzes gilt die Abweichung, dass nur die Haftung für leichte Fahrlässigkeit bei anderen Schäden als Personenschäden ausgeschlossen ist.
+""" .
+}
+=========================================== Access license data =============================================================
+PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX cc: <http://creativecommons.org/ns#>
+PREFIX odrl: <http://www.w3.org/ns/odrl/2/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+SELECT ?license ?jur ?publisher ?actions ?prohibitionactions ?img ?logo
+WHERE
+{
+    ?license a :LicenseId;
+             :permission ?permissions .
+            ?permissions cc:jurisdiction ?jur .
+    		?permissions cc:legalcode ?legalcode .
+    		?permissions foaf:img ?img .
+    		?permissions foaf:logo ?logo .
+            ?permissions odrl:prohibition ?prohibition .
+            ?prohibition odrl:action ?prohibitionactions .
+            ?permissions odrl:permission ?per .
+            ?per odrl:action ?actions .
+            ?per odrl:assigner ?assigner .
+            ?assigner dc:publisher ?publisher;
+    filter(?license=:L100)
+}
+
