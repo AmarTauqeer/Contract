@@ -396,51 +396,54 @@ class ContractStatusUpdateById(MethodResource, Resource):
     # @Credentials.check_for_token
     def get(self, contractID, status):
 
-        host_post = os.getenv("HOST_URI_POST")
-        hostname = host_post
-        userid = os.getenv("user_name")
-        password = os.getenv("password")
+        print(contractID)
+        return "success"
 
-        violation_date = datetime.now()
-        sparql = SPARQLWrapper(hostname)
-        sparql.setHTTPAuth(BASIC)
-        sparql.setCredentials(userid, password)
-        query = textwrap.dedent("""
-         PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
-            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-            PREFIX dc: <http://purl.org/dc/elements/1.1/>
-            PREFIX dpv: <http://www.w3.org/ns/dpv#>
-            PREFIX prov: <http://www.w3.org/ns/prov#>
-            PREFIX dcat: <http://www.w3.org/ns/dcat#>
-            PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
-            PREFIX dct: <http://purl.org/dc/terms/>
-            DELETE {{?Contract :hasContractStatus :statusCreated.
-                    ?Contract :hasContractStatus :statusRenewed.
-                    ?Contract :hasContractStatus :statusPending.
-                    ?Contract :hasContractStatus :statusViolated.
-                    ?Contract :hasContractStatus :statusExpired.
-                    ?Contract :hasContractStatus :statusSigned.
-                    ?Contract :hasContractStatus :statusUpdated.
-                    ?Contract :hasContractStatus :statusTerminated.}}
-            INSERT {{?Contract :hasContractStatus :{2}.
-            ?contractId :RevokedAtTime {0}.
-            }}
-             WHERE {{
-             ?Contract rdf:type fibo-fnd-agr-ctr:Contract;
-                        :contractID ?contractId;
-              FILTER(?contractId = "{1}")
-             }}""").format('\'{}^^xsd:dateTime\''.format(violation_date), contractID, status)
-
-        # print(query)
-        sparql.setQuery(query)
-        sparql.method = "POST"
-        sparql.queryType = "INSERT"
-        sparql.setReturnFormat('json')
-        result = sparql.query()
-        if str(result.response.read().decode("utf-8")) == "":
-            return "Success"
-        else:
-            return "Fail"
+        # host_post = os.getenv("HOST_URI_POST")
+        # hostname = host_post
+        # userid = os.getenv("user_name")
+        # password = os.getenv("password")
+        #
+        # violation_date = datetime.now()
+        # sparql = SPARQLWrapper(hostname)
+        # sparql.setHTTPAuth(BASIC)
+        # sparql.setCredentials(userid, password)
+        # query = textwrap.dedent("""
+        #  PREFIX : <http://ontologies.atb-bremen.de/smashHitCore#>
+        #     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        #     PREFIX dc: <http://purl.org/dc/elements/1.1/>
+        #     PREFIX dpv: <http://www.w3.org/ns/dpv#>
+        #     PREFIX prov: <http://www.w3.org/ns/prov#>
+        #     PREFIX dcat: <http://www.w3.org/ns/dcat#>
+        #     PREFIX fibo-fnd-agr-ctr: <https://spec.edmcouncil.org/fibo/ontology/FND/Agreements/Contracts/>
+        #     PREFIX dct: <http://purl.org/dc/terms/>
+        #     DELETE {{?Contract :hasContractStatus :statusCreated.
+        #             ?Contract :hasContractStatus :statusRenewed.
+        #             ?Contract :hasContractStatus :statusPending.
+        #             ?Contract :hasContractStatus :statusViolated.
+        #             ?Contract :hasContractStatus :statusExpired.
+        #             ?Contract :hasContractStatus :statusSigned.
+        #             ?Contract :hasContractStatus :statusUpdated.
+        #             ?Contract :hasContractStatus :statusTerminated.}}
+        #     INSERT {{?Contract :hasContractStatus :{2}.
+        #     ?contractId :RevokedAtTime {0}.
+        #     }}
+        #      WHERE {{
+        #      ?Contract rdf:type fibo-fnd-agr-ctr:Contract;
+        #                 :contractID ?contractId;
+        #       FILTER(?contractId = "{1}")
+        #      }}""").format('\'{}^^xsd:dateTime\''.format(violation_date), contractID, status)
+        #
+        # # print(query)
+        # sparql.setQuery(query)
+        # sparql.method = "POST"
+        # sparql.queryType = "INSERT"
+        # sparql.setReturnFormat('json')
+        # result = sparql.query()
+        # if str(result.response.read().decode("utf-8")) == "":
+        #     return "Success"
+        # else:
+        #     return "Fail"
 
 # class GetContractTestResult(MethodResource, Resource):
 #     # @Credentials.check_for_token
