@@ -50,6 +50,11 @@ python -m flask run
 ![](/backend/images/contract-api-first-part.png)
 ![](/backend/images/contract-api-second-part.png)
 
+## Tests
+
+[Test cases and results](
+https://github.com/AmarTauqeer/Contract/tree/master/backend/tests)
+
 ## Contributors
 
 - Amar Tauqeer
