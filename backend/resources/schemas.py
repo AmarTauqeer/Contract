@@ -1,3 +1,5 @@
+import requests
+
 from resources.imports import *
 
 
@@ -20,26 +22,33 @@ class GenerateToken(MethodResource, Resource):
 
             username = os.getenv('uname')
             password = os.getenv('upass')
+            # username = request.headers.get('username')
+            # password = request.headers.get('password')
             secret_key = os.getenv('SECRET_KEY')
 
-            print(request.authorization)
-            print(request.headers)
+            # print('uname= {}, upass= {}'.format(username,password))
+
+            # print(request.authorization)
+            # print(request.headers)
 
             if request.authorization and request.authorization.Username and request.authorization.Password:
+                print("authorisation")
                 if request.authorization.Username == username and request.authorization.Password == password:
                     token = jwt.encode({
                         'username': username,
-                        'exp': datetime.utcnow() + timedelta(minutes=1)
+                        'exp': datetime.utcnow() + timedelta(minutes=60)
                     }, secret_key)
                     return jsonify({'token': token.decode('UTF-8')})
                 else:
                     return 'username or password is not correct'
             elif request.headers.get('Username') and request.headers.get('Password'):
+                print("header")
                 if request.headers.get('Username') == username and request.headers.get('Password') == password:
                     token = jwt.encode({
                         'username': username,
-                        'exp': datetime.utcnow() + timedelta(minutes=1)
+                        'exp': datetime.utcnow() + timedelta(minutes=60)
                     }, secret_key)
+                    # print(token)
                     return jsonify({'token': token.decode('UTF-8')})
                 else:
                     return 'username or password is not correct'

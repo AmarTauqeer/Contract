@@ -6,7 +6,7 @@ from resources.schemas import *
 class GetSignatures(MethodResource, Resource):
     @doc(description='Contract Signatures', tags=['Contract Signatures'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
@@ -38,7 +38,7 @@ class GetSignatures(MethodResource, Resource):
 class SignatureById(MethodResource, Resource):
     @doc(description='Contract Signatures', tags=['Contract Signatures'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, signatureID):
         query = QueryEngine()
@@ -76,7 +76,7 @@ class SignatureById(MethodResource, Resource):
 class SignatureDeleteById(MethodResource, Resource):
     @doc(description='Contract Signatures', tags=['Contract Signatures'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     # @use_kwargs(ContractRequestSchema)
     def delete(self, signatureID):
@@ -100,7 +100,7 @@ class SignatureDeleteById(MethodResource, Resource):
 class ContractSignatureCreate(MethodResource, Resource):
     @doc(description='Contract Signatures', tags=['Contract Signatures'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @use_kwargs(ContractorSignaturesRequestSchema)
     def post(self, **kwargs):
         schema_serializer = ContractorSignaturesRequestSchema()
@@ -123,7 +123,7 @@ class ContractSignatureCreate(MethodResource, Resource):
 class ContractSignatureUpdate(MethodResource, Resource):
     @doc(description='Contract Signatures', tags=['Contract Signatures'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
     @use_kwargs(ContractorSignaturesUpdateSchema)
     def put(self, **kwargs):
@@ -150,7 +150,7 @@ class ContractSignatureUpdate(MethodResource, Resource):
 class GetContractSignatures(MethodResource, Resource):
     @doc(description='Contract Signatures', tags=['Contract Signatures'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, contractID):
         query = QueryEngine()
@@ -191,7 +191,7 @@ class GetContractSignatures(MethodResource, Resource):
 class GetSignatureIdentifierById(MethodResource, Resource):
     @doc(description='Contract Signatures', tags=['Contract Signatures'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, signatureID):
         query = QueryEngine()

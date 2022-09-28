@@ -7,7 +7,7 @@ from resources.schemas import *
 class GetObligations(MethodResource, Resource):
     @doc(description='Contract Obligations', tags=['Contract Obligations'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
@@ -43,7 +43,7 @@ class GetObligations(MethodResource, Resource):
 class GetObligationByContractId(MethodResource, Resource):
     @doc(description='Contract Obligations', tags=['Contract Obligations'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, contractID):
         query = QueryEngine()
@@ -71,7 +71,7 @@ class GetObligationByContractId(MethodResource, Resource):
 class ObligationById(MethodResource, Resource):
     @doc(description='Contract Obligations', tags=['Contract Obligations'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, obligationID):
         query = QueryEngine()
@@ -113,7 +113,7 @@ class ObligationById(MethodResource, Resource):
 class GetObligationIdentifierById(MethodResource, Resource):
     @doc(description='Contract Obligations', tags=['Contract Obligations'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, obligationID):
         query = QueryEngine()
@@ -134,7 +134,7 @@ class GetObligationIdentifierById(MethodResource, Resource):
 class ObligationCreate(MethodResource, Resource):
     @doc(description='Contract Obligations', tags=['Contract Obligations'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @use_kwargs(ObligationRequestSchema)
     def post(self, **kwargs):
         schema_serializer = ObligationRequestSchema()
@@ -161,7 +161,7 @@ class ObligationCreate(MethodResource, Resource):
 class ObligationDeleteById(MethodResource, Resource):
     @doc(description='Contract Obligations', tags=['Contract Obligations'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     # @use_kwargs(ContractRequestSchema)
     def delete(self, obligationID):
@@ -182,7 +182,7 @@ class ObligationDeleteById(MethodResource, Resource):
 class ContractObligationUpdate(MethodResource, Resource):
     @doc(description='Contract Obligations', tags=['Contract Obligations'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
     @use_kwargs(ObligationRequestSchema)
     def put(self, **kwargs):
@@ -207,7 +207,7 @@ class ContractObligationUpdate(MethodResource, Resource):
 
 class ObligationStatusUpdateByObligationId(MethodResource, Resource):
     @doc(description='Contract Obligations', tags=['Contract Obligations'])
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     def get(self, obligationID, contractID, contractorID, state):
 
         host_post = os.getenv("HOST_URI_POST")
@@ -267,7 +267,7 @@ class ObligationStatusUpdateByObligationId(MethodResource, Resource):
 
 class ObligationStatusUpdateById(MethodResource, Resource):
     @doc(description='Contract Obligations', tags=['Contract Obligations'])
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     def get(self, obligationID, state):
 
         host_post = os.getenv("HOST_URI_POST")

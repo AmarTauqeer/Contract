@@ -9,7 +9,7 @@ bidict==0.21.4
 blinker==1.4
 cachelib==0.4.1
 certifi==2021.5.30
-cffi==1.14.5
+# cffi==1.14.5
 chardet==4.0.0
 charset-normalizer==2.0.4
 click==8.0.1
@@ -39,22 +39,22 @@ Flask-Session==0.4.0
 Flask-SocketIO==5.1.1
 Flask-SQLAlchemy==2.5.1
 flask-swagger-ui==3.36.0
-future==0.18.2
-gevent==21.1.2
-greenlet==1.1.0
-idna==2.10
-importlib-metadata==4.10.0
-importlib-resources==5.4.0
-inflection==0.5.1
-isodate==0.6.0
-itsdangerous==2.0.1
-itypes==1.2.0
-Jinja2==3.0.1
-Mako==1.1.6
-MarkupSafe==2.0.1
+#future==0.18.2
+# gevent==21.1.2
+# greenlet==1.1.0
+#idna==2.10
+#importlib-metadata==4.10.0
+#importlib-resources==5.4.0
+#inflection==0.5.1
+#isodate==0.6.0
+#itsdangerous==2.0.1
+#itypes==1.2.0
+#Jinja2==3.0.1
+#Mako==1.1.6
+#MarkupSafe==2.0.1
 marshmallow==3.12.1
-mysql-connector-python==8.0.28
-mysqlclient==2.1.0
+# mysql-connector-python==8.0.28
+# mysqlclient==2.1.0
 packaging==21.0
 Pillow==8.3.2
 protobuf==3.19.4
@@ -74,7 +74,7 @@ pytz==2021.1
 pytz-deprecation-shim==0.1.0.post0
 quick-mailer==2022.2.22
 rdflib==5.0.0
-redis==4.0.2
+redis==4.3.4
 requests==2.25.1
 requests-file==1.5.1
 rsa==4.8

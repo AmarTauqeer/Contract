@@ -70,6 +70,7 @@ class Login(MethodResource, Resource):
         decoded_data = json.loads(my_json)
 
         user = User.query.filter_by(name=decoded_data["Name"]).first()
+        print(user)
 
         if user is None:
             return jsonify({"error": "Unauthorized"})
@@ -92,7 +93,8 @@ class Login(MethodResource, Resource):
 
         headers["Username"] = os.environ['uname']
         headers["Password"] = os.environ['upass']
-        url_get_login = "http://172.16.47.223:5000/contract/token/"
+        print(headers)
+        url_get_login = "https://actool.contract.sti2.at/contract/token/"
         resp1 = requests.get(url_get_login, headers=headers)
         token=resp1.json()['token']
         os.environ['token'] = token

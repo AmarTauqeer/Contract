@@ -21,6 +21,7 @@ from flask_session import Session
 from core.config import ApplicationConfig
 from flask_bcrypt import Bcrypt
 from core.models import User, db
+from flask_swagger_ui import get_swaggerui_blueprint
 
 from flask_apscheduler import APScheduler
 import time
@@ -39,18 +40,33 @@ cors = CORS(app, resources={
 }, supports_credentials=True)
 
 # swagger configuration
-app.config.update({
-    'APISPEC_SPEC': APISpec(
-        title='Automatic Contracting Tool Contracts API Specification',
-        info=dict(description="Author: Amar Tauqeer, Email: amar.tauqeer@sti2.at"),
-        version='v001',
-        plugins=[MarshmallowPlugin()],
-        openapi_version='2.0.0',
-    )
-    ,
-    'APISPEC_SWAGGER_UI_URL': '/swagger-ui/',
 
-})
+SWAGGER_URL = '/swagger-ui'
+API_URL = '/static/swagger.json'
+SWAGGER_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "smashHit Contracting API"
+    }
+)
+app.register_blueprint(SWAGGER_BLUEPRINT, url_prefix=SWAGGER_URL)
+# authorizations = {"Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}}
+
+# app.config.update({
+#     'APISPEC_SPEC': APISpec(
+#         title='Automatic Contracting Tool Contracts API Specification',
+#         info=dict(description="Author: Amar Tauqeer, Email: amar.tauqeer@sti2.at"),
+#         version='v001',
+#         plugins=[MarshmallowPlugin()],
+#         openapi_version='2.0.0',
+#         # authorizations=authorizations,
+#     )
+#     ,
+#     'APISPEC_SWAGGER_UI_URL': '/swagger-ui/',
+#
+# })
+
 app.config.from_object(ApplicationConfig)
 server_session = Session(app)
 db.init_app(app)
@@ -59,8 +75,8 @@ with app.app_context():
     db.create_all()
 
 api = Api(app)
-docs = FlaskApiSpec(app)
 
+docs = FlaskApiSpec(app)
 
 # token
 # generate token
@@ -255,7 +271,7 @@ def compliance():
 
 
 if __name__ == '__main__':
-    scheduler.add_job(id='Contract compliance task', func=compliance, trigger='interval', minutes=1440)
-    if current_date >= date(2022, 4, 26):
-        scheduler.start()
-    app.run(debug=True, host='0.0.0.0')
+    # scheduler.add_job(id='Contract compliance task', func=compliance, trigger='interval', minutes=1440)
+    # if current_date >= date(2022, 4, 26):
+    #     scheduler.start()
+    app.run(debug=True, host='0.0.0.0', port=5002)

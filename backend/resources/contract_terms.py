@@ -5,7 +5,7 @@ from resources.schemas import *
 class GetTerms(MethodResource, Resource):
     @doc(description='Contract Terms', tags=['Contract Terms'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
@@ -31,7 +31,7 @@ class GetTerms(MethodResource, Resource):
 class TermById(MethodResource, Resource):
     @doc(description='Contract Terms', tags=['Contract Terms'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, termID):
         query = QueryEngine()
@@ -56,7 +56,7 @@ class TermById(MethodResource, Resource):
 class TermDeleteById(MethodResource, Resource):
     @doc(description='Contract Terms', tags=['Contract Terms'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     # @use_kwargs(ContractRequestSchema)
     def delete(self, termID):
@@ -80,7 +80,7 @@ class TermDeleteById(MethodResource, Resource):
 class TermCreate(MethodResource, Resource):
     @doc(description='Contract Terms', tags=['Contract Terms'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @use_kwargs(TermRequestSchema)
     def post(self, **kwargs):
         schema_serializer = TermRequestSchema()
@@ -103,7 +103,7 @@ class TermCreate(MethodResource, Resource):
 class TermUpdate(MethodResource, Resource):
     @doc(description='Contract Terms', tags=['Contract Terms'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
     @use_kwargs(TermUpdateSchema)
     def put(self, **kwargs):
@@ -130,7 +130,7 @@ class TermUpdate(MethodResource, Resource):
 class GetContractTerms(MethodResource, Resource):
     @doc(description='Contract Terms', tags=['Contract Terms'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, contractID):
         query = QueryEngine()

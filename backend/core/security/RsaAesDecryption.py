@@ -19,6 +19,7 @@ class RsaAesDecrypt():
     def rsa_aes_decrypt(self, data):
         list_data = list(data.items())
         cwd = os.getcwd()
+        print(cwd)
         # reading encrypted aes keys
         with open(cwd + '/core/security/bundle' + list_data[0][1] + '.enc', 'rb') as f:
             e_aes_key = f.read(256)

@@ -4,7 +4,7 @@ from resources.schemas import *
 class CompanyUpdate(MethodResource, Resource):
     @doc(description='Company', tags=['Company'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
     @use_kwargs(CompanyUpdateSchema)
     def put(self, **kwargs):
@@ -30,7 +30,7 @@ class CompanyUpdate(MethodResource, Resource):
 class CompanyById(MethodResource, Resource):
     @doc(description='Company', tags=['Company'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, companyID):
         query = QueryEngine()
@@ -57,7 +57,7 @@ class CompanyById(MethodResource, Resource):
 class CompanyCreate(MethodResource, Resource):
     @doc(description='Company', tags=['Company'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @use_kwargs(CompanyRequestSchema)
     def post(self, **kwargs):
         schema_serializer = CompanyRequestSchema()
@@ -81,7 +81,7 @@ class CompanyCreate(MethodResource, Resource):
 class CompanyDeleteById(MethodResource, Resource):
     @doc(description='Company', tags=['Company'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     # @use_kwargs(ContractRequestSchema)
     def delete(self, companyID):
@@ -104,7 +104,7 @@ class CompanyDeleteById(MethodResource, Resource):
 class GetCompany(MethodResource, Resource):
     @doc(description='Company', tags=['Company'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()

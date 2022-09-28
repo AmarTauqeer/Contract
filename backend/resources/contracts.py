@@ -9,7 +9,7 @@ from resources.schemas import *
 class Contracts(MethodResource, Resource):
     @doc(description='Contracts', tags=['Contracts'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
@@ -99,7 +99,7 @@ class Contracts(MethodResource, Resource):
 class ContractByContractor(MethodResource, Resource):
     @doc(description='Contracts', tags=['Contracts'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, contractorID):
         query = QueryEngine()
@@ -137,7 +137,7 @@ class ContractByProvider(MethodResource, Resource):
 class ContractByContractId(MethodResource, Resource):
     @doc(description='Contracts', tags=['Contracts'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, contractID):
         query = QueryEngine()
@@ -226,7 +226,7 @@ class ContractByContractId(MethodResource, Resource):
 class ContractUpdate(MethodResource, Resource):
     @doc(description='Contracts', tags=['Contracts'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @marshal_with(BulkResponseQuerySchema)
     @use_kwargs(ContractUpdateSchema)
     def put(self, **kwargs):
@@ -259,7 +259,7 @@ class ContractUpdate(MethodResource, Resource):
 class ContractCreate(MethodResource, Resource):
     @doc(description='Contracts', tags=['Contracts'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     @use_kwargs(ContractRequestSchema)
     def post(self, **kwargs):
         schema_serializer = ContractRequestSchema()
@@ -285,7 +285,7 @@ class ContractCreate(MethodResource, Resource):
 class ContractDeleteById(MethodResource, Resource):
     @doc(description='Contracts', tags=['Contracts'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     # @use_kwargs(ContractRequestSchema)
     def delete(self, contractID):
@@ -345,7 +345,7 @@ class ContractDeleteById(MethodResource, Resource):
 class GetContractContractors(MethodResource, Resource):
     @doc(description='Contract Contractors', tags=['Contract Contractors'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self, contractID):
         query = QueryEngine()
@@ -393,7 +393,7 @@ class GetContractContractors(MethodResource, Resource):
 
 class ContractStatusUpdateById(MethodResource, Resource):
     @doc(description='Contracts', tags=['Contracts'])
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     def get(self, contractID, status):
 
         print(contractID)

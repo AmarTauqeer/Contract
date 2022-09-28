@@ -1,0 +1,1061 @@
+openapi: 3.0.0
+info:
+  title: Automatic Contracting Tool Contracts API Specification
+  description: Contract API Specification.
+  contact:
+    name: Amar Tauqeer
+    email: amar.tauqeer@sti2.at
+    url: https://github.com/AmarTauqeer
+  version: 1.0.0
+servers:
+  - url:  https://actool.contract.sti2.at
+paths:
+  /contract/register/:
+    post:
+      summary: Create a user.
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Email:
+                  type: string
+                Name:
+                  type: string
+                Password:
+                  type: string
+      responses:
+        '200':
+          description: Created
+  /contract/login/:
+    post:
+      summary: login.
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Name:
+                  type: string
+                Password:
+                  type: string
+      responses:
+        '200':
+          description: Success
+  /contract/term/type/create/:
+    post:
+      summary: Create a term type .
+      tags:
+        - Term Type
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Name:
+                  type: string
+                Description:
+                  type: string
+                CreateDate:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: Created
+  /contract/term/type/update/:
+    put:
+      summary: Update a term type .
+      tags:
+        - Term Type
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                TermTypeId:
+                  type: string
+                Name:
+                  type: string
+                Description:
+                  type: string
+                CreateDate:
+                  type: string
+                  format: date-time
+      responses:
+        '201':
+          description: Updated
+  /contract/term/types:
+    description: Term Types
+    get:
+      summary: Returns a list of term types.
+      tags:
+        - Term Type
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A JSON array of term types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /contract/termType/{termTypeID}/:
+    get:
+      summary: Get term type information by id.
+      tags:
+        - Term Type
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: termTypeID
+          in: path
+          required: true
+          description: term type id e.g. term_type_123568
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/term/type/delete/{termTypeID}/:
+    delete:
+      summary: Delete a term type by id.
+      tags:
+        - Term Type
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: termTypeID
+          in: path
+          required: true
+          description: term type id e.g. term_type_123564
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+
+  /contract/company/create/:
+    post:
+      summary: Create a company.
+      tags:
+        - Company
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Name:
+                  type: string
+                Email:
+                  type: string
+                Phone:
+                  type: string
+                Address:
+                  type: string
+                Territory:
+                  type: string
+                Country:
+                  type: string
+                Vat:
+                  type: string
+                CreateDate:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: Created
+  /contract/company/update/:
+    put:
+      summary: Update a company.
+      tags:
+        - Company
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                CompanyId:
+                  type: string
+                Name:
+                  type: string
+                Email:
+                  type: string
+                Phone:
+                  type: string
+                Address:
+                  type: string
+                Territory:
+                  type: string
+                Country:
+                  type: string
+                Vat:
+                  type: string
+                CreateDate:
+                  type: string
+                  format: date-time
+      responses:
+        '201':
+          description: Updated
+  /contract/companies/:
+    description: Companies
+    get:
+      summary: Returns a list of companies.
+      tags:
+        - Company
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A JSON array of companies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /contract/company/{companyID}/:
+    get:
+      summary: Update company information.
+      tags:
+        - Company
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: companyID
+          in: path
+          required: true
+          description: company id e.g. comp_123568
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/company/delete/{companyID}/:
+    delete:
+      summary: Delete a company by company id.
+      tags:
+        - Company
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: companyID
+          in: path
+          required: true
+          description: company id e.g. comp_123564
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/contractor/create/:
+    post:
+      summary: Create a contractor.
+      tags:
+        - Contractor
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Name:
+                  type: string
+                Email:
+                  type: string
+                Phone:
+                  type: string
+                Address:
+                  type: string
+                Territory:
+                  type: string
+                Country:
+                  type: string
+                Role:
+                  type: string
+                Vat:
+                  type: string
+                CompanyId:
+                  type: string
+                CreateDate:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: Created
+  /contract/contractor/udpate/:
+    put:
+      summary: Update a contractor.
+      tags:
+        - Contractor
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ContractorId:
+                  type: string
+                Name:
+                  type: string
+                Email:
+                  type: string
+                Phone:
+                  type: string
+                Address:
+                  type: string
+                Territory:
+                  type: string
+                Country:
+                  type: string
+                Role:
+                  type: string
+                Vat:
+                  type: string
+                CompanyId:
+                  type: string
+                CreateDate:
+                  type: string
+                  format: date-time
+      responses:
+        '201':
+          description: Updated
+  /contract/contractors/:
+    description: Contractors
+    get:
+      summary: Returns a list of contractors.
+      tags:
+        - Contractor
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A JSON array of contractors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /contract/contractor/{contractorID}/:
+    get:
+      summary: Get contractor information by contractor id.
+      tags:
+        - Contractor
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contractorID
+          in: path
+          required: true
+          description: contractor id e.g. c_123568
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/contractor/delete/{contractorID}/:
+    delete:
+      summary: Delete a contractor by contractor id.
+      tags:
+        - Contractor
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contractorID
+          in: path
+          required: true
+          description: contractor id e.g. c_123564
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/contractors/{contractID}/:
+    get:
+      summary: Get contractors information by contract id.
+      tags:
+        - Contract Contractors
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contractID
+          in: path
+          required: true
+          description: contract id e.g. contb2c_123568
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/create/:
+    post:
+      summary: Create a contract.
+      tags:
+        - Contracts
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ConsentId:
+                  type: string
+                ContractType:
+                  type: string
+                Purpose:
+                  type: string
+                ExecutionDate:
+                  type: string
+                  format: date-time
+                EffectiveDate:
+                  type: string
+                  format: date-time
+                EndDate:
+                  type: string
+                  format: date-time
+                Medium:
+                  type: string
+                ContractStatus:
+                  type: string
+                ContractCategory:
+                  type: string
+                ConsiderationDescription:
+                  type: string
+                ConsiderationValue:
+                        type: string
+                Contractors:
+                        type: array
+                        items:
+                          type: string
+                Terms:
+                        type: array
+                        items:
+                          type: string
+                Obligations:
+                        type: array
+                        items:
+                          type: string
+                Signatures:
+                        type: array
+                        items:
+                          type: string
+      responses:
+        '201':
+          description: Created
+  /contract/update/:
+    put:
+      summary: Update a contract.
+      tags:
+        - Contracts
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ConsentId:
+                  type: string
+                ContractId:
+                  type: string
+                ContractType:
+                  type: string
+                Purpose:
+                  type: string
+                ExecutionDate:
+                  type: string
+                  format: date-time
+                EffectiveDate:
+                  type: string
+                  format: date-time
+                EndDate:
+                  type: string
+                  format: date-time
+                Medium:
+                  type: string
+                ContractStatus:
+                  type: string
+                ContractCategory:
+                  type: string
+                ConsiderationDescription:
+                  type: string
+                ConsiderationValue:
+                        type: string
+                Contractors:
+                        type: array
+                        items:
+                          type: string
+                Terms:
+                        type: array
+                        items:
+                          type: string
+                Obligations:
+                        type: array
+                        items:
+                          type: string
+                Signatures:
+                        type: array
+                        items:
+                          type: string
+      responses:
+        '201':
+          description: Updated
+  /contract/list_of_contracts/:
+    description: Contract
+    get:
+      summary: Returns a list of contracts.
+      tags:
+        - Contracts
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: A JSON array of contracts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /contract/byContract/{contractID}/:
+    get:
+      summary: Returns a contract by contract id.
+      tags:
+        - Contracts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contractID
+          in: path
+          required: true
+          description: contract id e.g. kg244565
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/byContractor/{contractorID}/:
+    get:
+      summary: Returns a contract by contract requester.
+      tags:
+        - Contracts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contractor
+          in: path
+          required: true
+          description: contract contractor e.g. CompanyABC
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/delete/{contractID}/:
+    delete:
+      summary: Delete a contract by contract id.
+      tags:
+        - Contracts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contractID
+          in: path
+          required: true
+          description: contract id e.g. kg244565
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/status/{contractID}/{status}/:
+    get:
+      summary: Update contract status.
+      tags:
+        - Contracts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contractID
+          in: path
+          required: true
+          description: contract id e.g. contb2c_012333
+          schema:
+            type : string
+        - name: status
+          in: path
+          required: true
+          description: contract status like statusUpdated
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+
+  /contract/signature/create/:
+    post:
+      summary: Create a signature for the contract .
+      tags:
+        - Contract Signature
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ContractId:
+                  type: string
+                ContractorId:
+                  type: string
+                CreateDate:
+                  type: string
+                  format: date-time
+                Signature:
+                  type: string
+      responses:
+        '200':
+          description: Created
+  /contract/signature/update/:
+    put:
+      summary: Update a signature for the contract .
+      tags:
+        - Contract Signature
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                SignatureId:
+                  type: string
+                ContractId:
+                  type: string
+                ContractorId:
+                  type: string
+                CreateDate:
+                  type: string
+                  format: date-time
+                Signature:
+                  type: string
+      responses:
+        '201':
+          description: Updated
+  /contract/signatures/:
+    description: Signatures
+    get:
+      summary: Returns a list of contract signatures.
+      tags:
+        - Contract Signature
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A JSON array of contract signarues
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /contract/signature/{signatureID}/:
+    get:
+      summary: Get contract signature information by id.
+      tags:
+        - Contract Signature
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: signatureID
+          in: path
+          required: true
+          description: signature id e.g. sig_123568
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/signature/delete/{signatureID}/:
+    delete:
+      summary: Delete a contract signature by id.
+      tags:
+        - Contract Signature
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: signatureID
+          in: path
+          required: true
+          description: signature id e.g. sig_123564
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/signatures/{contractID}:
+    get:
+      summary: Get contract signatures by contract id.
+      tags:
+        - Contract Signature
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contractID
+          in: path
+          required: true
+          description: contract id e.g. contb2c_123568
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/term/create/:
+    post:
+      summary: Create a contract term .
+      tags:
+        - Contract Term
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                TermTypeId:
+                  type: string
+                ContractId:
+                  type: string
+                Description:
+                  type: string
+                CreateDate:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: Created
+  /contract/term/update/:
+    put:
+      summary: Update a contract term .
+      tags:
+        - Contract Term
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                TermId:
+                  type: string
+                TermTypeId:
+                  type: string
+                ContractId:
+                  type: string
+                Description:
+                  type: string
+                CreateDate:
+                  type: string
+                  format: date-time
+      responses:
+        '201':
+          description: Updated
+  /contract/terms/:
+    description: Terms
+    get:
+      summary: Returns a list of contract terms.
+      tags:
+        - Contract Term
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A JSON array of contract terms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /contract/term/{termID}/:
+    get:
+      summary: Get contract term information by id.
+      tags:
+        - Contract Term
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: termID
+          in: path
+          required: true
+          description: term id e.g. term_123568
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/term/delete/{termID}/:
+    delete:
+      summary: Delete a contract term by id.
+      tags:
+        - Contract Term
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: termID
+          in: path
+          required: true
+          description: term id e.g. term_123564
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/terms/{contractID}:
+    get:
+      summary: Get contract terms by contract id.
+      tags:
+        - Contract Term
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contractID
+          in: path
+          required: true
+          description: contract id e.g. contb2c_123568
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/obligation/create/:
+    post:
+      summary: Create an obligation.
+      tags:
+        - Contract Obligation
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Description:
+                  type: string
+                TermId:
+                  type: string
+                ContractorId:
+                  type: string
+                ContractId:
+                  type: string
+                ContractIdB2C:
+                  type: string
+                State:
+                  type: string
+                ExecutionDate:
+                  type: string
+                  format: date-time
+                EndDate:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: Created
+  /contract/obligations/:
+    description: Obligation
+    get:
+      summary: Returns a list of obligations.
+      tags:
+        - Contract Obligation
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A JSON array of obligations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /contract/obligation/{obligationID}/:
+    get:
+      summary: Get obligation information by id.
+      tags:
+        - Contract Obligation
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: obligationID
+          in: path
+          required: true
+          description: obligation id e.g. ob_123568
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/obligation/delete/{obligationID}/:
+    delete:
+      summary: Delete an obligation by id.
+      tags:
+        - Contract Obligation
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: obligationID
+          in: path
+          required: true
+          description: obligation id e.g. ob_123564
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/obligation/identifier/{obligationID}/:
+    get:
+      summary: Get obligation identifiers by id.
+      tags:
+        - Contract Obligation
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: obligationID
+          in: path
+          required: true
+          description: obligation id e.g. ob_123568
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/obligation/status/{obligationID}/{contractID}/{contractorID}/{state}/:
+    get:
+      summary: Update obligation status.
+      tags:
+        - Contract Obligation
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: obligationID
+          in: path
+          required: true
+          description: obligation id e.g. ob_123568
+          schema:
+            type : string
+        - name: contractID
+          in: path
+          required: true
+          description: contract id e.g. contb2c_123568
+          schema:
+            type : string
+        - name: contractorID
+          in: path
+          required: true
+          description: contractor id e.g. c_123568
+          schema:
+            type : string
+        - name: state
+          in: path
+          required: true
+          description: obligation state e.g. statePending
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+  /contract/obligation/{contractID}/:
+    get:
+      summary: Get obligation information by contract id.
+      tags:
+        - Contract Obligation
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contractID
+          in: path
+          required: true
+          description: contract id e.g. contb2b_123568
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+
+  /contract/compliance/:
+    description: Contract Compliance
+    get:
+      summary: Make a compliance verification on contracts.
+      tags:
+        - Contract Compliance
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A contract compliance verification result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+components:
+  securitySchemes:
+    bearerAuth:         
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    
+security:
+  - bearerAuth: []

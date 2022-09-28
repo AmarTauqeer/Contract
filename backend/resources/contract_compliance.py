@@ -18,7 +18,7 @@ from datetime import datetime, date
 class GetContractCompliance(MethodResource, Resource):
     @doc(description='Contract Compliance', tags=['Contract Compliance'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()

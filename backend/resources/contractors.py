@@ -125,7 +125,7 @@ class ContractorDeleteById(MethodResource, Resource):
 class GetContractors(MethodResource, Resource):
     @doc(description='Contractors', tags=['Contractors'])
     # @check_for_session
-    # @Credentials.check_for_token
+    @Credentials.check_for_token
     # @marshal_with(BulkResponseQuerySchema)
     def get(self):
         query = QueryEngine()
@@ -145,6 +145,7 @@ class GetContractors(MethodResource, Resource):
                         'vat': r['vat']['value'],
                         'territory': r['territory']['value']}
                 decrypted_result = obj_dec.rsa_aes_decrypt(data)
+                print('decrypted result={}'.format(decrypted_result))
                 name = decrypted_result[0]['name']
                 email = decrypted_result[1]['email']
                 phone = decrypted_result[2]['phone']

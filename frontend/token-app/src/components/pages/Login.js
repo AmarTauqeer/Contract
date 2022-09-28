@@ -12,8 +12,8 @@ const Login = () => {
     setToken("");
     if (username && password) {
       axios
-        .get("https://actool.contract.sti2.at/contract/token/", {
-          //.get("http://127.0.0.1:5000/contract/token/", {
+        // .get("https://actool.contract.sti2.at/contract/token/", {
+          .get("http://127.0.0.1:5002/contract/token/", {
           headers: {
             username: username,
             password: password,
