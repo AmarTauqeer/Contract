@@ -245,6 +245,8 @@ class GetContractCompliance(MethodResource, Resource):
             'password': os.getenv("pass"),
         }
 
+        # print(f"data={data}")
+
         url_get_login = "http://138.232.18.138:5003/jwt/login/"
         resp1 = requests.post(url_get_login, headers=headers, json=data)
         token = resp1.json()['access_token']

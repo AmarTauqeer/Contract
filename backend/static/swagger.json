@@ -8,7 +8,7 @@ info:
     url: https://github.com/AmarTauqeer
   version: 1.0.0
 servers:
-  - url:  https://actool.contract.sti2.at
+  - url:  http://127.0.0.1:5002/
 paths:
   /contract/register/:
     post:

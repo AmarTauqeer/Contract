@@ -91,11 +91,17 @@ class Login(MethodResource, Resource):
         os.environ['uname'] = decoded_data["Name"]
         os.environ['upass'] = decoded_data["Password"]
 
+        print(f"username={os.environ['uname']}  pass={os.environ['upass']}")
+
         headers["Username"] = os.environ['uname']
         headers["Password"] = os.environ['upass']
         print(headers)
-        url_get_login = "https://actool.contract.sti2.at/contract/token/"
+        # url_get_login = "https://actool.contract.sti2.at/contract/token/"
+
+        url_get_login = "http://127.0.0.1:5002/contract/token/"
+
         resp1 = requests.get(url_get_login, headers=headers)
+        print(f"response={resp1.json()}")
         token=resp1.json()['token']
         os.environ['token'] = token
         return jsonify(

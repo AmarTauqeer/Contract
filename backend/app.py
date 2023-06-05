@@ -13,7 +13,7 @@ from resources.contract_obligation import *
 from resources.term_types import *
 from resources.contract_compliance import *
 from resources.contract_signatures import *
-from tests.contract_test import *
+# from tests.contract_test import *
 from flask_restful import Api
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -263,15 +263,16 @@ docs.register(GetContractCompliance)
 current_date = date.today()
 
 
-def compliance():
-    CONTRACT_URL = "https://actool.contract.sti2.at/contract/compliance/"
-    # CONTRACT_URL = "http://172.25.0.81:5000/contract/compliance/"
-    data = requests.get(CONTRACT_URL)
-    data = data.json()
+# def compliance():
+#     CONTRACT_URL = "https://actool.contract.sti2.at/contract/compliance/"
+#     # CONTRACT_URL = "http://172.25.0.81:5000/contract/compliance/"
+#     data = requests.get(CONTRACT_URL)
+#     data = data.json()
 
 
 if __name__ == '__main__':
     # scheduler.add_job(id='Contract compliance task', func=compliance, trigger='interval', minutes=1440)
     # if current_date >= date(2022, 4, 26):
     #     scheduler.start()
-    app.run(debug=True, host='0.0.0.0', port=5002)
+    app.run(debug=True, port=5002)
+    # app.run(debug=True, host='0.0.0.0', port=5002)

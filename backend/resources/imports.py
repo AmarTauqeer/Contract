@@ -23,7 +23,7 @@ from core.company_validation.CompanyValidation import CompanyValidation
 from core.term_validation.term_validation import TermValidation
 from core.obligation_validation.obligation_validation import ObligationValidation
 from core.term_type_validation.term_type_validation import TermTypeValidation
-from tests.contract_test import ContractApiTest
+# from tests.contract_test import ContractApiTest
 import unittest
 from core.Credentials import Credentials
 
