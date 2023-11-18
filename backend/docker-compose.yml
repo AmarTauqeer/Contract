@@ -1,10 +1,29 @@
 version: "3"
 services:
   contractact:
+    container_name: contract-act
+    hostname: contract-act
     restart: always
-    build:
-      context: .
+    build: ./
     ports:
-      - "5002:5002"
+      - 5002:5002
     volumes:
       - ./:/Contract/backend
+
+
+
+
+
+
+#version: "3"
+#services:
+#  contractact:
+#    container_name: contract-act
+#    hostname: contract-act
+#    restart: always
+#    build: ./
+#    ports:
+#      - "5002:5002"
+#    volumes:
+#      - ./:/Contract/backend
+

@@ -12,10 +12,18 @@ Automated Contracting Tool, a component of smashHit. smashHit is a Horizon 2020 
 - [unittest](https://docs.python.org/3/library/unittest.html)
 
 ## Steps to be followed
-- git clone https://github.com/AmarTauqeer/Contract.git
-- go to the backend folder
-- update the .env file
-- sudo docker-compose -f docker-compose.yml up
+- git clone [https://github.com/AmarTauqeer/Contract.git](https://github.com/AmarTauqeer/Contract.git).
+- go to the backend folder.
+- install GraphDB instance on your computer/laptop.
+- Install the GraphDB instance on the server. GraphDB can be downloaded from [https://www.ontotext.com/products/graphdb/download/](https://www.ontotext.com/products/graphdb/download/).
+- After successfully installing, point to the GraphDB Desktop icon. It will open the URL=[http://localhost:7200/](http://localhost:7200/).
+- Create a new repository from Setup->repository or via url= [http://localhost:7200/repository/create/graphdb](http://localhost:7200/repository/create/graphdb). The name of the repository and its ID is required.
+- import Contract.rdf to GraphDB (Import->upload rdf files->click on import button and select the default graph option)
+- Select the created repository from the dropdown at the top right corner.
+- After selecting the repository click on the GraphDB icon on the top left corner, it will show the current active repository with different links. Select the link symbol that will show the SPARQL endpoint, which can be used for any type of SPARQL query form everywhere—for instance, [http://amartauqeer:7200/repositories/Contract](http://amartauqeer:7200/repositories/Contract). Contract-license is the repository name where the remaining parts belong to the GraphDB instance.
+- Finally, these are the URLs for accessing and inserting records into the GraphDB instance: HOST_URI_GET='http://server-url/repositories/Contract, HOST_URI_POST='http://server-url/repositories/Contract/statements'.
+- update the .env file with above mentioned urls.
+- sudo docker-compose -f docker-compose.yml up.
 
 ## Running Locally
 
@@ -58,7 +66,7 @@ https://github.com/AmarTauqeer/Contract/tree/master/backend/tests)
 ## Contributors
 
 - Amar Tauqeer
-  amar.tauqeer@sti2.at
+  amar.tauqeer@sti2.at, amar.tauqeer@gmail.com
 
 ## Project
 
